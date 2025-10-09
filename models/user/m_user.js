@@ -1,5 +1,5 @@
 // user.js
-const { sql, getPool } = require("../../sql-backend/server");
+const { sql, getPool, closePool } = require("../../sql-backend/server");
 
 // Thêm user mới
 async function insertUser(accObj, userObj) {
@@ -39,9 +39,11 @@ async function insertUser(accObj, userObj) {
     VALUES (@CustomerId, ${userColParams});
   `);
 
-  return { rowsAffected: result.rowsAffected[0], id: result.recordset[0].AccountId };
+  return {
+    rowsAffected: result.rowsAffected[0],
+    id: result.recordset[0].AccountId,
+  };
 }
-
 
 /** Lấy tất cả user */
 async function getUsers() {
@@ -54,7 +56,6 @@ async function getUsers() {
   `);
   return result.recordset;
 }
-
 
 // Xóa user theo ID
 async function deleteUserById(userId) {

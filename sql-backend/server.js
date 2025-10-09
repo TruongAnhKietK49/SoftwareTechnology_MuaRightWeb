@@ -1,30 +1,53 @@
 // server.js
-const sql = require('mssql');
+const express = require("express");
+const sql = require("mssql");
+const cors = require("cors");
+
+const app = express();
+app.use(cors());
+
 
 const config = {
-  server: 'localhost',  // Mặc định sẽ là localhost
-  database: 'WebDB',    // Tên database
-  user: 'sa',           // Tên user có sẵn trong SQL Server
-  password: '123',      // Đổi mật khẩu giống là được
+  server: "localhost", // Mặc định sẽ là localhost
+  database: "WebDB", // Tên database
+  user: "sa", // Tên user có sẵn trong SQL Server
+  password: "123", // Đổi mật khẩu giống là được
   options: {
     encrypt: true,
     trustServerCertificate: true,
   },
 };
 
+app.get("/admin/accounts", async (req, res)=> {
+  try {
+    const pool = await getPool();
+    const result = await pool.request().query("SELECT AccountId, Username, Email, Phone, Role, State FROM Account");
+    res.json(result.recordset);
+  } catch (err) {
+    console.error("Lỗi khi lấy tài khoản:", err);
+    res.status(500).send("Lỗi server");
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server đang chạy trên cổng ${PORT}`);
+});
+
 let poolPromise = null;
 
 // Trả về một pool đã kết nối (tái sử dụng cùng 1 connection)
 async function getPool() {
   if (!poolPromise) {
-    poolPromise = sql.connect(config)
-      .then(pool => {
-        console.log('✅ Kết nối SQL Server thành công!');
+    poolPromise = sql
+      .connect(config)
+      .then((pool) => {
+        console.log("✅ Kết nối SQL Server thành công!");
         return pool;
       })
-      .catch(err => {
+      .catch((err) => {
         poolPromise = null; // reset nếu lỗi để lần sau thử lại
-        console.error('❌ Lỗi khi kết nối SQL Server:', err);
+        console.error("❌ Lỗi khi kết nối SQL Server:", err);
         throw err;
       });
   }
@@ -35,14 +58,14 @@ async function closePool() {
   try {
     await sql.close();
     poolPromise = null;
-    console.log('🔒 Đóng kết nối SQL Server.');
+    console.log("🔒 Đóng kết nối SQL Server.");
   } catch (err) {
-    console.error('Lỗi khi đóng pool:', err);
+    console.error("Lỗi khi đóng pool:", err);
   }
 }
 
 // tidy up on exit
-process.on('SIGINT', async () => {
+process.on("SIGINT", async () => {
   await closePool();
   process.exit(0);
 });

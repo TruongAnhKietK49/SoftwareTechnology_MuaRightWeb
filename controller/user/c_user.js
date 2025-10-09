@@ -42,7 +42,7 @@ async function testGetUsers() {
     console.error(err);
   }
 }
-//testGetUsers().finally(() => closePool());
+testGetUsers().finally(() => closePool());
 
 // Test deleteUserById
 async function testDeleteUser(userId) {

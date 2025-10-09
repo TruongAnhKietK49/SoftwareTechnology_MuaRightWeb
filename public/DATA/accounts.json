@@ -1,0 +1,82 @@
+{
+  "customer": [
+    [
+      {
+        "Username": "nguyenvana",
+        "Email": "nguyenvana@example.com",
+        "Phone": "0912345678",
+        "PasswordHash": "123456",
+        "Role": "Customer",
+        "State": "Active",
+        "ImageUrl": ""
+      },
+      {
+        "FullName": "Nguyễn Văn A",
+        "Address": "123 Đường Lê Lợi, TP. HCM",
+        "Birthday": "1995-05-20",
+        "Gender": "Nam",
+        "Balance": 2500000.0
+      }
+    ],
+    [
+      {
+        "Username": "tranthib",
+        "Email": "tranthib@example.com",
+        "Phone": "0923456789",
+        "PasswordHash": "123456",
+        "Role": "Customer",
+        "State": "Active",
+        "ImageUrl": ""
+      },
+      {
+        "FullName": "Trần Thị B",
+        "Address": "456 Đường Nguyễn Huệ, TP. HCM",
+        "Birthday": "1991-01-25",
+        "Gender": "Nữ",
+        "Balance": 2500000.0
+      }
+    ]
+  ],
+  "seller": [
+    [
+      {
+        "Username": "leminhc",
+        "Email": "leminhc@example.com",
+        "Phone": "0934567890",
+        "PasswordHash": "123456",
+        "Role": "Seller",
+        "State": "Active",
+        "ImageUrl": ""
+      },
+      {
+        "FullName": "Lê Minh C",
+        "Address": "789 Đường Phạm Ngũ Lão, TP. HCM",
+        "Birthday": "1988-08-15",
+        "Gender": "Nam",
+        "StoreName": "Cửa Hàng Minh C",
+        "StoreAddress": "789 Đường Phạm Ngũ Lão, TP. HCM",
+        "Balance": 5000000.0
+      }
+    ],
+    [
+      {
+        "Username": "nguyenvand",
+        "Email": "nguyenvand@example.com",
+        "Phone": "0898765432",
+        "PasswordHash": "123456",
+        "Role": "Seller",
+        "State": "Active",
+        "ImageUrl": ""
+      },
+      {
+        "FullName": "Nguyễn Văn D",
+        "Address": "321 Đường Trần Hưng Đạo, TP. HCM",
+        "Birthday": "1990-12-10",
+        "Gender": "Nam",
+        "StoreName": "Cửa Hàng Văn D",
+        "StoreAddress": "321 Đường Trần Hưng Đạo, TP. HCM",
+        "Balance": 5000000.0
+      }
+    ]
+  ]
+}

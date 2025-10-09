@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Quản lý Người dùng</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/public/CSS/admin/accountManager.css">
+
+</head>
+
+<body>
+    <!-- Mobile Toggle Button -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+    
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <div class="container-fluid p-0">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Quản lý Người dùng</h1>
+                <button class="btn btn-primary-custom text-white" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                    <i class="bi bi-plus-circle me-2"></i> Thêm người dùng mới
+                </button>
+            </div>
+
+            <!-- Users Card -->
+            <div class="card custom-card">
+                <div class="card-header-custom">
+                    <h6 class="card-title mb-0">Danh sách người dùng</h6>
+                    <div class="d-flex align-items-center flex-wrap">
+                        <div class="input-group search-box mb-3">
+                            <input type="text" class="form-control" placeholder="Tìm kiếm người dùng...">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                        <div class="action-buttons d-flex">
+                            <button type="button" class="btn btn-success btn-sm">
+                                <i class="bi bi-check2-circle me-1"></i> Kích hoạt
+                            </button>
+                            <button type="button" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pause-circle me-1"></i> Tạm khóa
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash me-1"></i> Xóa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <!-- Filter Tabs -->
+                    <ul class="nav nav-tabs filter-tabs" id="userTabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#allUsers">Tất cả</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#customers">Khách hàng</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#sellers">Người bán</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#shippers">Shipper</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <!-- All Users Tab -->
+                        <div class="tab-pane fade show active" id="allUsers">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th scope="col" class="text-center" style="width: 5%;">
+                                                <input class="form-check-input" type="checkbox">
+                                            </th>
+                                            <th scope="col" style="width: 10%;">Ảnh</th>
+                                            <th scope="col">Thông tin</th>
+                                            <th scope="col">Vai trò</th>
+                                            <th scope="col">Trạng thái</th>
+                                            <th scope="col">Ngày tham gia</th>
+                                            <th scope="col" class="text-center" style="width: 15%;">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center" data-label="Chọn">
+                                                <input class="form-check-input" type="checkbox">
+                                            </td>
+                                            <td data-label="Ảnh">
+                                                <img src="https://i.pravatar.cc/100?u=user1" class="user-avatar"
+                                                    alt="User Avatar">
+                                            </td>
+                                            <td data-label="Thông tin">
+                                                <div class="user-name">Nguyễn Văn A</div>
+                                                <div class="user-email">nguyenvana@email.com</div>
+                                            </td>
+                                            <td data-label="Vai trò">
+                                                <span class="badge badge-customer">Khách hàng</span>
+                                            </td>
+                                            <td data-label="Trạng thái">
+                                                <span class="status-active"><i class="bi bi-circle-fill me-1"></i> Đang
+                                                    hoạt động</span>
+                                            </td>
+                                            <td data-label="Ngày tham gia">15/08/2024</td>
+                                            <td class="text-center" data-label="Hành động">
+                                                <div class="btn-group btn-group-custom" role="group">
+                                                    <button class="btn btn-outline-primary btn-sm" title="Sửa"
+                                                        data-bs-toggle="modal" data-bs-target="#editUserModal">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-danger btn-sm" title="Xóa"
+                                                        data-bs-toggle="modal" data-bs-target="#deleteUserModal">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-info btn-sm" title="Xem chi tiết">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center" data-label="Chọn">
+                                                <input class="form-check-input" type="checkbox">
+                                            </td>
+                                            <td data-label="Ảnh">
+                                                <img src="https://i.pravatar.cc/100?u=user2" class="user-avatar"
+                                                    alt="User Avatar">
+                                            </td>
+                                            <td data-label="Thông tin">
+                                                <div class="user-name">Trần Thị B</div>
+                                                <div class="user-email">tranthib@email.com</div>
+                                            </td>
+                                            <td data-label="Vai trò">
+                                                <span class="badge badge-seller">Người bán</span>
+                                            </td>
+                                            <td data-label="Trạng thái">
+                                                <span class="status-active"><i class="bi bi-circle-fill me-1"></i> Đang
+                                                    hoạt động</span>
+                                            </td>
+                                            <td data-label="Ngày tham gia">22/07/2024</td>
+                                            <td class="text-center" data-label="Hành động">
+                                                <div class="btn-group btn-group-custom" role="group">
+                                                    <button class="btn btn-outline-primary btn-sm" title="Sửa"
+                                                        data-bs-toggle="modal" data-bs-target="#editUserModal">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-danger btn-sm" title="Xóa"
+                                                        data-bs-toggle="modal" data-bs-target="#deleteUserModal">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-info btn-sm" title="Xem chi tiết">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center" data-label="Chọn">
+                                                <input class="form-check-input" type="checkbox">
+                                            </td>
+                                            <td data-label="Ảnh">
+                                                <img src="https://i.pravatar.cc/100?u=user3" class="user-avatar"
+                                                    alt="User Avatar">
+                                            </td>
+                                            <td data-label="Thông tin">
+                                                <div class="user-name">Lê Văn C</div>
+                                                <div class="user-email">levanc@email.com</div>
+                                            </td>
+                                            <td data-label="Vai trò">
+                                                <span class="badge badge-shipper">Shipper</span>
+                                            </td>
+                                            <td data-label="Trạng thái">
+                                                <span class="status-pending"><i class="bi bi-circle-fill me-1"></i> Chờ
+                                                    xác nhận</span>
+                                            </td>
+                                            <td data-label="Ngày tham gia">10/09/2024</td>
+                                            <td class="text-center" data-label="Hành động">
+                                                <div class="btn-group btn-group-custom" role="group">
+                                                    <button class="btn btn-outline-primary btn-sm" title="Sửa"
+                                                        data-bs-toggle="modal" data-bs-target="#editUserModal">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-danger btn-sm" title="Xóa"
+                                                        data-bs-toggle="modal" data-bs-target="#deleteUserModal">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-info btn-sm" title="Xem chi tiết">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center" data-label="Chọn">
+                                                <input class="form-check-input" type="checkbox">
+                                            </td>
+                                            <td data-label="Ảnh">
+                                                <img src="https://i.pravatar.cc/100?u=user4" class="user-avatar"
+                                                    alt="User Avatar">
+                                            </td>
+                                            <td data-label="Thông tin">
+                                                <div class="user-name">Phạm Thị D</div>
+                                                <div class="user-email">phamthid@email.com</div>
+                                            </td>
+                                            <td data-label="Vai trò">
+                                                <span class="badge badge-customer">Khách hàng</span>
+                                            </td>
+                                            <td data-label="Trạng thái">
+                                                <span class="status-inactive"><i class="bi bi-circle-fill me-1"></i> Đã
+                                                    khóa</span>
+                                            </td>
+                                            <td data-label="Ngày tham gia">05/06/2024</td>
+                                            <td class="text-center" data-label="Hành động">
+                                                <div class="btn-group btn-group-custom" role="group">
+                                                    <button class="btn btn-outline-primary btn-sm" title="Sửa"
+                                                        data-bs-toggle="modal" data-bs-target="#editUserModal">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-danger btn-sm" title="Xóa"
+                                                        data-bs-toggle="modal" data-bs-target="#deleteUserModal">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-info btn-sm" title="Xem chi tiết">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Other tabs would contain filtered user lists -->
+                        <div class="tab-pane fade" id="customers">
+                            <!-- Customer users would be displayed here -->
+                            <div class="alert alert-info text-center">
+                                <i class="bi bi-info-circle me-2"></i> Danh sách khách hàng sẽ được hiển thị tại đây
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="sellers">
+                            <!-- Seller users would be displayed here -->
+                            <div class="alert alert-info text-center">
+                                <i class="bi bi-info-circle me-2"></i> Danh sách người bán sẽ được hiển thị tại đây
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="shippers">
+                            <!-- Shipper users would be displayed here -->
+                            <div class="alert alert-info text-center">
+                                <i class="bi bi-info-circle me-2"></i> Danh sách shipper sẽ được hiển thị tại đây
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                    <div class="text-muted">
+                        Hiển thị <strong>4</strong> trong tổng số <strong>128</strong> người dùng
+                    </div>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination mb-0">
+                            <li class="page-item disabled"><a class="page-link" href="#">Trước</a></li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Sau</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add User Modal -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header modal-header-custom">
+                    <h5 class="modal-title" id="addUserModalLabel">Thêm người dùng mới</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName" class="form-label">Họ và tên đệm</label>
+                                <input type="text" class="form-control" id="firstName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName" class="form-label">Tên</label>
+                                <input type="text" class="form-control" id="lastName" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Số điện thoại</label>
+                            <input type="tel" class="form-control" id="phone">
+                        </div>
+                        <div class="mb-3">
+                            <label for="userRole" class="form-label">Vai trò</label>
+                            <select class="form-select" id="userRole" required>
+                                <option value="">Chọn vai trò</option>
+                                <option value="customer">Khách hàng</option>
+                                <option value="seller">Người bán</option>
+                                <option value="shipper">Shipper</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="userStatus" class="form-label">Trạng thái</label>
+                            <select class="form-select" id="userStatus" required>
+                                <option value="active">Đang hoạt động</option>
+                                <option value="inactive">Đã khóa</option>
+                                <option value="pending">Chờ xác nhận</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="avatar" class="form-label">Ảnh đại diện</label>
+                            <input class="form-control" type="file" id="avatar">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer modal-footer-custom">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary">Thêm người dùng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header modal-header-custom">
+                    <h5 class="modal-title" id="editUserModalLabel">Chỉnh sửa thông tin người dùng</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editFirstName" class="form-label">Họ và tên đệm</label>
+                                <input type="text" class="form-control" id="editFirstName" value="Nguyễn Văn" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editLastName" class="form-label">Tên</label>
+                                <input type="text" class="form-control" id="editLastName" value="A" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editEmail" value="nguyenvana@email.com"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPhone" class="form-label">Số điện thoại</label>
+                            <input type="tel" class="form-control" id="editPhone" value="0912345678">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editUserRole" class="form-label">Vai trò</label>
+                            <select class="form-select" id="editUserRole" required>
+                                <option value="customer" selected>Khách hàng</option>
+                                <option value="seller">Người bán</option>
+                                <option value="shipper">Shipper</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editUserStatus" class="form-label">Trạng thái</label>
+                            <select class="form-select" id="editUserStatus" required>
+                                <option value="active" selected>Đang hoạt động</option>
+                                <option value="inactive">Đã khóa</option>
+                                <option value="pending">Chờ xác nhận</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAvatar" class="form-label">Ảnh đại diện</label>
+                            <input class="form-control" type="file" id="editAvatar">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer modal-footer-custom">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete User Modal -->
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteUserModalLabel">Xác nhận xóa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn xóa người dùng <strong>Nguyễn Văn A</strong> không?</p>
+                    <p class="text-danger">Hành động này không thể hoàn tác.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-danger">Xóa người dùng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Loading sidebar
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("./navAdminPage.html")
+                .then(res => res.text())
+                .then(data => {
+                    document.getElementById("sidebar").innerHTML = data;
+
+                    // === Sau khi sidebar load xong ===
+                    const currentPage = window.location.pathname.split("/").pop(); // lấy tên file hiện tại
+                    const links = document.querySelectorAll("#sidebar .nav-link");
+
+                    links.forEach(link => {
+                        const linkPage = link.getAttribute("href");
+                        if (linkPage === currentPage) {
+                            link.classList.add("active");
+                            link.classList.add("bg-primary", "text-white", "fw-bold");
+                        } else {
+                            link.classList.remove("active", "bg-primary", "text-white", "fw-bold");
+                        }
+                    });
+                })
+                .catch(err => console.error("Lỗi khi tải sidebar:", err));
+        });
+
+        // Toggle sidebar on mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
+            document.getElementById('sidebar').classList.toggle('show');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function (event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('sidebarToggle');
+
+            if (window.innerWidth <= 992 &&
+                !sidebar.contains(event.target) &&
+                !toggleBtn.contains(event.target)) {
+                sidebar.classList.remove('show');
+            }
+        });
+
+        // Add hover effects to table rows
+        const tableRows = document.querySelectorAll('tbody tr');
+        tableRows.forEach(row => {
+            row.addEventListener('mouseenter', function () {
+                this.style.transform = 'translateY(-2px)';
+                this.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+            });
+
+            row.addEventListener('mouseleave', function () {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = 'none';
+            });
+        });
+
+        // Handle bulk actions
+        document.querySelectorAll('.action-buttons .btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const selectedCount = document.querySelectorAll('tbody input[type="checkbox"]:checked').length;
+                if (selectedCount === 0) {
+                    alert('Vui lòng chọn ít nhất một người dùng để thực hiện thao tác này.');
+                    return;
+                }
+
+                const action = this.textContent.trim();
+                if (confirm(`Bạn có chắc chắn muốn ${action.toLowerCase()} ${selectedCount} người dùng đã chọn?`)) {
+                    // Perform bulk action here
+                    console.log(`Performing ${action} on ${selectedCount} users`);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

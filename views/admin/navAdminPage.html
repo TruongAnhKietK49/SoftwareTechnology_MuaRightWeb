@@ -1,0 +1,161 @@
+<div class="sidebar-header">
+    <div class="d-flex align-items-center">
+        <i class="bi bi-speedometer2 text-white me-2 fs-4"></i>
+        <h4 class="text-white mb-0 fw-bold sidebar-text">Admin Panel</h4>
+    </div>
+</div>
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="admin_dashboard.html">
+            <i class="bi bi-house-door"></i>
+            <span class="sidebar-text">Dashboard</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="account_manager.html">
+            <i class="bi bi-people"></i>
+            <span class="sidebar-text">Người dùng</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="inventory_manager.html">
+            <i class="bi bi-bag"></i>
+            <span class="sidebar-text">Sản phẩm</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">
+            <i class="bi bi-cart3"></i>
+            <span class="sidebar-text">Đơn hàng</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">
+            <i class="bi bi-bar-chart"></i>
+            <span class="sidebar-text">Báo cáo</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#adminProfileModalLabel">
+            <i class="bi bi-gear"></i>
+            <span class="sidebar-text">Cài đặt tài khoản</span>
+        </a>
+    </li>
+</ul>
+<div class="sidebar-footer">
+    <div class="user-profile">
+        <img src="https://i.pravatar.cc/40?u=anhkiet" alt="User Avatar">
+        <div class="user-info sidebar-text">
+            <h6 class="mb-0">Anh Kiệt</h6>
+            <small>Quản trị viên</small>
+        </div>
+    </div>
+    <div class="d-grid">
+        <button class="btn btn-signout">
+            <i class="bi bi-box-arrow-right me-2"></i>
+            <span class="sidebar-text">Đăng xuất</span>
+        </button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="adminProfileModal" tabindex="-1" aria-labelledby="adminProfileModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Header -->
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="adminProfileModalLabel"><i class="bi bi-person-badge me-2"></i>Thông tin tài
+                    khoản</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body">
+                <form>
+                    <div class="row g-3">
+                        <!-- Hình ảnh -->
+                        <div class="col-12 text-center">
+                            <img src="https://i.pravatar.cc/120?u=admin" alt="Avatar" class="rounded-circle mb-2"
+                                width="120" height="120">
+                            <div class="mb-3">
+                                <label for="imageUrl" class="form-label fw-semibold">Ảnh đại diện (URL)</label>
+                                <input type="url" class="form-control" id="imageUrl"
+                                    placeholder="https://example.com/avatar.jpg">
+                            </div>
+                        </div>
+
+                        <!-- Username -->
+                        <div class="col-md-6">
+                            <label for="username" class="form-label fw-semibold">Tên đăng nhập</label>
+                            <input type="text" class="form-control" id="username" placeholder="admin123">
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-md-6">
+                            <label for="email" class="form-label fw-semibold">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="admin@example.com">
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label fw-semibold">Số điện thoại</label>
+                            <input type="tel" class="form-control" id="phone" placeholder="0123 456 789">
+                        </div>
+
+                        <!-- Password -->
+                        <div class="col-md-6">
+                            <label for="password" class="form-label fw-semibold">Mật khẩu</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password" placeholder="••••••••">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword"><i
+                                        class="bi bi-eye"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Full Name -->
+                        <div class="col-md-6">
+                            <label for="fullname" class="form-label fw-semibold">Họ và tên</label>
+                            <input type="text" class="form-control" id="fullname" placeholder="Nguyễn Anh Kiệt">
+                        </div>
+
+                        <!-- Birthday -->
+                        <div class="col-md-6">
+                            <label for="birthday" class="form-label fw-semibold">Ngày sinh</label>
+                            <input type="date" class="form-control" id="birthday">
+                        </div>
+
+                        <!-- Gender -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Giới tính</label>
+                            <select class="form-select" id="gender">
+                                <option value="">-- Chọn giới tính --</option>
+                                <option value="male">Nam</option>
+                                <option value="female">Nữ</option>
+                                <option value="other">Khác</option>
+                            </select>
+                        </div>
+
+                        <!-- Position -->
+                        <div class="col-md-6">
+                            <label for="position" class="form-label fw-semibold">Chức vụ</label>
+                            <input type="text" class="form-control" id="position" placeholder="Quản trị viên">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-1"></i>Đóng
+                </button>
+                <button type="button" class="btn btn-success">
+                    <i class="bi bi-save me-1"></i>Lưu thay đổi
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
