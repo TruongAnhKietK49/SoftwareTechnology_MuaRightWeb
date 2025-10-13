@@ -1,0 +1,24 @@
+[
+    {
+        "SellerId": 3,
+        "NameProduct": "Nước hoa Pháp",
+        "Category": "Nam",
+        "Quantity": 50,
+        "Price": 150000.0,
+        "Description": "Lưu hương lâu 12 tiếng, mùi mạnh mẽ",
+        "Warranty": "BH 12 tháng",
+        "ImageUrl": "../images/products/SP1.jpg",
+        "TagName": "Nước hoa Pháp, Pháp, Lưu hương"
+    },
+    {
+        "SellerId": 4,
+        "NameProduct": "Dior Sauvagge",
+        "Category": "Nam",
+        "Quantity": 50,
+        "Price": 150000.0,
+        "Description": "Lưu hương lâu 12 tiếng, mùi mạnh mẽ",
+        "Warranty": "BH 12 tháng",
+        "ImageUrl": "../images/products/SP1.jpg",
+        "TagName": "Dior, Sauvage, QUái vật lưu hương"
+    }
+]

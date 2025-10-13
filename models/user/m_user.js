@@ -67,5 +67,9 @@ async function deleteUserById(userId) {
   return { rowsAffected: result.rowsAffected[0] };
 }
 
+async function getProducts() {
+  
+}
+
 //Cần export hàm để các file khác sử dụng
-module.exports = { insertUser, getUsers, deleteUserById };
+module.exports = { insertUser, getUsers, deleteUserById, getProducts };

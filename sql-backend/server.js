@@ -6,7 +6,7 @@ const cors = require("cors");
 const app = express();
 app.use(cors());
 
-
+// Port 1433
 const config = {
   server: "localhost", // Mặc định sẽ là localhost
   database: "WebDB", // Tên database

@@ -2,7 +2,8 @@ const {
   insertUser,
   getUsers,
   deleteUserById,
-} = require("../../models/user/m_user");
+  getProdcuts
+} = require("/models/user/m_user");
 const { closePool } = require("../../sql-backend/server");
 
 // Test insertUser
@@ -54,3 +55,6 @@ async function testDeleteUser(userId) {
   }
 }
 //testDeleteUser(1).finally(() => closePool());
+async function renderProduct() {
+  const res = await getProdcuts();
+}

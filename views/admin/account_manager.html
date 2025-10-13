@@ -23,7 +23,7 @@
 
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
-    
+
     </nav>
 
     <!-- Main Content -->
@@ -87,160 +87,20 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th scope="col" class="text-center" style="width: 5%;">
-                                                <input class="form-check-input" type="checkbox">
+                                                <input class="form-check-input" type="checkbox" id="checkAll">
                                             </th>
                                             <th scope="col" style="width: 10%;">Ảnh</th>
                                             <th scope="col">Thông tin</th>
                                             <th scope="col">Vai trò</th>
                                             <th scope="col">Trạng thái</th>
-                                            <th scope="col">Ngày tham gia</th>
+                                            <th scope="col">Số điện thoại</th>
                                             <th scope="col" class="text-center" style="width: 15%;">Hành động</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <!-- Load user ở đây -->
+                                    <tbody id="userAccount">
                                         <tr>
-                                            <td class="text-center" data-label="Chọn">
-                                                <input class="form-check-input" type="checkbox">
-                                            </td>
-                                            <td data-label="Ảnh">
-                                                <img src="https://i.pravatar.cc/100?u=user1" class="user-avatar"
-                                                    alt="User Avatar">
-                                            </td>
-                                            <td data-label="Thông tin">
-                                                <div class="user-name">Nguyễn Văn A</div>
-                                                <div class="user-email">nguyenvana@email.com</div>
-                                            </td>
-                                            <td data-label="Vai trò">
-                                                <span class="badge badge-customer">Khách hàng</span>
-                                            </td>
-                                            <td data-label="Trạng thái">
-                                                <span class="status-active"><i class="bi bi-circle-fill me-1"></i> Đang
-                                                    hoạt động</span>
-                                            </td>
-                                            <td data-label="Ngày tham gia">15/08/2024</td>
-                                            <td class="text-center" data-label="Hành động">
-                                                <div class="btn-group btn-group-custom" role="group">
-                                                    <button class="btn btn-outline-primary btn-sm" title="Sửa"
-                                                        data-bs-toggle="modal" data-bs-target="#editUserModal">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </button>
-                                                    <button class="btn btn-outline-danger btn-sm" title="Xóa"
-                                                        data-bs-toggle="modal" data-bs-target="#deleteUserModal">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                    <button class="btn btn-outline-info btn-sm" title="Xem chi tiết">
-                                                        <i class="bi bi-eye"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center" data-label="Chọn">
-                                                <input class="form-check-input" type="checkbox">
-                                            </td>
-                                            <td data-label="Ảnh">
-                                                <img src="https://i.pravatar.cc/100?u=user2" class="user-avatar"
-                                                    alt="User Avatar">
-                                            </td>
-                                            <td data-label="Thông tin">
-                                                <div class="user-name">Trần Thị B</div>
-                                                <div class="user-email">tranthib@email.com</div>
-                                            </td>
-                                            <td data-label="Vai trò">
-                                                <span class="badge badge-seller">Người bán</span>
-                                            </td>
-                                            <td data-label="Trạng thái">
-                                                <span class="status-active"><i class="bi bi-circle-fill me-1"></i> Đang
-                                                    hoạt động</span>
-                                            </td>
-                                            <td data-label="Ngày tham gia">22/07/2024</td>
-                                            <td class="text-center" data-label="Hành động">
-                                                <div class="btn-group btn-group-custom" role="group">
-                                                    <button class="btn btn-outline-primary btn-sm" title="Sửa"
-                                                        data-bs-toggle="modal" data-bs-target="#editUserModal">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </button>
-                                                    <button class="btn btn-outline-danger btn-sm" title="Xóa"
-                                                        data-bs-toggle="modal" data-bs-target="#deleteUserModal">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                    <button class="btn btn-outline-info btn-sm" title="Xem chi tiết">
-                                                        <i class="bi bi-eye"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center" data-label="Chọn">
-                                                <input class="form-check-input" type="checkbox">
-                                            </td>
-                                            <td data-label="Ảnh">
-                                                <img src="https://i.pravatar.cc/100?u=user3" class="user-avatar"
-                                                    alt="User Avatar">
-                                            </td>
-                                            <td data-label="Thông tin">
-                                                <div class="user-name">Lê Văn C</div>
-                                                <div class="user-email">levanc@email.com</div>
-                                            </td>
-                                            <td data-label="Vai trò">
-                                                <span class="badge badge-shipper">Shipper</span>
-                                            </td>
-                                            <td data-label="Trạng thái">
-                                                <span class="status-pending"><i class="bi bi-circle-fill me-1"></i> Chờ
-                                                    xác nhận</span>
-                                            </td>
-                                            <td data-label="Ngày tham gia">10/09/2024</td>
-                                            <td class="text-center" data-label="Hành động">
-                                                <div class="btn-group btn-group-custom" role="group">
-                                                    <button class="btn btn-outline-primary btn-sm" title="Sửa"
-                                                        data-bs-toggle="modal" data-bs-target="#editUserModal">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </button>
-                                                    <button class="btn btn-outline-danger btn-sm" title="Xóa"
-                                                        data-bs-toggle="modal" data-bs-target="#deleteUserModal">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                    <button class="btn btn-outline-info btn-sm" title="Xem chi tiết">
-                                                        <i class="bi bi-eye"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center" data-label="Chọn">
-                                                <input class="form-check-input" type="checkbox">
-                                            </td>
-                                            <td data-label="Ảnh">
-                                                <img src="https://i.pravatar.cc/100?u=user4" class="user-avatar"
-                                                    alt="User Avatar">
-                                            </td>
-                                            <td data-label="Thông tin">
-                                                <div class="user-name">Phạm Thị D</div>
-                                                <div class="user-email">phamthid@email.com</div>
-                                            </td>
-                                            <td data-label="Vai trò">
-                                                <span class="badge badge-customer">Khách hàng</span>
-                                            </td>
-                                            <td data-label="Trạng thái">
-                                                <span class="status-inactive"><i class="bi bi-circle-fill me-1"></i> Đã
-                                                    khóa</span>
-                                            </td>
-                                            <td data-label="Ngày tham gia">05/06/2024</td>
-                                            <td class="text-center" data-label="Hành động">
-                                                <div class="btn-group btn-group-custom" role="group">
-                                                    <button class="btn btn-outline-primary btn-sm" title="Sửa"
-                                                        data-bs-toggle="modal" data-bs-target="#editUserModal">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </button>
-                                                    <button class="btn btn-outline-danger btn-sm" title="Xóa"
-                                                        data-bs-toggle="modal" data-bs-target="#deleteUserModal">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                    <button class="btn btn-outline-info btn-sm" title="Xem chi tiết">
-                                                        <i class="bi bi-eye"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
+                                            <td colspan="7" class="text-center">Đang tải dữ liệu...</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -504,6 +364,8 @@
             });
         });
     </script>
+
+    <script src="/controller/admin/c_admin.js"></script>
 </body>
 
 </html>

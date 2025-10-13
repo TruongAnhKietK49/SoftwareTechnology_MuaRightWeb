@@ -7,7 +7,6 @@
         "Phone": "0912345678",
         "PasswordHash": "123456",
         "Role": "Customer",
-        "State": "Active",
         "ImageUrl": ""
       },
       {
@@ -25,7 +24,6 @@
         "Phone": "0923456789",
         "PasswordHash": "123456",
         "Role": "Customer",
-        "State": "Active",
         "ImageUrl": ""
       },
       {
@@ -45,7 +43,6 @@
         "Phone": "0934567890",
         "PasswordHash": "123456",
         "Role": "Seller",
-        "State": "Active",
         "ImageUrl": ""
       },
       {
@@ -65,7 +62,6 @@
         "Phone": "0898765432",
         "PasswordHash": "123456",
         "Role": "Seller",
-        "State": "Active",
         "ImageUrl": ""
       },
       {
@@ -76,6 +72,48 @@
         "StoreName": "Cửa Hàng Văn D",
         "StoreAddress": "321 Đường Trần Hưng Đạo, TP. HCM",
         "Balance": 5000000.0
+      }
+    ]
+  ],
+  "shipper": [
+    [
+      {
+        "Username": "shipper_long",
+        "Email": "long.shipper@example.com",
+        "Phone": "0989111222",
+        "PasswordHash": "hashed_pw_long",
+        "Role": "Shipper",
+        "ImageUrl": "https://example.com/images/shipper_long.jpg"
+      },
+      {
+        "FullName": "Nguyễn Văn Long",
+        "Address": "45 Nguyễn Trãi, Quận 5, TP.HCM",
+        "Birthday": "1996-05-12",
+        "Gender": "Male",
+        "VehicleInfo": "Xe máy Honda AirBlade",
+        "LicenseNo": "59X2-34567",
+        "Region": "Quận 1, Quận 3, Quận 5",
+        "Balance": 320000.0
+      }
+    ],
+    [
+      {
+        "Username": "shipper_lan",
+        "Email": "lan.shipper@example.com",
+        "Phone": "0977555444",
+        "PasswordHash": "hashed_pw_lan",
+        "Role": "Shipper",
+        "ImageUrl": "https://example.com/images/shipper_lan.jpg"
+      },
+      {
+        "FullName": "Trần Thị Lan",
+        "Address": "120 Lê Văn Sỹ, Quận 3, TP.HCM",
+        "Birthday": "1998-09-25",
+        "Gender": "Female",
+        "VehicleInfo": "Xe máy Yamaha Sirius",
+        "LicenseNo": "59C1-99888",
+        "Region": "Quận 3, Quận 10, Phú Nhuận",
+        "Balance": 150000.0
       }
     ]
   ]

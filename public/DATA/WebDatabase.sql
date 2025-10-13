@@ -8,6 +8,8 @@ CREATE TABLE Account (
 	Phone			NVARCHAR(50) NOT NULL UNIQUE,
 	PasswordHash	NVARCHAR(255) NOT NULL,
 	Role			NVARCHAR(20) NOT NULL,
+    State           NVARCHAR(20) NOT NULL DEFAULT('Active'),
+    ImageUrl        NVARCHAR(1000) NULL,
 	CONSTRAINT CHK_Account_Role CHECK (Role IN ('Customer','Seller','Shipper','Admin'))
 )
 Drop Table Account
@@ -26,6 +28,10 @@ DROP Table CustomerProfile
 
 CREATE TABLE SellerProfile (
     SellerId     INT PRIMARY KEY,
+    FullName     NVARCHAR(200) NULL,
+    Address      NVARCHAR(500) NULL,
+    Birthday     DATE NULL,
+    Gender       NVARCHAR(10) NULL,
     StoreName    NVARCHAR(200) NOT NULL,
     StoreAddress NVARCHAR(500) NULL,
     Balance      DECIMAL(18,2) NOT NULL DEFAULT(0),	-- Tiền thu được khi bán
@@ -36,6 +42,10 @@ DROP Table SellerProfile
 
 CREATE TABLE ShipperProfile (
     ShipperId   INT PRIMARY KEY,
+    FullName    NVARCHAR(200) NULL,
+    Address     NVARCHAR(500) NULL,
+    Birthday    DATE NULL,
+    Gender      NVARCHAR(10) NULL,
     VehicleInfo NVARCHAR(200) NULL,   -- Xe máy/ô tô/xe tải
     LicenseNo   NVARCHAR(100) NULL,   -- Biển số
     Region      NVARCHAR(200) NULL,   -- Khu vực giao hàng
@@ -48,10 +58,12 @@ DROP Table ShipperProfile
 CREATE TABLE AdminProfile (
     AdminId     INT PRIMARY KEY,
     FullName    NVARCHAR(200) NULL,
+    Birthday    DATE NULL,
+    Gender      NVARCHAR(10) NULL,
     Position    NVARCHAR(100) NULL,  -- Ví dụ: Quản lý hệ thống
     Note        NVARCHAR(MAX) NULL,
     CONSTRAINT FK_AdminProfile_Account FOREIGN KEY (AdminId) 
-        REFERENCES dbo.Account(AccountId) ON DELETE CASCADE
+        REFERENCES Account(AccountId) ON DELETE CASCADE
 );
 DROP Table AdminProfile
 

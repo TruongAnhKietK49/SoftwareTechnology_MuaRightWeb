@@ -6,7 +6,7 @@ async function getAccount() {
   const result = await pool
     .request()
     .query(
-      "SELECT AccountId, Username, Email, Phone, Role, State FROM Account"
+      "SELECT AccountId, Username, Email, Phone, Role, State, ImageUrl FROM Account"
     );
   return result.recordset;
 }
