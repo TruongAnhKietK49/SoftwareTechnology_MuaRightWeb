@@ -1,2 +1,864 @@
-<!-- Import menu của seller vào -->
-<!-- Ở đây có thể hiện profile, doanh thu,... -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard - MuaRight</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #ff7d1a;
+            --primary-dark: #071b2f;
+            --hover-orange: #ff9642;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 4px 20px rgba(7, 27, 47, 0.08);
+            --card-hover-shadow: 0 8px 30px rgba(7, 27, 47, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            min-height: 100vh;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+        
+        /* Sidebar Premium */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 280px;
+            background: linear-gradient(180deg, var(--primary-dark) 0%, #0a2540 100%);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 125, 26, 0.3);
+            border-radius: 10px;
+        }
+        
+        .sidebar-header {
+            padding: 30px 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .sidebar-header h4 {
+            color: white;
+            margin: 0;
+            font-weight: 700;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .sidebar-header .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-orange);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 15px;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            margin: 8px 0;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .sidebar-menu a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-orange);
+            transform: scaleY(0);
+            transition: transform 0.3s;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255, 125, 26, 0.15);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar-menu a.active::before {
+            transform: scaleY(1);
+        }
+        
+        .sidebar-menu i {
+            width: 24px;
+            margin-right: 15px;
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        .sidebar-menu a.active i {
+            color: var(--primary-orange);
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        /* Top Bar Premium */
+        .top-bar {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .top-bar h5 {
+            margin: 0;
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-size: 24px;
+        }
+        
+        .top-bar .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-orange), var(--hover-orange));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        /* Stats Cards Premium */
+        .stats-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--hover-orange));
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--card-hover-shadow);
+        }
+        
+        .stats-card .icon-wrapper {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .stats-card.revenue .icon-wrapper {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            color: var(--primary-orange);
+        }
+        
+        .stats-card.orders .icon-wrapper {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            color: #1976d2;
+        }
+        
+        .stats-card.products .icon-wrapper {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            color: #388e3c;
+        }
+        
+        .stats-card.pending .icon-wrapper {
+            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+            color: #c2185b;
+        }
+        
+        .stats-card h3 {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 15px 0 8px 0;
+            color: var(--primary-dark);
+            letter-spacing: -1px;
+        }
+        
+        .stats-card p {
+            color: #6c757d;
+            margin: 0;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        
+        .stats-card .trend {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+        
+        .stats-card .trend.up {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .stats-card .trend.down {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        /* Card Premium */
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            border: none;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-dark), #0a2540);
+            color: white;
+            border: none;
+            padding: 20px 30px;
+            font-weight: 600;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-header i {
+            color: var(--primary-orange);
+            margin-right: 10px;
+        }
+        
+        /* Table Premium */
+        .table {
+            margin: 0;
+        }
+        
+        .table thead th {
+            background: #f8f9fa;
+            color: var(--primary-dark);
+            font-weight: 600;
+            border: none;
+            padding: 18px 20px;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        
+        .table tbody tr {
+            transition: all 0.3s;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .table tbody tr:hover {
+            background: #f8f9fa;
+            transform: scale(1.01);
+        }
+        
+        .table tbody td {
+            padding: 20px;
+            vertical-align: middle;
+            color: #495057;
+        }
+        
+        .badge {
+            padding: 8px 16px;
+            font-weight: 600;
+            font-size: 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge.bg-warning {
+            background: linear-gradient(135deg, #ffd54f, #ffb300) !important;
+            color: #000;
+        }
+        
+        .badge.bg-info {
+            background: linear-gradient(135deg, #4fc3f7, #0288d1) !important;
+        }
+        
+        .badge.bg-primary {
+            background: linear-gradient(135deg, #64b5f6, #1976d2) !important;
+        }
+        
+        .badge.bg-success {
+            background: linear-gradient(135deg, #81c784, #388e3c) !important;
+        }
+        
+        /* Buttons Premium */
+        .btn {
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #66bb6a, #43a047);
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(135deg, #43a047, #2e7d32);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 160, 71, 0.3);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-orange), var(--hover-orange));
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--hover-orange), var(--primary-orange));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 125, 26, 0.3);
+        }
+        
+        .btn-outline-primary {
+            border: 2px solid var(--primary-orange);
+            color: var(--primary-orange);
+            background: transparent;
+        }
+        
+        .btn-outline-primary:hover {
+            background: var(--primary-orange);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Top Products List */
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px;
+            margin-bottom: 12px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        
+        .product-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .product-item strong {
+            color: var(--primary-dark);
+        }
+        
+        /* Notification List */
+        .notification-item {
+            padding: 18px;
+            margin-bottom: 12px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-orange);
+            transition: all 0.3s;
+        }
+        
+        .notification-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .notification-icon.warning {
+            background: #fff3e0;
+            color: var(--primary-orange);
+        }
+        
+        .notification-icon.info {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .notification-icon.success {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+        
+        /* Mobile Toggle */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 1001;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-orange), var(--hover-orange));
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 8px 20px rgba(255, 125, 26, 0.4);
+            font-size: 24px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+            
+            .mobile-toggle {
+                display: block;
+            }
+            
+            .top-bar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .stats-card h3 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h4>
+                <div class="logo-icon">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <span>MuaRight</span>
+            </h4>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#dashboard" class="active" data-route="dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="#products" data-route="products"><i class="fas fa-box"></i> Quản lý sản phẩm</a></li>
+            <li><a href="#orders" data-route="orders"><i class="fas fa-shopping-cart"></i> Quản lý đơn hàng</a></li>
+            <li><a href="#statistics" data-route="statistics"><i class="fas fa-chart-bar"></i> Thống kê doanh thu</a></li>
+            <li><a href="#settings" data-route="settings"><i class="fas fa-cog"></i> Cài đặt</a></li>
+            <li><a href="#logout" onclick="authManager.logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content - Dynamic Content sẽ được load ở đây -->
+    <div class="main-content" id="main-content">
+        <!-- Dashboard Page Content -->
+        <div id="dashboard-page" class="page-content active">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div>
+                    <h5 id="welcomeMessage">Xin chào, <span id="sellerName">Đang tải...</span></h5>
+                    <small class="text-muted">Chào mừng trở lại với MuaRight Seller Center</small>
+                </div>
+                <div class="user-info">
+                    <div>
+                        <div class="text-end">
+                            <small class="text-muted d-block">Hôm nay</small>
+                            <strong id="currentDate" style="color: var(--primary-dark);"></strong>
+                        </div>
+                    </div>
+                    <div class="user-avatar" id="userAvatar">NA</div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="row" id="dashboardStats">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="stats-card revenue">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <h3 id="monthlyRevenue">0đ</h3>
+                        <p>Doanh thu tháng này</p>
+                        <span class="trend up" id="revenueTrend">
+                            <i class="fas fa-arrow-up"></i> <span id="revenuePercent">0%</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="stats-card orders">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <h3 id="monthlyOrders">0</h3>
+                        <p>Đơn hàng tháng này</p>
+                        <span class="trend up" id="ordersTrend">
+                            <i class="fas fa-arrow-up"></i> <span id="ordersPercent">0%</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="stats-card products">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <h3 id="activeProducts">0</h3>
+                        <p>Sản phẩm đang bán</p>
+                        <span class="trend up" id="productsTrend">
+                            <i class="fas fa-plus"></i> <span id="newProducts">0 mới</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="stats-card pending">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3 id="pendingOrders">0</h3>
+                        <p>Đơn chờ xử lý</p>
+                        <span class="trend down" id="pendingTrend">
+                            <i class="fas fa-exclamation-triangle"></i> Cần xử lý
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <span><i class="fas fa-list"></i> Đơn hàng gần đây</span>
+                            <a href="#orders" data-route="orders" class="btn btn-sm btn-outline-primary">Xem tất cả</a>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã đơn</th>
+                                            <th>Sản phẩm</th>
+                                            <th>Khách hàng</th>
+                                            <th>Số lượng</th>
+                                            <th>Tổng tiền</th>
+                                            <th>Trạng thái</th>
+                                            <th>Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentOrdersTable">
+                                        <tr>
+                                            <td colspan="7" class="text-center py-4">
+                                                <div class="spinner-border text-primary" role="status">
+                                                    <span class="visually-hidden">Đang tải...</span>
+                                                </div>
+                                                <p class="mt-2 text-muted">Đang tải đơn hàng...</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <span><i class="fas fa-trophy"></i> Top 5 sản phẩm bán chạy</span>
+                        </div>
+                        <div class="card-body" id="topProductsList">
+                            <div class="text-center py-3">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Đang tải...</span>
+                                </div>
+                                <p class="mt-2 text-muted">Đang tải sản phẩm...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <span><i class="fas fa-bell"></i> Thông báo mới nhất</span>
+                        </div>
+                        <div class="card-body" id="notificationsList">
+                            <div class="text-center py-3">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Đang tải...</span>
+                                </div>
+                                <p class="mt-2 text-muted">Đang tải thông báo...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Các trang khác sẽ được load dynamic vào đây -->
+    </div>
+
+    <!-- Mobile Toggle -->
+    <button class="btn mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Import JavaScript files -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Core JavaScript files -->
+    <script src="js/auth.js"></script>
+    <script src="js/router.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/orders.js"></script>
+
+    <script>
+        // Initialize date
+        const dateElement = document.getElementById('currentDate');
+        if (dateElement) {
+            const today = new Date();
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            dateElement.textContent = today.toLocaleDateString('vi-VN', options);
+        }
+
+        // Sidebar toggle function
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-toggle');
+            
+            if (window.innerWidth <= 768) {
+                if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+                    sidebar.classList.remove('show');
+                }
+            }
+        });
+
+        // Utility functions
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(amount);
+        }
+
+        function getStatusBadge(status) {
+            const statusMap = {
+                'pending': '<span class="badge bg-warning">Chờ xác nhận</span>',
+                'confirmed': '<span class="badge bg-info">Đã xác nhận</span>',
+                'shipping': '<span class="badge bg-primary">Đang giao</span>',
+                'delivered': '<span class="badge bg-success">Đã giao</span>',
+                'cancelled': '<span class="badge bg-danger">Đã hủy</span>'
+            };
+            return statusMap[status] || '<span class="badge bg-secondary">Không xác định</span>';
+        }
+
+        function getActionButton(status, orderId) {
+            const buttonMap = {
+                'pending': `<button class="btn btn-sm btn-success" onclick="confirmOrder('${orderId}')">Xác nhận</button>`,
+                'confirmed': `<button class="btn btn-sm btn-primary" onclick="viewOrder('${orderId}')">Chi tiết</button>`,
+                'shipping': `<button class="btn btn-sm btn-primary" onclick="viewOrder('${orderId}')">Chi tiết</button>`,
+                'delivered': `<button class="btn btn-sm btn-secondary" onclick="viewOrder('${orderId}')">Xem</button>`
+            };
+            return buttonMap[status] || `<button class="btn btn-sm btn-secondary" onclick="viewOrder('${orderId}')">Xem</button>`;
+        }
+
+        function getRankBadgeClass(rank) {
+            const rankMap = {
+                1: 'bg-warning',
+                2: 'bg-info',
+                3: 'bg-primary'
+            };
+            return rankMap[rank] || 'bg-success';
+        }
+
+        function getRankIcon(rank) {
+            const iconMap = {
+                1: '🥇',
+                2: '🥈',
+                3: '🥉'
+            };
+            return iconMap[rank] || '';
+        }
+
+        function getNotificationIcon(type) {
+            const iconMap = {
+                'warning': 'fas fa-exclamation-circle',
+                'info': 'fas fa-box',
+                'success': 'fas fa-star',
+                'danger': 'fas fa-times-circle'
+            };
+            return iconMap[type] || 'fas fa-bell';
+        }
+
+        // Order actions
+        function confirmOrder(orderId) {
+            if (confirm(`Xác nhận đơn hàng #${orderId}?`)) {
+                // Gọi API xác nhận đơn hàng
+                fetch(`/api/seller/orders/${orderId}/status`, {
+                    method: 'PUT',
+                    headers: authManager.getAuthHeaders(),
+                    body: JSON.stringify({ status: 'confirmed' })
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        alert('Đã xác nhận đơn hàng!');
+                        loadDashboardData(); // Reload data
+                    } else {
+                        alert('Lỗi khi xác nhận đơn hàng: ' + result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Lỗi khi xác nhận đơn hàng');
+                });
+            }
+        }
+
+        function viewOrder(orderId) {
+            // Chuyển đến trang chi tiết đơn hàng
+            router.navigate(`orders?orderId=${orderId}`);
+        }
+
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Khởi tạo dashboard page
+            if (window.initDashboardPage) {
+                initDashboardPage();
+            }
+            
+            // Setup menu click handlers
+            const menuLinks = document.querySelectorAll('.sidebar-menu a[data-route]');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const route = this.getAttribute('data-route');
+                    if (route !== 'logout') {
+                        // Update active menu
+                        menuLinks.forEach(l => l.classList.remove('active'));
+                        this.classList.add('active');
+                        // Navigate to route
+                        router.navigate(route);
+                    }
+                });
+            });
+        });
+
+        // Global error handler
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e.error);
+        });
+    </script>
+</body>
+</html>
