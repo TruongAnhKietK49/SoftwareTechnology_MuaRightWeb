@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MuaRight - Đăng ký tài khoản</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/public/CSS/signUp.css">
+</head>
+
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h2 class="fw-bold mb-0">MuaRight</h2>
+                        <h4 class="mt-3 mb-4">Tạo tài khoản của bạn</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="signupForm">
+                            <!-- Username -->
+                            <div class="mb-3">
+                                <label for="username" class="form-label">
+                                    <i class="bi bi-person me-2"></i>Tên đăng nhập
+                                </label>
+                                <input type="text" class="form-control" id="username" placeholder="Nhập username..."
+                                    required>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">
+                                    <i class="bi bi-envelope me-2"></i>Email
+                                </label>
+                                <input type="email" class="form-control" id="email" placeholder="Nhập địa chỉ email"
+                                    required>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">
+                                    <i class="bi bi-telephone me-2"></i>Số điện thoại
+                                </label>
+                                <input type="tel" class="form-control" id="phone" placeholder="Nhập số điện thoại"
+                                    required>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="mb-3">
+                                <label for="password" class="form-label">
+                                    <i class="bi bi-lock me-2"></i>Mật khẩu
+                                </label>
+                                <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu"
+                                    required>
+                            </div>
+
+                            <!-- Role Selection -->
+                            <div class="mb-4">
+                                <label class="form-label">
+                                    <i class="bi bi-person-badge me-2"></i>Chọn vai trò
+                                </label>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                    <button type="button" class="btn btn-outline-primary role-btn flex-fill active"
+                                        data-role="Customer">
+                                        <i class="bi bi-person me-1"></i> Khách hàng
+                                    </button>
+                                    <button type="button" class="btn btn-outline-primary role-btn flex-fill"
+                                        data-role="Seller">
+                                        <i class="bi bi-shop me-1"></i> Người bán
+                                    </button>
+                                    <button type="button" class="btn btn-outline-primary role-btn flex-fill"
+                                        data-role="Shipper">
+                                        <i class="bi bi-truck me-1"></i> Shipper
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Customer Profile Section -->
+                            <div id="CustomerProfile" class="profile-section active">
+                                <h5 class="section-title"><i class="bi bi-person-circle me-2"></i>Thông tin khách hàng
+                                </h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="customerFullName" class="form-label">Họ và tên</label>
+                                        <input type="text" class="form-control" id="customerFullName"
+                                            placeholder="Nhập họ và tên">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="customerBirthday" class="form-label">Ngày sinh</label>
+                                        <input type="date" class="form-control" id="customerBirthday">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="customerGender" class="form-label">Giới tính</label>
+                                        <select class="form-select" id="customerGender">
+                                            <option value="">Chọn giới tính</option>
+                                            <option value="Nam">Nam</option>
+                                            <option value="Nữ">Nữ</option>
+                                            <option value="Khác">Khác</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="customerAddress" class="form-label">Địa chỉ</label>
+                                    <textarea class="form-control" id="customerAddress" rows="3"
+                                        placeholder="Nhập địa chỉ"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Seller Profile Section -->
+                            <div id="SellerProfile" class="profile-section">
+                                <h5 class="section-title"><i class="bi bi-shop-window me-2"></i>Thông tin người bán</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="sellerFullName" class="form-label">Họ và tên</label>
+                                        <input type="text" class="form-control" id="sellerFullName"
+                                            placeholder="Nhập họ và tên">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="sellerBirthday" class="form-label">Ngày sinh</label>
+                                        <input type="date" class="form-control" id="sellerBirthday">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="sellerGender" class="form-label">Giới tính</label>
+                                        <select class="form-select" id="sellerGender">
+                                            <option value="">Chọn giới tính</option>
+                                            <option value="Nam">Nam</option>
+                                            <option value="Nữ">Nữ</option>
+                                            <option value="Khác">Khác</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="storeName" class="form-label">Tên cửa hàng</label>
+                                        <input type="text" class="form-control" id="storeName"
+                                            placeholder="Nhập tên cửa hàng">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="storeAddress" class="form-label">Địa chỉ cửa hàng</label>
+                                    <textarea class="form-control" id="storeAddress" rows="3"
+                                        placeholder="Nhập địa chỉ cửa hàng"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="sellerAddress" class="form-label">Địa chỉ cá nhân</label>
+                                    <textarea class="form-control" id="sellerAddress" rows="3"
+                                        placeholder="Nhập địa chỉ cá nhân"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Shipper Profile Section -->
+                            <div id="ShipperProfile" class="profile-section">
+                                <h5 class="section-title"><i class="bi bi-truck me-2"></i>Thông tin shipper</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="shipperFullName" class="form-label">Họ và tên</label>
+                                        <input type="text" class="form-control" id="shipperFullName"
+                                            placeholder="Nhập họ và tên">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="shipperBirthday" class="form-label">Ngày sinh</label>
+                                        <input type="date" class="form-control" id="shipperBirthday">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="shipperGender" class="form-label">Giới tính</label>
+                                        <select class="form-select" id="shipperGender">
+                                            <option value="">Chọn giới tính</option>
+                                            <option value="Nam">Nam</option>
+                                            <option value="Nữ">Nữ</option>
+                                            <option value="Khác">Khác</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="vehicleInfo" class="form-label">Thông tin phương tiện</label>
+                                        <select class="form-select" id="vehicleInfo">
+                                            <option value="">Chọn phương tiện</option>
+                                            <option value="Xe máy">Xe máy</option>
+                                            <option value="Ô tô">Ô tô</option>
+                                            <option value="Xe tải">Xe tải</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="licenseNo" class="form-label">Biển số xe</label>
+                                        <input type="text" class="form-control" id="licenseNo"
+                                            placeholder="Nhập biển số xe">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="region" class="form-label">Khu vực giao hàng</label>
+                                    <input type="text" class="form-control" id="region"
+                                        placeholder="Nhập khu vực giao hàng">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="shipperAddress" class="form-label">Địa chỉ</label>
+                                    <textarea class="form-control" id="shipperAddress" rows="3"
+                                        placeholder="Nhập địa chỉ"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Sign Up Button -->
+                            <div class="d-grid mb-4 mt-4">
+                                <button type="button" class="btn btn-primary btn-lg" id="signUp" onclick="createUser()">
+                                    <i class="bi bi-person-plus me-2"></i>Đăng ký
+                                </button>
+                            </div>
+
+                            <!-- Divider -->
+                            <div class="divider">Hoặc đăng ký với</div>
+
+                            <!-- Social Login -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-outline-secondary social-btn w-100">
+                                        <i class="bi bi-google text-danger"></i> Google
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-outline-secondary social-btn w-100">
+                                        <i class="bi bi-facebook text-primary"></i> Facebook
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Already have account -->
+                            <div class="text-center">
+                                <p>Đã có tài khoản?
+                                    <a href="./signIn_page.html" class="text-decoration-none">
+                                        <i class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập
+                                    </a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Xử lý chọn vai trò
+        document.querySelectorAll('.role-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                // Cập nhật trạng thái nút
+                document.querySelectorAll('.role-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+
+                // Ẩn tất cả các form profile
+                document.querySelectorAll('.profile-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+
+                // Hiển thị form profile tương ứng
+                const role = this.getAttribute('data-role');
+                document.getElementById(`${role}Profile`).classList.add('active');
+            });
+        });
+    </script>
+    <script src="/controller/c_signUp.js"></script>
+</body>
+
+</html>

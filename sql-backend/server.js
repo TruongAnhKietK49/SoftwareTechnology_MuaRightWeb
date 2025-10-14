@@ -18,10 +18,14 @@ const config = {
   },
 };
 
-app.get("/admin/accounts", async (req, res)=> {
+app.get("/admin/accounts", async (req, res) => {
   try {
     const pool = await getPool();
-    const result = await pool.request().query("SELECT AccountId, Username, Email, Phone, Role, State FROM Account");
+    const result = await pool
+      .request()
+      .query(
+        "SELECT AccountId, Username, Email, Phone, Role, State FROM Account"
+      );
     res.json(result.recordset);
   } catch (err) {
     console.error("Lỗi khi lấy tài khoản:", err);
@@ -29,13 +33,18 @@ app.get("/admin/accounts", async (req, res)=> {
   }
 });
 
+const userRoutes = require("./routes/userRoutes");
+app.use(cors());
+app.use(express.json());
+app.use("/api/users", userRoutes);
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server đang chạy trên cổng ${PORT}`);
 });
 
-let poolPromise = null;
 
+let poolPromise = null;
 // Trả về một pool đã kết nối (tái sử dụng cùng 1 connection)
 async function getPool() {
   if (!poolPromise) {

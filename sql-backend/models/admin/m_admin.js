@@ -1,4 +1,4 @@
-const { sql, getPool } = require("../../sql-backend/server");
+const { sql, getPool } = require("../../server");
 
 // Lấy account từ database
 async function getAccount() {
