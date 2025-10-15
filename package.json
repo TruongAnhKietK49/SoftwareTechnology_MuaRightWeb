@@ -1,7 +1,26 @@
 {
   "dependencies": {
+    "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "mssql": "^12.0.0"
-  }
+  },
+  "name": "softwaretechnology_muarightweb",
+  "version": "1.0.0",
+  "description": "Dự án dùng HTML, CSS, BOOTSTRAP và xử lý backend bằng Node.JS + Express\r Cài NodeJS (nếu chưa có)\r Clone code từ Repository\r Cài package.json (lệnh npm init -y)\r Tiếp tục cài npm install express mssql cors\r Kiểm tra bằng lệnh npm list express mssql cors\r Vào file server.js trong folder sql-backend, xem cấu hình config để kết nối SQL Server\r Vào SQL Server Management Studio 2022 để chỉnh sửa tài khoản y như cấu hình\r Sau khi xong tiến hành chạy file server.js bằng Extension 'Code Runner' hoặc gõ lệnh\r =>Thông báo kết nối thành công là được!\r Tiến hành code theo task đã phân chia\r 🏷️Lưu ý: Mỗi lần commit, phải ghi rõ tên commit.\r   Ví dụ: Mình đang code chức năng đăng nhập, khi commit -m sẽ ghi \"SignIn\".",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TruongAnhKietK49/SoftwareTechnology_MuaRightWeb.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TruongAnhKietK49/SoftwareTechnology_MuaRightWeb/issues"
+  },
+  "homepage": "https://github.com/TruongAnhKietK49/SoftwareTechnology_MuaRightWeb#readme"
 }
