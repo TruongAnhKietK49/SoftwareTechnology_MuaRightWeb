@@ -1,3 +1,214 @@
-<!-- Import menu của shipper vào -->
-<!-- Hiển thị danh sách sản phẩm từ tất cả các cửa hàng đang chờ nhận -->
-<!-- Có thể filter theo địa chỉ, cửa hàng, loại sản phẩm, giá cả,... -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MuaRight - Products (Shipper)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .navbar-custom {
+            background-color: #000 !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .text-brown-gold {
+            color: #f7b32c; /* Màu vàng cam cho chữ nổi bật */
+        }
+        /* Custom styles cho Card sản phẩm */
+        .product-card {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 100%; /* Đảm bảo chiều cao bằng nhau trong hàng */
+        }
+        .product-image {
+            background-color: #000; /* Nền đen cho ảnh */
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 300px; /* Chiều cao cố định cho phần ảnh */
+        }
+        .product-image img {
+            max-height: 100%;
+            width: auto;
+            object-fit: contain;
+        }
+        .product-details {
+            padding: 15px;
+        }
+        .btn-select {
+            background-color: #d9534f; /* Màu đỏ nổi bật cho nút CHỌN GIAO */
+            border-color: #d9534f;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .btn-select:hover {
+            background-color: #c9302c;
+            border-color: #c9302c;
+            color: #fff;
+        }
+        .rating-stars {
+            color: gold;
+        }
+        /* Bổ sung cho Bảng đơn hàng */
+        .table-dark-custom {
+            --bs-table-bg: #1a1a1a;
+            --bs-table-striped-bg: #282828;
+            --bs-table-striped-color: #fff;
+            --bs-table-hover-bg: #353535;
+            --bs-table-hover-color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid mx-5">
+            <a class="navbar-brand fw-bold text-brown-gold" href="#">MuaRight-shipper</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Profile</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <img src="../../images/image 11.png" alt="Panda Icon" width="30" height="30" class="me-2">
+                    <span class="navbar-text text-white">
+                        Hi, Tom
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid py-5">
+        
+        <h2 class="mb-4 text-white">Đơn hàng mới chờ nhận</h2>
+
+        <div class="row g-4 mb-5 justify-content-center">
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="../../images/Old_fashion_balck_and_gold_color_perfume__3_-removebg-preview 1.png" class="img-fluid" alt="Luxurious Elixir Rough">
+                    </div>
+                    
+                    <div class="product-details">
+                        <h4 class="text-white">#DH202500456</h4>
+                        <p class="text-brown-gold fw-bold m-0">Luxurious Elixir Rough</p>
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="rating-stars me-2">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <small>(80)</small>
+                            <span class="ms-auto fw-bold text-white">$220.00 <small>100ml</small></span>
+                        </div>
+
+                        <ul class="list-unstyled small lh-sm">
+                            <li><strong class="text-brown-gold">Địa chỉ Lấy Hàng:</strong> Kho Q.Tân Bình, 155 Cộng Hòa</li>
+                            <li><strong class="text-brown-gold">Địa chỉ Giao Hàng:</strong> P.10, Q.Phú Nhuận</li>
+                            <li><strong class="text-brown-gold">Ghi chú Khách Hàng:</strong> Khách yêu cầu giao sau 18:00 vì không có ở nhà</li>
+                        </ul>
+                        
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-select">CHỌN GIAO</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="../../images/Old_fashion_gold_color_perfume__1_-removebg-preview 1.png" class="img-fluid" alt="The Golden Legacy">
+                    </div>
+
+                    <div class="product-details">
+                        <h4 class="text-white">#DH202500457</h4>
+                        <p class="text-brown-gold fw-bold m-0">The Golden Legacy</p>
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="rating-stars me-2">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                            <small>(103)</small>
+                            <span class="ms-auto fw-bold text-white">$150.00 <small>100ml</small></span>
+                        </div>
+
+                        <ul class="list-unstyled small lh-sm">
+                            <li><strong class="text-brown-gold">Địa chỉ Lấy Hàng:</strong> Chi nhánh Q.1, 12 Nguyễn Huệ</li>
+                            <li><strong class="text-brown-gold">Địa chỉ Giao Hàng:</strong> P.7, Q.Gò Vấp</li>
+                            <li><strong class="text-brown-gold">Ghi chú Khách Hàng:</strong> Không có ghi chú. Khách nhận tại sảnh chung cư.</li>
+                        </ul>
+                        
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-select">CHỌN GIAO</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+
+        </div>
+
+        <hr class="border-secondary my-5">
+
+        <h2 class="mb-4 text-white d-flex align-items-center">
+            <img src="../../images/image 12.png" alt="Package Icon" width="50" height="50" class="me-3">
+            ĐƠN HÀNG CỦA TÔI
+        </h2>
+        
+        <div class="table-responsive">
+            <table class="table table-dark table-striped table-hover table-dark-custom align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-brown-gold">MÃ ĐƠN</th>
+                        <th scope="col" class="text-brown-gold">ĐỊA CHỈ GIAO</th>
+                        <th scope="col" class="text-brown-gold">TỔNG TIỀN</th>
+                        <th scope="col" class="text-brown-gold">TRẠNG THÁI</th>
+                        </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#DH202500456</td>
+                        <td>P.10, Q.Phú Nhuận</td>
+                        <td>$220.00</td>
+                        <td><span class="badge bg-success">ĐÃ GIAO</span></td>
+                    </tr>
+                    <tr>
+                        <td>#DH202500458</td>
+                        <td>P.5, Q.3</td>
+                        <td>$180.00</td>
+                        <td><span class="badge bg-danger">HỦY GIAO</span></td>
+                    </tr>
+                    <tr>
+                        <td>#DH202500459</td>
+                        <td>P.15, Q.Tân Bình</td>
+                        <td>$300.00</td>
+                        <td><span class="badge bg-success">ĐÃ GIAO</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
