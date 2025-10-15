@@ -6,86 +6,26 @@
     <title>MuaRight - Products (Shipper)</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <style>
-        body {
-            background-color: #000;
-            color: #fff;
-            font-family: Arial, sans-serif;
-        }
-        .navbar-custom {
-            background-color: #000 !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .text-brown-gold {
-            color: #f7b32c; /* Màu vàng cam cho chữ nổi bật */
-        }
-        /* Custom styles cho Card sản phẩm */
-        .product-card {
-            background-color: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 10px;
-            overflow: hidden;
-            height: 100%; /* Đảm bảo chiều cao bằng nhau trong hàng */
-        }
-        .product-image {
-            background-color: #000; /* Nền đen cho ảnh */
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 300px; /* Chiều cao cố định cho phần ảnh */
-        }
-        .product-image img {
-            max-height: 100%;
-            width: auto;
-            object-fit: contain;
-        }
-        .product-details {
-            padding: 15px;
-        }
-        .btn-select {
-            background-color: #d9534f; /* Màu đỏ nổi bật cho nút CHỌN GIAO */
-            border-color: #d9534f;
-            color: #fff;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .btn-select:hover {
-            background-color: #c9302c;
-            border-color: #c9302c;
-            color: #fff;
-        }
-        .rating-stars {
-            color: gold;
-        }
-        /* Bổ sung cho Bảng đơn hàng */
-        .table-dark-custom {
-            --bs-table-bg: #1a1a1a;
-            --bs-table-striped-bg: #282828;
-            --bs-table-striped-color: #fff;
-            --bs-table-hover-bg: #353535;
-            --bs-table-hover-color: #fff;
-        }
-    </style>
+    <link rel="stylesheet" href="../../public/CSS/shipper/productsPage.css">
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
         <div class="container-fluid mx-5">
-            <a class="navbar-brand fw-bold text-brown-gold" href="#">MuaRight-shipper</a>
+            <a class="navbar-brand fw-bold text-brown-gold" href="./homeShipper_page.html">MuaRight-shipper</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Home</a>
+                        <a class="nav-link" href="./homeShipper_page.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Products</a>
+                        <a class="nav-link active" aria-current="page" href="./products_page.html">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
+                        <a class="nav-link" href="./profile_Page.html">Profile</a>
                     </li>
                 </ul>
                 <div class="d-flex align-items-center">
