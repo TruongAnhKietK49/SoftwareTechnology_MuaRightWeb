@@ -1,3 +1,251 @@
-<!-- Import menu của shipper vào -->
-<!-- Có thể hiển thị profile, đơn hàng đã nhận và đang chờ giao. Có chức năng bấm đã giao hoặc hủy đơn -->
-<!-- Làm gì hợp lí thì làm -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MuaRight - Trang Chủ Shipper</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* CSS tuỳ chỉnh (chỉ để áp dụng màu sắc và font cơ bản nếu cần, còn lại dùng Bootstrap) */
+        body {
+            background-color: #000; /* Nền đen như thiết kế */
+            color: #fff; /* Chữ trắng */
+            font-family: Arial, sans-serif; /* Font cơ bản */
+        }
+        .navbar-custom {
+            background-color: #000 !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .section-header {
+            color: #f7b32c; /* Màu vàng cam cho tiêu đề chính */
+            font-weight: bold;
+        }
+        .text-brown-gold {
+            color: #f7b32c; /* Màu vàng cam cho chữ nổi bật */
+        }
+        .icon-box {
+            background-color: rgba(255, 255, 255, 0.05); /* Hộp nhẹ cho phần mô tả */
+            border-radius: 10px;
+        }
+        /* Dùng màu đậm hơn cho nền footer như trong ảnh */
+        .footer-custom {
+            background-image: linear-gradient(to bottom, #303030, #1a1a1a);
+            color: #d1d1d1;
+            padding-top: 50px;
+        }
+        .footer-custom a {
+            color: #d1d1d1;
+            text-decoration: none;
+        }
+        .footer-custom a:hover {
+            color: #fff;
+        }
+        /* Style cho phần chia sẻ */
+        .share-on .btn {
+            background-color: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            margin: 0 5px;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .share-on .btn:hover {
+            background-color: #fff;
+            color: #000;
+        }
+        /* Cố gắng mô phỏng đường dots và mũi tên */
+        .process-flow-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .process-icon {
+            width: 70px; /* Kích thước icon */
+            height: 70px;
+        }
+        .arrow-icon {
+            width: 100px; /* Kích thước mũi tên */
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid mx-5">
+            <a class="navbar-brand fw-bold text-brown-gold" href="#">MuaRight-shipper</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Profile</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <img src="../../images/image 11.png" alt="Panda Icon" width="30" height="30" class="me-2">
+                    <span class="navbar-text text-white">
+                        Hi, Tom
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid text-center py-5">
+        <div class="row mb-5">
+            <div class="col-12">
+                <h1 class="display-5 fw-bold section-header">
+                    Giao hương thơm 
+                    <img src="../../images/image 2.png" alt="Perfume Icon" width="30" height="30" class="mx-2"> 
+                    Thu nhập hấp dẫn 
+                    <img src="../../images/image 3.png" alt="Money Bag Icon" width="30" height="30" class="ms-2">
+                </h1>
+            </div>
+        </div>
+
+        <div class="row mb-5 justify-content-center">
+            <div class="col-lg-8">
+                <img src="../../images/banner_perfumes.png" class="img-fluid rounded shadow-lg" alt="Perfume bottles" style="max-height: 400px; object-fit: cover;">
+            </div>
+        </div>
+
+        <div class="row justify-content-center mb-5 gx-4 gy-4">
+            <div class="col-lg-5 text-start icon-box p-4">
+                <img src="../../images/wallet.png" alt="Wallet Icon" width="30" height="30" class="float-start me-2"> 
+                <p class="fw-bold fs-5"><span class="text-brown-gold">1. Thời Gian Ổn Định:</span> Đảm bảo mức thu nhập ổn định mỗi tháng. Khác biệt với các nền tảng khác, bạn hoạt động theo lịch trình nhận hàng và đặt hàng cố định.</p>
+            </div>
+            <div class="col-lg-5 text-start icon-box p-4">
+                <p class="fw-bold fs-5"><span class="text-brown-gold">2. Chủ Động về Thời Gian:</span> Bạn là ông chủ của lịch trình mình. Tự do quyết định nhận đơn, bắt đầu giao hàng và kết thúc khi nào bạn muốn, không bắt buộc giờ cố định. 
+                    <img src="../../images/time.png" alt="Time Icon" width="30" height="30" class="float-end">
+                </p>
+            </div>
+            <div class="col-lg-5 text-start icon-box p-4">
+                <p class="fw-bold fs-5">
+                    <img src="../../images/diamond.png" alt="Diamond Icon" width="30" height="30" class="float-start me-2"> 
+                    <span class="text-brown-gold">3. Giao Trọn Sứ Mệnh:</span> Khác biệt với việc giao hàng thông thường, bạn giao sản phẩm giá trị cao cấp, được đóng gói hoàn hảo. Giao hàng nhẹ nhàng, chuyên nghiệp và ít rủi ro hư hỏng.
+                </p>
+            </div>
+            <div class="col-lg-5 text-start icon-box p-4">
+                <p class="fw-bold fs-5"><span class="text-brown-gold">4. Đội Ngũ Hỗ Trợ Tận 24/7:</span> Không bao giờ giao hàng một mình. Đội ngũ CSKH chuyên nghiệp luôn hỗ trợ bạn xử lý mọi vấn đề phát sinh, đảm bảo mọi chuyến nguy nga đều trọn vẹn. 
+                    <img src="../../images/headset.png" alt="Headset Icon" width="30" height="30" class="float-end">
+                </p>
+            </div>
+        </div>
+
+        <div class="row mb-5 align-items-center">
+            <div class="col-lg-6 text-center mb-4 mb-lg-0">
+                <img src="../../images/detail_perfume.png" class="img-fluid rounded" alt="Perfume with Lemon Slice" style="max-height: 350px; object-fit: cover;">
+            </div>
+            <div class="col-lg-6 text-start">
+                <h3 class="text-brown-gold mb-4">QUY TRÌNH LÀM VIỆC VÔ CÙNG ĐƠN GIẢN</h3>
+                <p class="fs-5">**BƯỚC 1:** <span class="fw-bold text-white">Nhận đơn</span></p>
+                <p class="fs-5">**BƯỚC 2:** <span class="fw-bold text-white">Lấy hàng</span></p>
+                <p class="fs-5">**BƯỚC 3:** <span class="fw-bold text-white">Giao hàng</span></p>
+                <p class="fs-5">**BƯỚC 4:** <span class="fw-bold text-white">Thanh toán</span></p>
+            </div>
+        </div>
+
+        <div class="row justify-content-center align-items-center mb-5 py-3">
+            <div class="col-12">
+                <div class="row justify-content-center">
+                    <div class="col-auto process-flow-item">
+                        <img src="../../images/image 17.png" alt="Location Icon" class="process-icon">
+                    </div>
+                    <div class="col-auto process-flow-item">
+                        <img src="../../images/image 18.png" alt="Arrow" class="arrow-icon">
+                    </div>
+                    <div class="col-auto process-flow-item">
+                        <img src="../../images/image 6.png" alt="Package Icon" class="process-icon">
+                    </div>
+                    <div class="col-auto process-flow-item">
+                        <img src="../../images/image 18.png" alt="Arrow" class="arrow-icon">
+                    </div>
+                    <div class="col-auto process-flow-item">
+                        <img src="../../images/image 9.png" alt="Shipper Icon" class="process-icon">
+                    </div>
+                    <div class="col-auto process-flow-item">
+                        <img src="../../images/image 18.png" alt="Arrow" class="arrow-icon">
+                    </div>
+                    <div class="col-auto process-flow-item">
+                        <img src="../../images/image 10.png" alt="Payment Icon" class="process-icon">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mb-5">
+            <div class="col-12 text-center share-on">
+                <p class="text-white fs-5 fw-bold">Share On</p>
+                <a href="#" class="btn btn-outline-light"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="btn btn-outline-light"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="btn btn-outline-light"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+
+    </main>
+    
+    <footer class="footer-custom py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="fw-bold text-white">MuaRight</h5>
+                    <p>MuaRight là địa chỉ chuyên cung cấp các loại nước hoa chính hãng với chất lượng đảm bảo và giá cả hợp lý.</p>
+                    <p>Chúng tôi cam kết mang đến cho khách hàng những sản phẩm tốt nhất và dịch vụ chuyên nghiệp.</p>
+                    <div class="d-flex social-icons mt-3">
+                        <a href="#" class="me-3"><i class="fab fa-twitter fa-2x" style="color: #1DA1F2;"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-facebook-f fa-2x" style="color: #4267B2;"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-linkedin-in fa-2x" style="color: #0077B5;"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-instagram fa-2x" style="color: #C13584;"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h5 class="fw-bold text-white">Liên hệ</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2 text-brown-gold"></i> 280 An Dương Vương, P.8, Quận 5, TP.HCM</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2 text-brown-gold"></i> 0123 123 123</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2 text-brown-gold"></i> MuaRightshop@gmail.com</li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h5 class="fw-bold text-white">Chính sách</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Chính sách đổi trả</a></li>
+                        <li class="mb-2"><a href="#">Chính sách bảo mật</a></li>
+                        <li class="mb-2"><a href="#">Chính sách vận chuyển</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-2">
+                    <h5 class="fw-bold text-white">Phương thức thanh toán</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><img src="../../images/image 10.png" alt="Payment Icon" width="18" class="me-2"> Thanh toán khi nhận hàng</li>
+                        <li class="mb-2"><img src="../../images/wallet.png" alt="Momo Icon" width="18" class="me-2"> Thẻ momo</li>
+                        <li class="mb-2"><i class="fab fa-cc-visa me-2 text-primary"></i> Thẻ visa</li>
+                        <li class="mb-2"><i class="fab fa-cc-paypal me-2 text-info"></i> Paypal</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="row mt-4 pt-3 border-top border-secondary">
+                <div class="col-12 text-center">
+                    <p class="mb-0">© 2025 MuaRight Inc. All rights reserved</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
