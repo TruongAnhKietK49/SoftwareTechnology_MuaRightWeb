@@ -42,14 +42,16 @@ async function createUser() {
         Region: document.getElementById("region").value,
       };
     }
-    const formData = [commonData, profileData];
+    const formData = {commonData, profileData};
     console.log(formData);
-    await fetch("http://localhost:3000/api/users", {
+    const response = await fetch("http://localhost:3000/api/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     });
-    alert("Tạo tài khoản thành công!");
+
+    const result = await response.json();
+    alert(result.message);
   } catch (e) {
     console.log("Lỗi: ", e);
     alert("Thất bại khi tạo tài khoản!");

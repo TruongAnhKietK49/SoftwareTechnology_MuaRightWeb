@@ -1,22 +1,12 @@
-// server.js
-const express = require("express");
-const sql = require("mssql");
-const cors = require("cors");
+const { getPool, closePool } = require("./routes/config");
+const { insertUser } = require("./models/m_signUp");
 
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
 const app = express();
 app.use(cors());
-
-// Port 1433
-const config = {
-  server: "localhost", // Mặc định sẽ là localhost
-  database: "WebDB", // Tên database
-  user: "sa", // Tên user có sẵn trong SQL Server
-  password: "123", // Đổi mật khẩu giống là được
-  options: {
-    encrypt: true,
-    trustServerCertificate: true,
-  },
-};
+app.use(bodyParser.json());
 
 app.get("/admin/accounts", async (req, res) => {
   try {
@@ -24,7 +14,7 @@ app.get("/admin/accounts", async (req, res) => {
     const result = await pool
       .request()
       .query(
-        "SELECT AccountId, Username, Email, Phone, Role, State FROM Account"
+        "SELECT AccountId, Username, Email, Phone, Role, State, ImageUrl FROM Account"
       );
     res.json(result.recordset);
   } catch (err) {
@@ -33,60 +23,22 @@ app.get("/admin/accounts", async (req, res) => {
   }
 });
 
-const userRoutes = require("./routes/userRoutes");
-app.use(cors());
-app.use(express.json());
-app.use("/api/users", userRoutes);
+app.post("/api/signup", async (req, res) => {
+  try {
+    const dataUser = req.body;
+    console.log("Nhận dữ liệu từ client:", dataUser);
+
+    // Gọi hàm insertUser trong models
+    await insertUser(dataUser);
+
+    res.status(201).json({ message: "Đăng ký thành công!" });
+  } catch (err) {
+    console.error("Lỗi khi đăng ký:", err);
+    res.status(500).json({ message: "Đăng ký thất bại!" });
+  }
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server đang chạy trên cổng ${PORT}`);
 });
-
-
-let poolPromise = null;
-// Trả về một pool đã kết nối (tái sử dụng cùng 1 connection)
-async function getPool() {
-  if (!poolPromise) {
-    poolPromise = sql
-      .connect(config)
-      .then((pool) => {
-        console.log("✅ Kết nối SQL Server thành công!");
-        return pool;
-      })
-      .catch((err) => {
-        poolPromise = null; // reset nếu lỗi để lần sau thử lại
-        console.error("❌ Lỗi khi kết nối SQL Server:", err);
-        throw err;
-      });
-  }
-  return poolPromise;
-}
-
-async function closePool() {
-  try {
-    await sql.close();
-    poolPromise = null;
-    console.log("🔒 Đóng kết nối SQL Server.");
-  } catch (err) {
-    console.error("Lỗi khi đóng pool:", err);
-  }
-}
-
-// tidy up on exit
-process.on("SIGINT", async () => {
-  await closePool();
-  process.exit(0);
-});
-
-// Khởi động server và kết nối đến SQL Server
-(async () => {
-  try {
-    await getPool();
-    console.log("🚀 Server đã khởi động và kết nối thành công!");
-  } catch (err) {
-    console.error("❌ Không thể khởi động server:", err);
-  }
-})();
-
-module.exports = { sql, getPool, closePool };

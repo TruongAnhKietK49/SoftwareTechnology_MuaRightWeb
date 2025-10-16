@@ -1,5 +1,5 @@
 // user.js
-const { sql, getPool, closePool } = require("../../server");
+const { getPool, closePool } = require("../../routes/config");
 
 // Thêm user mới
 async function insertUser(accObj, userObj) {

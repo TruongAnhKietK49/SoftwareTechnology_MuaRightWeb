@@ -3,8 +3,8 @@ const {
   getUsers,
   deleteUserById,
   getProdcuts
-} = require("/models/user/m_user");
-const { closePool } = require("../../sql-backend/server");
+} = require("../../models/user/m_user");
+const { getPool,closePool } = require("../../routes/config");
 
 // Test insertUser
 async function testInsertUser() {
@@ -43,7 +43,7 @@ async function testGetUsers() {
     console.error(err);
   }
 }
-testGetUsers().finally(() => closePool());
+testGetUsers();
 
 // Test deleteUserById
 async function testDeleteUser(userId) {
