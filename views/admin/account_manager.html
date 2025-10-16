@@ -207,86 +207,41 @@
         </div>
     </div>
 
-    <!-- Edit User Modal -->
-    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+    <!-- Modal chỉnh sửa user -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header modal-header-custom">
-                    <h5 class="modal-title" id="editUserModalLabel">Chỉnh sửa thông tin người dùng</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUserLabel">Chỉnh sửa tài khoản</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="editFirstName" class="form-label">Họ và tên đệm</label>
-                                <input type="text" class="form-control" id="editFirstName" value="Nguyễn Văn" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="editLastName" class="form-label">Tên</label>
-                                <input type="text" class="form-control" id="editLastName" value="A" required>
-                            </div>
-                        </div>
+                    <form id="editUserForm">
                         <div class="mb-3">
                             <label for="editEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="editEmail" value="nguyenvana@email.com"
-                                required>
+                            <input type="email" class="form-control" id="editEmail" required />
                         </div>
                         <div class="mb-3">
                             <label for="editPhone" class="form-label">Số điện thoại</label>
-                            <input type="tel" class="form-control" id="editPhone" value="0912345678">
+                            <input type="text" class="form-control" id="editPhone" required />
                         </div>
                         <div class="mb-3">
-                            <label for="editUserRole" class="form-label">Vai trò</label>
-                            <select class="form-select" id="editUserRole" required>
-                                <option value="customer" selected>Khách hàng</option>
-                                <option value="seller">Người bán</option>
-                                <option value="shipper">Shipper</option>
+                            <label for="editState" class="form-label">Trạng thái</label>
+                            <select id="editState" class="form-select">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
                             </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editUserStatus" class="form-label">Trạng thái</label>
-                            <select class="form-select" id="editUserStatus" required>
-                                <option value="active" selected>Đang hoạt động</option>
-                                <option value="inactive">Đã khóa</option>
-                                <option value="pending">Chờ xác nhận</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editAvatar" class="form-label">Ảnh đại diện</label>
-                            <input class="form-control" type="file" id="editAvatar">
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer modal-footer-custom">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-primary">Lưu thay đổi</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" id="saveEditBtn">Lưu thay đổi</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Delete User Modal -->
-    <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteUserModalLabel">Xác nhận xóa</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Bạn có chắc chắn muốn xóa người dùng <strong>Nguyễn Văn A</strong> không?</p>
-                    <p class="text-danger">Hành động này không thể hoàn tác.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-danger">Xóa người dùng</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script>
         // Loading sidebar
@@ -364,7 +319,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../../sql-backend/controller//admin/c_admin.js"></script>
+    <script src="../../sql-backend/controller/admin/c_accountManager.js"></script>
 </body>
 
 </html>

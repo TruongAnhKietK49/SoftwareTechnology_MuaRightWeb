@@ -31,7 +31,8 @@
 
           <li class="nav-item"><a class="nav-link" href="./views/user/Blog_Page.html">Blog</a></li>
           <li class="nav-item"><a class="nav-link" href="./template/pages/signIn_page.html"><i
-                class="bi bi-person"></i></a></li>
+                class="bi bi-person"></i><span id="username"></span></a></li>
+          <li class="nav-item"><button onclick="logout()">Đăng xuất</button></li>
         </ul>
       </div>
     </div>
@@ -266,6 +267,20 @@
 
       console.error("❌ Không tải được footer từ các đường dẫn:", paths);
     });
+
+    const account = JSON.parse(localStorage.getItem("account"));
+    if (account) {
+      document.getElementById("username").innerText = account.Username;
+      console.log("Tài khoản hiện tại:", account);
+    }
+    function logout() {
+      if (confirm("Bạn có chắc muốn đăng xuất không?")) {
+        localStorage.removeItem("account");
+        window.location.href = "./template/pages/signIn_page.html";
+      }
+    }
+
+
   </script>
 
 </body>

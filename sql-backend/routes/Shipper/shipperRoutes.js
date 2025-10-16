@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 // ĐƯỜNG DẪN ĐÃ SỬA LỖI
-const cShipper = require('../controller/shipper/c_shipper'); 
+const cShipper = require('../../controller/shipper/c_shipper'); 
 
 // Middleware giả định: Bỏ qua kiểm tra đăng nhập cho mục đích phát triển
 function isAuthenticatedShipper(req, res, next) {

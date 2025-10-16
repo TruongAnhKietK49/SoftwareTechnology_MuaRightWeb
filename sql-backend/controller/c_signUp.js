@@ -10,6 +10,7 @@ async function createUser() {
       Phone: document.getElementById("phone").value,
       PasswordHash: document.getElementById("password").value,
       Role: activeRole,
+      ImageUrl: ''
     };
 
     let profileData = {};
@@ -42,7 +43,7 @@ async function createUser() {
         Region: document.getElementById("region").value,
       };
     }
-    const formData = {commonData, profileData};
+    const formData = { commonData, profileData };
     console.log(formData);
     const response = await fetch("http://localhost:3000/api/signup", {
       method: "POST",
@@ -51,7 +52,12 @@ async function createUser() {
     });
 
     const result = await response.json();
-    alert(result.message);
+    if (response.ok) {
+      alert(result.message);
+      window.location.href = "../../template/pages/signIn_page.html";
+    } else {
+      alert(result.error || "Đăng ký thất bại!");
+    }
   } catch (e) {
     console.log("Lỗi: ", e);
     alert("Thất bại khi tạo tài khoản!");

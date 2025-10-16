@@ -161,3 +161,34 @@ CREATE TABLE Voucher (
     CONSTRAINT FK_Voucher_Customer FOREIGN KEY (CustomerId) REFERENCES CustomerProfile(CustomerId)
 );
 Drop Table Voucher
+
+SELECT * FROM Account
+
+DECLARE @NewAdminId INT;
+
+-- 1. Thêm vào Account
+INSERT INTO Account (Username, Email, Phone, PasswordHash, Role, State, ImageUrl)
+VALUES (
+    N'admin01',
+    N'admin01@gmail.com',
+    N'0909123456',
+    N'123456',
+    N'Admin',
+    N'Active',
+    N'https://example.com/avatar.png'
+);
+
+-- 2. Lấy AccountId vừa tạo
+SET @NewAdminId = SCOPE_IDENTITY();
+
+-- 3. Thêm vào AdminProfile
+INSERT INTO AdminProfile (AdminId, FullName, Birthday, Gender, Position, Note)
+VALUES (
+    @NewAdminId, 
+    N'Nguyễn Văn Quản Trị', 
+    '1990-05-12', 
+    N'Nam', 
+    N'Quản lý hệ thống', 
+    N'Quản lý toàn bộ người dùng và hệ thống.'
+);
+Delete Account Where Username = 'tienthanh'
