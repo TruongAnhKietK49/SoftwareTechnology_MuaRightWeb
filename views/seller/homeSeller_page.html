@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="../../public/CSS/seller/homeSellerPage.css">
 </head>
 <body>
-    <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h4>
@@ -20,196 +19,337 @@
             </h4>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="#dashboard" class="active" data-route="dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
-            <li><a href="#products" data-route="products"><i class="fas fa-box"></i> Quản lý sản phẩm</a></li>
-            <li><a href="#orders" data-route="orders"><i class="fas fa-shopping-cart"></i> Quản lý đơn hàng</a></li>
-            <li><a href="#statistics" data-route="statistics"><i class="fas fa-chart-bar"></i> Thống kê doanh thu</a></li>
-            <li><a href="#settings" data-route="settings"><i class="fas fa-cog"></i> Cài đặt</a></li>
-            <li><a href="#logout" onclick="authManager.logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+            <li><a href="homeSeller_page.html" class="active"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="products_page.html"><i class="fas fa-box"></i> Quản lý sản phẩm</a></li>
+            <li><a href="orders_page.html"><i class="fas fa-shopping-cart"></i> Quản lý đơn hàng</a></li>
+            <li><a href="satisfaction_page.html"><i class="fas fa-chart-bar"></i> Thống kê doanh thu</a></li>
+            <li><a href="#settings"><i class="fas fa-cog"></i> Cài đặt</a></li>
+            <li><a href="#logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
         </ul>
     </div>
 
-    <!-- Main Content - Dynamic Content sẽ được load ở đây -->
-    <div class="main-content" id="main-content">
-        <!-- Dashboard Page Content -->
-        <div id="dashboard-page" class="page-content active">
-            <!-- Top Bar -->
-            <div class="top-bar">
+    <div class="main-content">
+        <div class="top-bar">
+            <div>
+                <h5>Xin chào, <span id="sellerName">Seller</span></h5>
+                <small class="text-muted">Chào mừng trở lại với MuaRight Seller Center</small>
+            </div>
+            <div class="user-info">
                 <div>
-                    <h5 id="welcomeMessage">Xin chào, <span id="sellerName">Đang tải...</span></h5>
-                    <small class="text-muted">Chào mừng trở lại với MuaRight Seller Center</small>
-                </div>
-                <div class="user-info">
-                    <div>
-                        <div class="text-end">
-                            <small class="text-muted d-block">Hôm nay</small>
-                            <strong id="currentDate" style="color: var(--primary-dark);"></strong>
-                        </div>
+                    <div class="text-end">
+                        <small class="text-muted d-block">Hôm nay</small>
+                        <strong id="currentDate" style="color: var(--primary-dark);"></strong>
                     </div>
-                    <div class="user-avatar" id="userAvatar">NA</div>
+                </div>
+                <div class="user-avatar" id="userAvatar">NA</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card revenue">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <h3 id="monthRevenue">0đ</h3>
+                    <p>Doanh thu tháng này</p>
+                    <span class="trend up" id="revenueTrend">
+                        <i class="fas fa-arrow-up"></i> +0%
+                    </span>
                 </div>
             </div>
-
-            <!-- Stats Cards -->
-            <div class="row" id="dashboardStats">
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="stats-card revenue">
-                        <div class="icon-wrapper">
-                            <i class="fas fa-dollar-sign"></i>
-                        </div>
-                        <h3 id="monthlyRevenue">0đ</h3>
-                        <p>Doanh thu tháng này</p>
-                        <span class="trend up" id="revenueTrend">
-                            <i class="fas fa-arrow-up"></i> <span id="revenuePercent">0%</span>
-                        </span>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card orders">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-shopping-bag"></i>
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="stats-card orders">
-                        <div class="icon-wrapper">
-                            <i class="fas fa-shopping-bag"></i>
-                        </div>
-                        <h3 id="monthlyOrders">0</h3>
-                        <p>Đơn hàng tháng này</p>
-                        <span class="trend up" id="ordersTrend">
-                            <i class="fas fa-arrow-up"></i> <span id="ordersPercent">0%</span>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="stats-card products">
-                        <div class="icon-wrapper">
-                            <i class="fas fa-box-open"></i>
-                        </div>
-                        <h3 id="activeProducts">0</h3>
-                        <p>Sản phẩm đang bán</p>
-                        <span class="trend up" id="productsTrend">
-                            <i class="fas fa-plus"></i> <span id="newProducts">0 mới</span>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="stats-card pending">
-                        <div class="icon-wrapper">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <h3 id="pendingOrders">0</h3>
-                        <p>Đơn chờ xử lý</p>
-                        <span class="trend down" id="pendingTrend">
-                            <i class="fas fa-exclamation-triangle"></i> Cần xử lý
-                        </span>
-                    </div>
+                    <h3 id="monthOrders">0</h3>
+                    <p>Đơn hàng tháng này</p>
+                    <span class="trend up" id="ordersTrend">
+                        <i class="fas fa-arrow-up"></i> +0%
+                    </span>
                 </div>
             </div>
-
-            <!-- Recent Orders -->
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <span><i class="fas fa-list"></i> Đơn hàng gần đây</span>
-                            <a href="#orders" data-route="orders" class="btn btn-sm btn-outline-primary">Xem tất cả</a>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Mã đơn</th>
-                                            <th>Sản phẩm</th>
-                                            <th>Khách hàng</th>
-                                            <th>Số lượng</th>
-                                            <th>Tổng tiền</th>
-                                            <th>Trạng thái</th>
-                                            <th>Thao tác</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="recentOrdersTable">
-                                        <tr>
-                                            <td colspan="7" class="text-center py-4">
-                                                <div class="spinner-border text-primary" role="status">
-                                                    <span class="visually-hidden">Đang tải...</span>
-                                                </div>
-                                                <p class="mt-2 text-muted">Đang tải đơn hàng...</p>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card products">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-box-open"></i>
                     </div>
+                    <h3 id="totalProducts">0</h3>
+                    <p>Sản phẩm đang bán</p>
+                    <span class="trend up" id="productsTrend">
+                        <i class="fas fa-plus"></i> +0 mới
+                    </span>
                 </div>
             </div>
-
-            <!-- Bottom Section -->
-            <div class="row">
-                <div class="col-lg-6 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <span><i class="fas fa-trophy"></i> Top 5 sản phẩm bán chạy</span>
-                        </div>
-                        <div class="card-body" id="topProductsList">
-                            <div class="text-center py-3">
-                                <div class="spinner-border text-primary" role="status">
-                                    <span class="visually-hidden">Đang tải...</span>
-                                </div>
-                                <p class="mt-2 text-muted">Đang tải sản phẩm...</p>
-                            </div>
-                        </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card pending">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-clock"></i>
                     </div>
+                    <h3 id="pendingOrders">0</h3>
+                    <p>Đơn chờ xử lý</p>
+                    <span class="trend down" id="pendingTrend">
+                        <i class="fas fa-exclamation-triangle"></i> Cần xử lý
+                    </span>
                 </div>
-                
-                <div class="col-lg-6 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <span><i class="fas fa-bell"></i> Thông báo mới nhất</span>
-                        </div>
-                        <div class="card-body" id="notificationsList">
-                            <div class="text-center py-3">
-                                <div class="spinner-border text-primary" role="status">
-                                    <span class="visually-hidden">Đang tải...</span>
-                                </div>
-                                <p class="mt-2 text-muted">Đang tải thông báo...</p>
-                            </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-list"></i> Đơn hàng gần đây</span>
+                        <a href="orders_page.html" class="btn btn-sm btn-outline-primary">Xem tất cả</a>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Mã đơn</th>
+                                        <th>Sản phẩm</th>
+                                        <th>Khách hàng</th>
+                                        <th>Số lượng</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentOrdersTable">
+                                    <!-- Orders will be loaded here -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Các trang khác sẽ được load dynamic vào đây -->
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-trophy"></i> Top 5 sản phẩm bán chạy</span>
+                    </div>
+                    <div class="card-body" id="topProductsList">
+                        <!-- Top products will be loaded here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-bell"></i> Thông báo mới nhất</span>
+                    </div>
+                    <div class="card-body" id="notificationsList">
+                        <!-- Notifications will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Mobile Toggle -->
     <button class="btn mobile-toggle" onclick="toggleSidebar()">
         <i class="fas fa-bars"></i>
     </button>
 
-    <!-- Import JavaScript files -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Core JavaScript files -->
-    <script src="js/auth.js"></script>
-    <script src="js/router.js"></script>
-    <script src="js/dashboard.js"></script>
-    <script src="js/products.js"></script>
-    <script src="js/orders.js"></script>
-
     <script>
-        // Initialize date
-        const dateElement = document.getElementById('currentDate');
-        if (dateElement) {
+        // Dashboard data - will be fetched from API
+        let dashboardData = {
+            seller: {
+                name: 'Nguyễn Văn A',
+                email: 'seller@muaright.com'
+            },
+            stats: {
+                monthRevenue: 45200000,
+                revenueTrend: 12.5,
+                monthOrders: 156,
+                ordersTrend: 8.2,
+                totalProducts: 48,
+                newProducts: 2,
+                pendingOrders: 12
+            },
+            recentOrders: [
+                { id: 'DH001', product: 'Chanel No.5 EDP 100ml', customer: 'Nguyễn Văn A', qty: 1, total: 3500000, status: 'pending' },
+                { id: 'DH002', product: 'Dior Sauvage EDT 60ml', customer: 'Trần Thị B', qty: 2, total: 4200000, status: 'confirmed' },
+                { id: 'DH003', product: 'Versace Eros Pour Homme', customer: 'Lê Văn C', qty: 1, total: 2100000, status: 'shipping' },
+                { id: 'DH004', product: 'Gucci Bloom EDP 50ml', customer: 'Phạm Thị D', qty: 1, total: 2800000, status: 'delivered' },
+                { id: 'DH005', product: 'Tom Ford Black Orchid', customer: 'Hoàng Văn E', qty: 1, total: 4500000, status: 'pending' }
+            ],
+            topProducts: [
+                { name: 'Chanel No.5 EDP', sold: 45, badge: '🥇 Top 1' },
+                { name: 'Dior Sauvage EDT', sold: 38, badge: '🥈 Top 2' },
+                { name: 'Versace Eros', sold: 32, badge: '🥉 Top 3' },
+                { name: 'Gucci Bloom', sold: 28, badge: 'Top 4' },
+                { name: 'Tom Ford Black Orchid', sold: 25, badge: 'Top 5' }
+            ],
+            notifications: [
+                { type: 'warning', icon: 'exclamation-circle', title: 'Đơn hàng mới', message: 'Bạn có 3 đơn hàng mới cần xác nhận ngay', time: '5 phút trước' },
+                { type: 'info', icon: 'box', title: 'Sản phẩm sắp hết hàng', message: 'Chanel No.5 chỉ còn 5 sản phẩm trong kho', time: '1 giờ trước' },
+                { type: 'success', icon: 'star', title: 'Đánh giá tích cực', message: 'Sản phẩm Dior Sauvage nhận đánh giá 5 sao', time: '2 giờ trước' }
+            ]
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboard();
+            updateDateTime();
+        });
+
+        function loadDashboard() {
+            // TODO: Replace with API call
+            // fetch('/api/seller/dashboard')
+            //     .then(res => res.json())
+            //     .then(data => {
+            //         dashboardData = data;
+            //         updateDashboard();
+            //     });
+            
+            updateDashboard();
+        }
+
+        function updateDashboard() {
+            // Update seller info
+            document.getElementById('sellerName').textContent = dashboardData.seller.name;
+            const initials = dashboardData.seller.name.split(' ').map(n => n[0]).join('').substring(0, 2);
+            document.getElementById('userAvatar').textContent = initials;
+
+            // Update stats
+            document.getElementById('monthRevenue').textContent = formatPrice(dashboardData.stats.monthRevenue);
+            document.getElementById('revenueTrend').innerHTML = `<i class="fas fa-arrow-up"></i> +${dashboardData.stats.revenueTrend}%`;
+            
+            document.getElementById('monthOrders').textContent = dashboardData.stats.monthOrders;
+            document.getElementById('ordersTrend').innerHTML = `<i class="fas fa-arrow-up"></i> +${dashboardData.stats.ordersTrend}%`;
+            
+            document.getElementById('totalProducts').textContent = dashboardData.stats.totalProducts;
+            document.getElementById('productsTrend').innerHTML = `<i class="fas fa-plus"></i> +${dashboardData.stats.newProducts} mới`;
+            
+            document.getElementById('pendingOrders').textContent = dashboardData.stats.pendingOrders;
+
+            // Load recent orders
+            loadRecentOrders();
+            
+            // Load top products
+            loadTopProducts();
+            
+            // Load notifications
+            loadNotifications();
+        }
+
+        function loadRecentOrders() {
+            const tbody = document.getElementById('recentOrdersTable');
+            tbody.innerHTML = '';
+
+            const statusConfig = {
+                pending: { class: 'bg-warning', text: 'Chờ xác nhận' },
+                confirmed: { class: 'bg-info', text: 'Đã xác nhận' },
+                shipping: { class: 'bg-primary', text: 'Đang giao' },
+                delivered: { class: 'bg-success', text: 'Đã giao' }
+            };
+
+            dashboardData.recentOrders.forEach(order => {
+                const config = statusConfig[order.status];
+                const row = `
+                    <tr>
+                        <td><strong>#${order.id}</strong></td>
+                        <td>${order.product}</td>
+                        <td>${order.customer}</td>
+                        <td>${order.qty}</td>
+                        <td><strong style="color: var(--primary-orange);">${formatPrice(order.total)}</strong></td>
+                        <td><span class="badge ${config.class}">${config.text}</span></td>
+                        <td>
+                            ${order.status === 'pending' 
+                                ? '<button class="btn btn-sm btn-success" onclick="confirmOrder(\'' + order.id + '\')">Xác nhận</button>'
+                                : '<button class="btn btn-sm btn-primary" onclick="viewOrder(\'' + order.id + '\')">Chi tiết</button>'
+                            }
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function loadTopProducts() {
+            const container = document.getElementById('topProductsList');
+            container.innerHTML = '';
+
+            const badges = ['bg-warning', 'bg-info', 'bg-primary', 'bg-success', 'bg-success'];
+
+            dashboardData.topProducts.forEach((product, index) => {
+                const item = `
+                    <div class="product-item">
+                        <div>
+                            <strong>${product.name}</strong><br>
+                            <small class="text-muted">${product.sold} đơn bán ra</small>
+                        </div>
+                        <span class="badge ${badges[index]}">${product.badge}</span>
+                    </div>
+                `;
+                container.innerHTML += item;
+            });
+        }
+
+        function loadNotifications() {
+            const container = document.getElementById('notificationsList');
+            container.innerHTML = '';
+
+            dashboardData.notifications.forEach(notif => {
+                const item = `
+                    <div class="notification-item">
+                        <div class="d-flex gap-3">
+                            <div class="notification-icon ${notif.type}">
+                                <i class="fas fa-${notif.icon}"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <strong>${notif.title}</strong><br>
+                                <small class="text-muted">${notif.message}</small><br>
+                                <small class="text-muted"><i class="far fa-clock"></i> ${notif.time}</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += item;
+            });
+        }
+
+        function formatPrice(price) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+        }
+
+        function updateDateTime() {
+            const dateElement = document.getElementById('currentDate');
             const today = new Date();
             const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
             dateElement.textContent = today.toLocaleDateString('vi-VN', options);
         }
 
-        // Sidebar toggle function
+        function confirmOrder(orderId) {
+            if (confirm('Xác nhận đơn hàng này?')) {
+                // TODO: Replace with API call
+                // fetch('/api/seller/orders/' + orderId + '/confirm', { method: 'PUT' })
+                //     .then(res => res.json())
+                //     .then(data => {
+                //         alert('Đã xác nhận đơn hàng thành công!');
+                //         loadDashboard();
+                //     });
+                
+                alert('Đã xác nhận đơn hàng thành công!');
+                window.location.href = 'orders_page.html';
+            }
+        }
+
+        function viewOrder(orderId) {
+            // TODO: Navigate to order detail or open modal
+            window.location.href = 'orders_page.html';
+        }
+
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('show');
         }
 
-        // Close sidebar when clicking outside on mobile
         document.addEventListener('click', function(event) {
             const sidebar = document.getElementById('sidebar');
             const toggle = document.querySelector('.mobile-toggle');
@@ -221,120 +361,14 @@
             }
         });
 
-        // Utility functions
-        function formatCurrency(amount) {
-            return new Intl.NumberFormat('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-            }).format(amount);
-        }
-
-        function getStatusBadge(status) {
-            const statusMap = {
-                'pending': '<span class="badge bg-warning">Chờ xác nhận</span>',
-                'confirmed': '<span class="badge bg-info">Đã xác nhận</span>',
-                'shipping': '<span class="badge bg-primary">Đang giao</span>',
-                'delivered': '<span class="badge bg-success">Đã giao</span>',
-                'cancelled': '<span class="badge bg-danger">Đã hủy</span>'
-            };
-            return statusMap[status] || '<span class="badge bg-secondary">Không xác định</span>';
-        }
-
-        function getActionButton(status, orderId) {
-            const buttonMap = {
-                'pending': `<button class="btn btn-sm btn-success" onclick="confirmOrder('${orderId}')">Xác nhận</button>`,
-                'confirmed': `<button class="btn btn-sm btn-primary" onclick="viewOrder('${orderId}')">Chi tiết</button>`,
-                'shipping': `<button class="btn btn-sm btn-primary" onclick="viewOrder('${orderId}')">Chi tiết</button>`,
-                'delivered': `<button class="btn btn-sm btn-secondary" onclick="viewOrder('${orderId}')">Xem</button>`
-            };
-            return buttonMap[status] || `<button class="btn btn-sm btn-secondary" onclick="viewOrder('${orderId}')">Xem</button>`;
-        }
-
-        function getRankBadgeClass(rank) {
-            const rankMap = {
-                1: 'bg-warning',
-                2: 'bg-info',
-                3: 'bg-primary'
-            };
-            return rankMap[rank] || 'bg-success';
-        }
-
-        function getRankIcon(rank) {
-            const iconMap = {
-                1: '🥇',
-                2: '🥈',
-                3: '🥉'
-            };
-            return iconMap[rank] || '';
-        }
-
-        function getNotificationIcon(type) {
-            const iconMap = {
-                'warning': 'fas fa-exclamation-circle',
-                'info': 'fas fa-box',
-                'success': 'fas fa-star',
-                'danger': 'fas fa-times-circle'
-            };
-            return iconMap[type] || 'fas fa-bell';
-        }
-
-        // Order actions
-        function confirmOrder(orderId) {
-            if (confirm(`Xác nhận đơn hàng #${orderId}?`)) {
-                // Gọi API xác nhận đơn hàng
-                fetch(`/api/seller/orders/${orderId}/status`, {
-                    method: 'PUT',
-                    headers: authManager.getAuthHeaders(),
-                    body: JSON.stringify({ status: 'confirmed' })
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success) {
-                        alert('Đã xác nhận đơn hàng!');
-                        loadDashboardData(); // Reload data
-                    } else {
-                        alert('Lỗi khi xác nhận đơn hàng: ' + result.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Lỗi khi xác nhận đơn hàng');
-                });
-            }
-        }
-
-        function viewOrder(orderId) {
-            // Chuyển đến trang chi tiết đơn hàng
-            router.navigate(`orders?orderId=${orderId}`);
-        }
-
-        // Initialize dashboard when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            // Khởi tạo dashboard page
-            if (window.initDashboardPage) {
-                initDashboardPage();
-            }
-            
-            // Setup menu click handlers
-            const menuLinks = document.querySelectorAll('.sidebar-menu a[data-route]');
-            menuLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const route = this.getAttribute('data-route');
-                    if (route !== 'logout') {
-                        // Update active menu
-                        menuLinks.forEach(l => l.classList.remove('active'));
-                        this.classList.add('active');
-                        // Navigate to route
-                        router.navigate(route);
-                    }
-                });
+        const menuLinks = document.querySelectorAll('.sidebar-menu a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (!this.getAttribute('href').startsWith('#')) return;
+                e.preventDefault();
+                menuLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
             });
-        });
-
-        // Global error handler
-        window.addEventListener('error', function(e) {
-            console.error('Global error:', e.error);
         });
     </script>
 </body>
