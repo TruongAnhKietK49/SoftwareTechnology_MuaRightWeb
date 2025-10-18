@@ -1,2 +1,254 @@
 <!-- Import menu của seller vào -->
 <!-- Hiển thị đánh giá của khách hàng về sản phẩm của shop -->
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống kê doanh thu - MuaRight</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href = "../../public/CSS/seller/satisfaction_page.css">
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h4>
+                <div class="logo-icon">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <span>MuaRight</span>
+            </h4>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="homeSeller_page.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="products_page.html"><i class="fas fa-box"></i> Quản lý sản phẩm</a></li>
+            <li><a href="orders_page.html"><i class="fas fa-shopping-cart"></i> Quản lý đơn hàng</a></li>
+            <li><a href="satisfaction_page.html" class="active"><i class="fas fa-chart-bar"></i> Thống kê doanh thu</a></li>
+            <li><a href="#settings"><i class="fas fa-cog"></i> Cài đặt</a></li>
+            <li><a href="#logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h2><i class="fas fa-chart-bar"></i> Thống kê & Báo cáo</h2>
+            <p class="text-muted mb-0 mt-2">Phân tích doanh thu và hiệu suất kinh doanh</p>
+        </div>
+
+        <div class="filter-bar">
+            <div class="d-flex gap-2 flex-wrap">
+                <button class="btn-filter" data-period="today" onclick="changeTimePeriod('today')">Hôm nay</button>
+                <button class="btn-filter" data-period="7days" onclick="changeTimePeriod('7days')">7 ngày</button>
+                <button class="btn-filter active" data-period="30days" onclick="changeTimePeriod('30days')">30 ngày</button>
+                <button class="btn-filter" data-period="3months" onclick="changeTimePeriod('3months')">3 tháng</button>
+                <button class="btn-filter" data-period="6months" onclick="changeTimePeriod('6months')">6 tháng</button>
+                <button class="btn-filter" data-period="1year" onclick="changeTimePeriod('1year')">1 năm</button>
+                <button class="btn-filter" data-period="custom" onclick="changeTimePeriod('custom')">Tùy chỉnh</button>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card revenue">
+                    <div class="stats-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stats-value" id="totalRevenue">0đ</div>
+                    <div class="stats-label">Tổng doanh thu</div>
+                    <span class="stats-change up" id="revenueTrend">
+                        <i class="fas fa-arrow-up"></i> +0%
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card orders">
+                    <div class="stats-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stats-value" id="totalOrders">0</div>
+                    <div class="stats-label">Tổng đơn hàng</div>
+                    <span class="stats-change up" id="ordersTrend">
+                        <i class="fas fa-arrow-up"></i> +0%
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card products">
+                    <div class="stats-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="stats-value" id="productsSold">0</div>
+                    <div class="stats-label">Sản phẩm đã bán</div>
+                    <span class="stats-change up" id="productsTrend">
+                        <i class="fas fa-arrow-up"></i> +0%
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card customers">
+                    <div class="stats-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stats-value" id="newCustomers">0</div>
+                    <div class="stats-label">Khách hàng mới</div>
+                    <span class="stats-change up" id="customersTrend">
+                        <i class="fas fa-arrow-up"></i> +0%
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">
+                            <i class="fas fa-chart-area"></i>
+                            <span id="chartTitle">Biểu đồ doanh thu 30 ngày</span>
+                        </div>
+                        <div class="d-flex gap-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <div style="width: 15px; height: 15px; background: var(--primary-orange); border-radius: 3px;"></div>
+                                <small>Doanh thu</small>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <div style="width: 15px; height: 15px; background: #1976d2; border-radius: 3px;"></div>
+                                <small>Đơn hàng</small>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="revenueChart" height="80"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-lg-6 mb-4">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">
+                            <i class="fas fa-chart-pie"></i>
+                            Phân loại theo danh mục
+                        </div>
+                    </div>
+                    <canvas id="categoryChart" height="250"></canvas>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">
+                            <i class="fas fa-chart-bar"></i>
+                            Doanh thu theo tuần
+                        </div>
+                    </div>
+                    <canvas id="weeklyChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="table-card">
+                    <div class="table-header">
+                        <i class="fas fa-trophy"></i> Top 10 sản phẩm bán chạy nhất
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Xếp hạng</th>
+                                    <th>Sản phẩm</th>
+                                    <th>Danh mục</th>
+                                    <th>Đã bán</th>
+                                    <th>Doanh thu</th>
+                                    <th>Đánh giá</th>
+                                </tr>
+                            </thead>
+                            <tbody id="topProductsTable">
+                                <!-- Table rows will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Statistics data - will be fetched from API
+        let statisticsData = {
+            summary: {
+                totalRevenue: 45200000,
+                revenueTrend: 12.5,
+                totalOrders: 156,
+                ordersTrend: 8.2,
+                productsSold: 342,
+                productsTrend: 15.3,
+                newCustomers: 89,
+                customersTrend: 22.1
+            },
+            revenueChart: {
+                labels: ['01/10', '05/10', '10/10', '15/10', '20/10', '25/10', '30/10'],
+                revenue: [8.5, 12.3, 15.8, 10.2, 18.5, 14.7, 20.1],
+                orders: [25, 35, 42, 30, 50, 38, 55]
+            },
+            categoryChart: {
+                labels: ['Nước hoa nam', 'Nước hoa nữ', 'Nước hoa unisex'],
+                data: [45, 40, 15]
+            },
+            weeklyChart: {
+                labels: ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'],
+                data: [32.5, 28.7, 38.2, 45.8]
+            },
+            topProducts: [
+                { rank: 1, name: 'Chanel No.5 EDP 100ml', category: 'Nước hoa nữ', sold: 45, revenue: 157500000, rating: 4.8 },
+                { rank: 2, name: 'Dior Sauvage EDT 60ml', category: 'Nước hoa nam', sold: 38, revenue: 79800000, rating: 4.9 },
+                { rank: 3, name: 'Versace Eros EDT 100ml', category: 'Nước hoa nam', sold: 32, revenue: 67200000, rating: 4.7 },
+                { rank: 4, name: 'Gucci Bloom EDP 50ml', category: 'Nước hoa nữ', sold: 28, revenue: 78400000, rating: 4.6 },
+                { rank: 5, name: 'Tom Ford Black Orchid', category: 'Nước hoa unisex', sold: 25, revenue: 112500000, rating: 4.9 },
+                { rank: 6, name: 'Lancôme La Vie Est Belle', category: 'Nước hoa nữ', sold: 22, revenue: 68200000, rating: 4.5 },
+                { rank: 7, name: 'YSL Black Opium EDP', category: 'Nước hoa nữ', sold: 20, revenue: 64000000, rating: 4.7 },
+                { rank: 8, name: 'Prada Candy EDP 80ml', category: 'Nước hoa nữ', sold: 18, revenue: 52200000, rating: 4.4 },
+                { rank: 9, name: 'Armani Code Homme', category: 'Nước hoa nam', sold: 16, revenue: 43200000, rating: 4.6 },
+                { rank: 10, name: 'Burberry Brit Rhythm', category: 'Nước hoa nam', sold: 14, revenue: 35700000, rating: 4.3 }
+            ]
+        };
+
+        let currentPeriod = '30days';
+        let revenueChartInstance = null;
+        let categoryChartInstance = null;
+        let weeklyChartInstance = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStatistics();
+        });
+
+        function loadStatistics() {
+            // TODO: Replace with API call
+            // fetch('/api/seller/statistics?period=' + currentPeriod)
+            //     .then(res => res.json())
+            //     .then(data => {
+            //         statisticsData = data;
+            //         updateStatistics();
+            //     });
+            
+            updateStatistics();
+        }
+
+        // function updateStatistics() {
+        //     // Update summary stats
+        //     document.getElementById('totalRevenue').textContent = formatPrice(statisticsData.summary.totalRevenue);
+        //     document.getElementById('rev
+
+</script>
+</body>
+</html>

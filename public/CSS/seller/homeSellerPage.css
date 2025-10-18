@@ -2,7 +2,7 @@
   --primary-orange: #ff7d1a;
   --primary-dark: #071b2f;
   --hover-orange: #ff9642;
-  --light-bg: #f8f9fa;
+  -light-bg: #f8f9fa;
   --card-shadow: 0 4px 20px rgba(7, 27, 47, 0.08);
   --card-hover-shadow: 0 8px 30px rgba(7, 27, 47, 0.15);
 }
@@ -15,33 +15,10 @@
 
 body {
   background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
-  font-family: "Inter", "Segoe UI", sans-serif;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
   min-height: 100vh;
 }
 
-.loading {
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-.error-message {
-  background: #ffebee;
-  color: #c62828;
-  padding: 10px;
-  border-radius: 8px;
-  margin: 10px 0;
-  text-align: center;
-}
-
-.page-content {
-  display: none;
-}
-
-.page-content.active {
-  display: block;
-}
-
-/* Sidebar Premium */
 .sidebar {
   position: fixed;
   top: 0;
@@ -111,11 +88,10 @@ body {
   font-weight: 500;
   position: relative;
   overflow: hidden;
-  cursor: pointer;
 }
 
 .sidebar-menu a::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -148,14 +124,12 @@ body {
   color: var(--primary-orange);
 }
 
-/* Main Content */
 .main-content {
   margin-left: 280px;
   padding: 30px;
   min-height: 100vh;
 }
 
-/* Top Bar Premium */
 .top-bar {
   background: white;
   padding: 25px 30px;
@@ -184,11 +158,7 @@ body {
   width: 45px;
   height: 45px;
   border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    var(--primary-orange),
-    var(--hover-orange)
-  );
+  background: linear-gradient(135deg, var(--primary-orange), var(--hover-orange));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -197,7 +167,6 @@ body {
   font-size: 18px;
 }
 
-/* Stats Cards Premium */
 .stats-card {
   background: white;
   border-radius: 20px;
@@ -210,17 +179,13 @@ body {
 }
 
 .stats-card::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(
-    90deg,
-    var(--primary-orange),
-    var(--hover-orange)
-  );
+  background: linear-gradient(90deg, var(--primary-orange), var(--hover-orange));
 }
 
 .stats-card:hover {
@@ -296,7 +261,6 @@ body {
   color: #c62828;
 }
 
-/* Card Premium */
 .card {
   background: white;
   border-radius: 20px;
@@ -322,7 +286,6 @@ body {
   margin-right: 10px;
 }
 
-/* Table Premium */
 .table {
   margin: 0;
 }
@@ -380,7 +343,6 @@ body {
   background: linear-gradient(135deg, #81c784, #388e3c) !important;
 }
 
-/* Buttons Premium */
 .btn {
   border-radius: 10px;
   padding: 10px 20px;
@@ -400,19 +362,11 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(
-    135deg,
-    var(--primary-orange),
-    var(--hover-orange)
-  );
+  background: linear-gradient(135deg, var(--primary-orange), var(--hover-orange));
 }
 
 .btn-primary:hover {
-  background: linear-gradient(
-    135deg,
-    var(--hover-orange),
-    var(--primary-orange)
-  );
+  background: linear-gradient(135deg, var(--hover-orange), var(--primary-orange));
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(255, 125, 26, 0.3);
 }
@@ -429,7 +383,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* Top Products List */
 .product-item {
   display: flex;
   justify-content: space-between;
@@ -450,7 +403,6 @@ body {
   color: var(--primary-dark);
 }
 
-/* Notification List */
 .notification-item {
   padding: 18px;
   margin-bottom: 12px;
@@ -490,7 +442,6 @@ body {
   color: #388e3c;
 }
 
-/* Mobile Toggle */
 .mobile-toggle {
   display: none;
   position: fixed;
@@ -499,18 +450,13 @@ body {
   z-index: 1001;
   width: 60px;
   height: 60px;
-  background: linear-gradient(
-    135deg,
-    var(--primary-orange),
-    var(--hover-orange)
-  );
+  background: linear-gradient(135deg, var(--primary-orange), var(--hover-orange));
   border: none;
   border-radius: 50%;
   box-shadow: 0 8px 20px rgba(255, 125, 26, 0.4);
   font-size: 24px;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
