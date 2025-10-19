@@ -282,6 +282,14 @@ body {
   border-color: var(--primary-color);
 }
 
+#productDetailModal img {
+  max-height: 250px;
+  object-fit: cover;
+}
+#productDetailModal .modal-body p {
+  margin-bottom: 0.5rem;
+}
+
 /* Mobile Toggle Button */
 .sidebar-toggle {
   display: none;

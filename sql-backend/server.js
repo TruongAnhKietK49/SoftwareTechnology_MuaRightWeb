@@ -7,16 +7,19 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const accountRoutes = require("./routes/Admin/accountRoute");
-app.use("/admin", accountRoutes);
+const adminProfileRoutes = require("./routes/Admin/adminProfileRoute");
+const inventoryRoutes = require("./routes/Admin/inventoryRoute");
+app.use("/admin", adminProfileRoutes, accountRoutes, inventoryRoutes);
+
+const productRoutes = require("./routes/Seller/productRoute");
+app.use("/seller", productRoutes);
 
 const signUpRoutes = require("./routes/signUpRoute")
-app.use("/api", signUpRoutes);
-
 const signInRoutes = require("./routes/signInRoute")
-app.use('/api', signInRoutes)
-
+app.use('/api', signUpRoutes, signInRoutes)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server đang chạy trên cổng ${PORT}`);
 });
+

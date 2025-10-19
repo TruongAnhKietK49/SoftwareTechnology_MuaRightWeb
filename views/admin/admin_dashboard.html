@@ -280,39 +280,42 @@
                 .then(res => res.text())
                 .then(data => {
                     document.getElementById("sidebar").innerHTML = data;
+                    // Hiển thị tên tài khoản
+                    const account = JSON.parse(localStorage.getItem("account"));
+                    if (account) {
+                        const nameElement = document.querySelector("#sidebar #username");
+                        if (nameElement) {
+                            nameElement.innerText = account.Username;
+                        }
+                        console.log("Tài khoản hiện tại:", account);
+                    } else {
+                        window.location.href = "../../template/pages/signIn_page.html";
+                    }
+                    // Xử lý nút Đăng xuất
+                    const logoutBtn = document.querySelector("#sidebar .btn-signout");
+                    if (logoutBtn) {
+                        logoutBtn.addEventListener("click", () => {
+                            if (confirm("Bạn có chắc muốn đăng xuất không?")) {
+                                localStorage.removeItem("account");
+                                window.location.href = "../../template/pages/signIn_page.html";
+                            }
+                        });
+                    }
 
-                    // === Sau khi sidebar load xong ===
-                    const currentPage = window.location.pathname.split("/").pop(); // lấy tên file hiện tại
+                    // Đánh dấu link đang active
+                    const currentPage = window.location.pathname.split("/").pop();
                     const links = document.querySelectorAll("#sidebar .nav-link");
 
                     links.forEach(link => {
                         const linkPage = link.getAttribute("href");
                         if (linkPage === currentPage) {
-                            link.classList.add("active");
-                            link.classList.add("bg-primary", "text-white", "fw-bold");
+                            link.classList.add("active", "bg-primary", "text-white", "fw-bold");
                         } else {
                             link.classList.remove("active", "bg-primary", "text-white", "fw-bold");
                         }
                     });
                 })
                 .catch(err => console.error("Lỗi khi tải sidebar:", err));
-        });
-
-        // Toggle sidebar on mobile
-        document.getElementById('sidebarToggle').addEventListener('click', function () {
-            document.getElementById('sidebar').classList.toggle('show');
-        });
-
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function (event) {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('sidebarToggle');
-
-            if (window.innerWidth <= 992 &&
-                !sidebar.contains(event.target) &&
-                !toggleBtn.contains(event.target)) {
-                sidebar.classList.remove('show');
-            }
         });
 
         // Add hover effects to stats cards
@@ -329,6 +332,8 @@
             });
         });
     </script>
+     <!-- Link JS sidebar Admin -->
+    <script src="../../public/JS/sidebarAdmin.js"></script>
 </body>
 
 </html>

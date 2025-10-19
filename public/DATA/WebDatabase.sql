@@ -192,3 +192,5 @@ VALUES (
     N'Quản lý toàn bộ người dùng và hệ thống.'
 );
 Delete Account Where Username = 'tienthanh'
+SELECT * FROM Product
+Delete From Product

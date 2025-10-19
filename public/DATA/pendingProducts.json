@@ -1,0 +1,189 @@
+[
+  {
+    "SellerId": 4,
+    "NameProduct": "Nước hoa Gucci Bloom",
+    "Category": "Nữ",
+    "Quantity": 45,
+    "Price": 2700000,
+    "Description": "Mùi hương hoa trắng thanh khiết, tươi mát và đầy nữ tính.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://nuochoa95.com/Data/images/san%20pham/Gucci/gucci-bloom-nuoc-hoa-nu.jpg",
+    "TagName": "Gucci, Nữ, hương hoa, thanh khiết"
+  },
+  {
+    "SellerId": 3,
+    "NameProduct": "Nước hoa Lancôme La Vie Est Belle",
+    "Category": "Nữ",
+    "Quantity": 30,
+    "Price": 2900000,
+    "Description": "Sự kết hợp của hương vani và hoa diên vĩ tạo nên mùi hương ngọt ngào và quý phái.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://file.hstatic.net/1000025647/file/nuoc-hoa-lancome-la-vie-est-belle_322cf2d327df450da4f7e8d2090fd6d9_1024x1024.jpg",
+    "TagName": "Lancôme, Nữ, sang trọng, ngọt ngào"
+  },
+  {
+    "SellerId": 4,
+    "NameProduct": "Nước hoa Chanel No.5",
+    "Category": "Nữ",
+    "Quantity": 25,
+    "Price": 3500000,
+    "Description": "Huyền thoại trong thế giới nước hoa, với hương aldehyde và hoa nhài cổ điển.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://ansancosmetics.com/upload/images_product/sub_images/8899_20210317030852.jpg",
+    "TagName": "Chanel, Nữ, cổ điển, sang trọng"
+  },
+  {
+    "SellerId": 3,
+    "NameProduct": "Nước hoa Calvin Klein One",
+    "Category": "Unisex",
+    "Quantity": 60,
+    "Price": 1800000,
+    "Description": "Hương cam chanh tươi sáng, phù hợp cho cả nam và nữ.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://sneakerholicvietnam.vn/wp-content/uploads/2024/06/nuoc-hoa-calvin-klein-one-edt-100ml-1-768x768.jpg",
+    "TagName": "Calvin Klein, Unisex, hương cam chanh, tươi mát"
+  },
+  {
+    "SellerId": 4,
+    "NameProduct": "Nước hoa Burberry Her",
+    "Category": "Nữ",
+    "Quantity": 40,
+    "Price": 2600000,
+    "Description": "Mùi hương dâu tây, hổ phách và xạ hương hiện đại, ngọt ngào.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://file.hstatic.net/1000025647/file/burberry-her-london-dream-edp_e833a4f3bde2419d9f31043370e0ae9d_1024x1024.jpg",
+    "TagName": "Burberry, Nữ, hương trái cây, ngọt ngào"
+  },
+  {
+    "SellerId": 3,
+    "NameProduct": "Nước hoa Giorgio Armani Acqua di Gio",
+    "Category": "Nam",
+    "Quantity": 55,
+    "Price": 2400000,
+    "Description": "Mùi hương biển tươi mát và nhẹ nhàng, hoàn hảo cho mùa hè.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://th.bing.com/th/id/R.8312738f83626e3f8d3b8f3f3afa8615?rik=PhQGX9fn0TS0zw&riu=http%3a%2f%2fyperfume.net%2fwp-content%2fuploads%2f2022%2f08%2fgio-men-edp-1.jpg&ehk=hxfVN4inoLY7tBhWC4JlNgiBqJNghZ9eJTnzlbLpOtg%3d&risl=&pid=ImgRaw&r=0",
+    "TagName": "Armani, Nam, hương biển, nhẹ nhàng"
+  },
+  {
+    "SellerId": 4,
+    "NameProduct": "Nước hoa Jo Malone English Pear & Freesia",
+    "Category": "Nữ",
+    "Quantity": 35,
+    "Price": 3100000,
+    "Description": "Sự kết hợp tinh tế của lê và hoa lan chuông, hương thơm nhẹ nhàng.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://perfume168.com/wp-content/uploads/2024/04/jo-malone-english-pear-1.jpg",
+    "TagName": "Jo Malone, Nữ, hương lê, thanh lịch"
+  },
+  {
+    "SellerId": 4,
+    "NameProduct": "Nước hoa Tom Ford Black Orchid",
+    "Category": "Unisex",
+    "Quantity": 30,
+    "Price": 4200000,
+    "Description": "Mùi hương trầm ấm, quyến rũ, bí ẩn, dùng cho cả nam và nữ.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://file.hstatic.net/1000025647/file/nuoc-hoa-tom-ford-black-orchid_2f9ba966e6c742319f5d8e8d58cc9e76_1024x1024.png",
+    "TagName": "Tom Ford, Unisex, hương trầm, quyến rũ"
+  },
+  {
+    "SellerId": 3,
+    "NameProduct": "Nước hoa Bvlgari Man Wood Essence",
+    "Category": "Nam",
+    "Quantity": 45,
+    "Price": 2500000,
+    "Description": "Hương gỗ tự nhiên kết hợp tinh tế với hương cam quýt, tạo cảm giác tươi mới.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://tprofumo.com/wp-content/uploads/2022/04/Bvlgari-Man-Wood-Essence-Eau-de-Parfum-1.jpeg",
+    "TagName": "Bvlgari, Nam, hương gỗ, tự nhiên"
+  },
+  {
+    "SellerId": 4,
+    "NameProduct": "Nước hoa YSL Libre",
+    "Category": "Nữ",
+    "Quantity": 50,
+    "Price": 3300000,
+    "Description": "Kết hợp hoa oải hương và cam bergamot, tạo cảm giác tự do và quyến rũ.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://file.hstatic.net/1000025647/file/z3775432755460_e46cb89f4ddd4872b9f5168015ad71ff_e98a9f452127419a8b8d0df5c44e4db0_1024x1024.jpg",
+    "TagName": "YSL, Nữ, hương oải hương, quyến rũ"
+  },
+  {
+    "SellerId": 3,
+    "NameProduct": "Nước hoa Jean Paul Gaultier Le Male",
+    "Category": "Nam",
+    "Quantity": 35,
+    "Price": 2700000,
+    "Description": "Hương bạc hà và vani đầy quyến rũ, dành cho người đàn ông hiện đại.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://cdn.chiaki.vn/unsafe/0x960/left/top/smart/filters:quality(70)/https://storage.googleapis.com/chiaki-central/seller/1760107922334/cloud-image-1760107922334-10102025215202-cloud-image-1760107831823-image.png",
+    "TagName": "Jean Paul Gaultier, Nam, hương bạc hà, quyến rũ"
+  },
+  {
+    "SellerId": 4,
+    "NameProduct": "Nước hoa Valentino Donna",
+    "Category": "Nữ",
+    "Quantity": 30,
+    "Price": 2800000,
+    "Description": "Hương hoa hồng và vani dịu dàng, thể hiện nét nữ tính và sang trọng.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://th.bing.com/th/id/R.3ead862f56c1d347ced4c4b6ff00126e?rik=vjAAsudI7tezTg&pid=ImgRaw&r=0",
+    "TagName": "Valentino, Nữ, hương hoa hồng, thanh lịch"
+  },
+  {
+    "SellerId": 3,
+    "NameProduct": "Nước hoa Hugo Boss Bottled",
+    "Category": "Nam",
+    "Quantity": 60,
+    "Price": 2300000,
+    "Description": "Hương táo, quế và gỗ đàn hương mang đến cảm giác tự tin, mạnh mẽ.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://nuochoamc.com/upload/images/bai-viet/523/review-nuoc-hoa-hugo-boss-bottled-infinite.webp",
+    "TagName": "Hugo Boss, Nam, hương táo, tự tin"
+  },
+  {
+    "SellerId": 4,
+    "NameProduct": "Nước hoa Carolina Herrera Good Girl",
+    "Category": "Nữ",
+    "Quantity": 40,
+    "Price": 3100000,
+    "Description": "Mùi hương ngọt ngào, quyến rũ với tông cacao và hạnh nhân.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://cdn.notinoimg.com/detail_main_lq/carolina-herrera/8411061083659_05/carolina-herrera-good-girl-blush-elixir-eau-de-parfum-pentru-femei___240124.jpg",
+    "TagName": "Carolina Herrera, Nữ, quyến rũ, ngọt ngào"
+  },
+  {
+    "SellerId": 3,
+    "NameProduct": "Nước hoa Montblanc Explorer",
+    "Category": "Nam",
+    "Quantity": 50,
+    "Price": 2400000,
+    "Description": "Hương cam bergamot và hoắc hương, mang đến cảm giác phiêu lưu và tinh tế.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://tse4.mm.bing.net/th/id/OIP.sb9DdKKlp-KOUcrVHNCZnQHaHa?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3",
+    "TagName": "Montblanc, Nam, hương cam, tinh tế"
+  },
+  {
+    "SellerId": 4,
+    "NameProduct": "Nước hoa Maison Margiela Replica Beach Walk",
+    "Category": "Unisex",
+    "Quantity": 35,
+    "Price": 3500000,
+    "Description": "Hương dừa, cam chanh và xạ hương, gợi nhớ đến cảm giác đi dạo trên bãi biển.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.HMS2Lqw7Wg6vBCK2R3nBMQHaHa?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3",
+    "TagName": "Maison Margiela, Unisex, hương biển, dịu nhẹ"
+  },
+  {
+    "SellerId": 3,
+    "NameProduct": "Nước hoa Hermès Terre d’Hermès",
+    "Category": "Nam",
+    "Quantity": 25,
+    "Price": 3400000,
+    "Description": "Sự kết hợp của hương cam và gỗ tuyết tùng mang lại cảm giác ấm áp, tinh tế.",
+    "Warranty": "Bảo hành 12 tháng",
+    "ImageUrl": "https://cdn.vuahanghieu.com/unsafe/0x0/left/top/smart/filters:quality(90)/https://admin.vuahanghieu.com/upload/news/content/2022/06/nuoc-hoa-hermes-terre-d-hermes-e-jpg-1655521241-18062022100041.jpg",
+    "TagName": "Hermès, Nam, hương gỗ, sang trọng"
+  }
+]

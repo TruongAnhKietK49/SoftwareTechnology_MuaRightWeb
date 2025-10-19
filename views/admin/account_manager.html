@@ -43,11 +43,13 @@
                     <h6 class="card-title mb-0">Danh sách người dùng</h6>
                     <div class="d-flex align-items-center flex-wrap">
                         <div class="input-group search-box mb-3">
-                            <input type="text" class="form-control" placeholder="Tìm kiếm người dùng...">
-                            <button class="btn btn-outline-secondary" type="button">
+                            <input type="text" class="form-control" id="searchInput"
+                                placeholder="Tìm kiếm người dùng...">
+                            <button class="btn btn-outline-secondary" type="button" id="searchBtn">
                                 <i class="bi bi-search"></i>
                             </button>
                         </div>
+
                         <div class="action-buttons d-flex">
                             <button type="button" class="btn btn-success btn-sm">
                                 <i class="bi bi-check2-circle me-1"></i> Kích hoạt
@@ -66,25 +68,26 @@
                     <!-- Filter Tabs -->
                     <ul class="nav nav-tabs filter-tabs" id="userTabs">
                         <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#allUsers">Tất cả</a>
+                            <a class="nav-link active" data-role="All" data-bs-toggle="tab" href="#allUsers">Tất cả</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#customers">Khách hàng</a>
+                            <a class="nav-link" data-role="Customer" data-bs-toggle="tab" href="#customers">Khách
+                                hàng</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#sellers">Người bán</a>
+                            <a class="nav-link" data-role="Seller" data-bs-toggle="tab" href="#sellers">Người bán</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#shippers">Shipper</a>
+                            <a class="nav-link" data-role="Shipper" data-bs-toggle="tab" href="#shippers">Shipper</a>
                         </li>
                     </ul>
 
                     <div class="tab-content">
-                        <!-- All Users Tab -->
+                        <!-- All Users -->
                         <div class="tab-pane fade show active" id="allUsers">
                             <div class="table-responsive">
-                                <table class="table table-hover align-middle mb-0">
-                                    <thead class="table-light">
+                                <table class="table align-middle table-hover text-center" id="userTable">
+                                    <thead class=" table-light">
                                         <tr>
                                             <th scope="col" class="text-center" style="width: 5%;">
                                                 <input class="form-check-input" type="checkbox" id="checkAll">
@@ -97,8 +100,7 @@
                                             <th scope="col" class="text-center" style="width: 15%;">Hành động</th>
                                         </tr>
                                     </thead>
-                                    <!-- Load user ở đây -->
-                                    <tbody id="userAccount">
+                                    <tbody id="userAccount" class="fs-5">
                                         <tr>
                                             <td colspan="7" class="text-center">Đang tải dữ liệu...</td>
                                         </tr>
@@ -107,105 +109,161 @@
                             </div>
                         </div>
 
-                        <!-- Other tabs would contain filtered user lists -->
+                        <!-- Customers -->
                         <div class="tab-pane fade" id="customers">
-                            <!-- Customer users would be displayed here -->
-                            <div class="alert alert-info text-center">
-                                <i class="bi bi-info-circle me-2"></i> Danh sách khách hàng sẽ được hiển thị tại đây
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th scope="col" class="text-center" style="width: 5%;">
+                                                <input class="form-check-input" type="checkbox" id="checkAllCustomers">
+                                            </th>
+                                            <th scope="col" style="width: 10%;">Ảnh</th>
+                                            <th scope="col">Thông tin</th>
+                                            <th scope="col">Vai trò</th>
+                                            <th scope="col">Trạng thái</th>
+                                            <th scope="col">Số điện thoại</th>
+                                            <th scope="col" class="text-center" style="width: 15%;">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="customerAccount" class="fs-5">
+                                        <tr>
+                                            <td colspan="7" class="text-center">Đang tải dữ liệu...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="sellers">
-                            <!-- Seller users would be displayed here -->
-                            <div class="alert alert-info text-center">
-                                <i class="bi bi-info-circle me-2"></i> Danh sách người bán sẽ được hiển thị tại đây
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="shippers">
-                            <!-- Shipper users would be displayed here -->
-                            <div class="alert alert-info text-center">
-                                <i class="bi bi-info-circle me-2"></i> Danh sách shipper sẽ được hiển thị tại đây
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="card-footer d-flex justify-content-between align-items-center">
-                    <div class="text-muted">
-                        Hiển thị <strong>4</strong> trong tổng số <strong>128</strong> người dùng
+                        <!-- Sellers -->
+                        <div class="tab-pane fade" id="sellers">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th scope="col" class="text-center" style="width: 5%;">
+                                                <input class="form-check-input" type="checkbox" id="checkAllSellers">
+                                            </th>
+                                            <th scope="col" style="width: 10%;">Ảnh</th>
+                                            <th scope="col">Thông tin</th>
+                                            <th scope="col">Vai trò</th>
+                                            <th scope="col">Trạng thái</th>
+                                            <th scope="col">Số điện thoại</th>
+                                            <th scope="col" class="text-center" style="width: 15%;">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sellerAccount" class="fs-5">
+                                        <tr>
+                                            <td colspan="7" class="text-center">Đang tải dữ liệu...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Shippers -->
+                        <div class="tab-pane fade" id="shippers">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th scope="col" class="text-center" style="width: 5%;">
+                                                <input class="form-check-input" type="checkbox" id="checkAllShippers">
+                                            </th>
+                                            <th scope="col" style="width: 10%;">Ảnh</th>
+                                            <th scope="col">Thông tin</th>
+                                            <th scope="col">Vai trò</th>
+                                            <th scope="col">Trạng thái</th>
+                                            <th scope="col">Số điện thoại</th>
+                                            <th scope="col" class="text-center" style="width: 15%;">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="shipperAccount" class="fs-5">
+                                        <tr>
+                                            <td colspan="7" class="text-center">Đang tải dữ liệu...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination mb-0">
-                            <li class="page-item disabled"><a class="page-link" href="#">Trước</a></li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">Sau</a></li>
-                        </ul>
-                    </nav>
+
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <div class="text-muted" id="paginationInfo">
+                            Hiển thị <strong>4</strong> trong tổng số <strong>128</strong> người dùng
+                        </div>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination mb-0" id="pagination">
+                                <li class="page-item disabled"><a class="page-link" href="#">Trước</a></li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">Sau</a></li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
-        </div>
     </main>
 
     <!-- Add User Modal -->
     <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header modal-header-custom">
-                    <h5 class="modal-title" id="addUserModalLabel">Thêm người dùng mới</h5>
+                    <h5 class="modal-title" id="addUserModalLabel">Thêm tài khoản mới</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
+
                 <div class="modal-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="firstName" class="form-label">Họ và tên đệm</label>
-                                <input type="text" class="form-control" id="firstName" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="lastName" class="form-label">Tên</label>
-                                <input type="text" class="form-control" id="lastName" required>
-                            </div>
+                    <form id="addUserForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Tên đăng nhập (Username)</label>
+                            <input type="text" class="form-control" id="username" placeholder="Nhập tên đăng nhập"
+                                required />
                         </div>
+
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" required>
+                            <input type="email" class="form-control" id="email" placeholder="Nhập email" required />
                         </div>
+
                         <div class="mb-3">
                             <label for="phone" class="form-label">Số điện thoại</label>
-                            <input type="tel" class="form-control" id="phone">
+                            <input type="tel" class="form-control" id="phone" placeholder="Nhập số điện thoại" />
                         </div>
+
                         <div class="mb-3">
-                            <label for="userRole" class="form-label">Vai trò</label>
-                            <select class="form-select" id="userRole" required>
+                            <label for="password" class="form-label">Mật khẩu</label>
+                            <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu"
+                                required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Vai trò</label>
+                            <select class="form-select" id="role" required>
                                 <option value="">Chọn vai trò</option>
-                                <option value="customer">Khách hàng</option>
-                                <option value="seller">Người bán</option>
-                                <option value="shipper">Shipper</option>
+                                <option value="Customer">Khách hàng</option>
+                                <option value="Seller">Người bán</option>
+                                <option value="Shipper">Shipper</option>
                             </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="userStatus" class="form-label">Trạng thái</label>
-                            <select class="form-select" id="userStatus" required>
-                                <option value="active">Đang hoạt động</option>
-                                <option value="inactive">Đã khóa</option>
-                                <option value="pending">Chờ xác nhận</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="avatar" class="form-label">Ảnh đại diện</label>
-                            <input class="form-control" type="file" id="avatar">
                         </div>
                     </form>
                 </div>
+
                 <div class="modal-footer modal-footer-custom">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-primary">Thêm người dùng</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Hủy
+                    </button>
+                    <button type="button" id="btnAddUser" class="btn btn-primary">
+                        Thêm người dùng
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Modal chỉnh sửa user -->
     <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserLabel" aria-hidden="true">
@@ -224,6 +282,11 @@
                         <div class="mb-3">
                             <label for="editPhone" class="form-label">Số điện thoại</label>
                             <input type="text" class="form-control" id="editPhone" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPassword" class="form-label">Mật khẩu mới</label>
+                            <input type="password" class="form-control" id="editPassword"
+                                placeholder="Nhập mật khẩu mới (để trống nếu không đổi)" />
                         </div>
                         <div class="mb-3">
                             <label for="editState" class="form-label">Trạng thái</label>
@@ -250,16 +313,36 @@
                 .then(res => res.text())
                 .then(data => {
                     document.getElementById("sidebar").innerHTML = data;
+                    // Hiển thị tên tài khoản
+                    const account = JSON.parse(localStorage.getItem("account"));
+                    if (account) {
+                        const nameElement = document.querySelector("#sidebar #username");
+                        if (nameElement) {
+                            nameElement.innerText = account.Username;
+                        }
+                        console.log("Tài khoản hiện tại:", account);
+                    } else {
+                        window.location.href = "../../template/pages/signIn_page.html";
+                    }
+                    // Xử lý nút Đăng xuất
+                    const logoutBtn = document.querySelector("#sidebar .btn-signout");
+                    if (logoutBtn) {
+                        logoutBtn.addEventListener("click", () => {
+                            if (confirm("Bạn có chắc muốn đăng xuất không?")) {
+                                localStorage.removeItem("account");
+                                window.location.href = "../../template/pages/signIn_page.html";
+                            }
+                        });
+                    }
 
-                    // === Sau khi sidebar load xong ===
-                    const currentPage = window.location.pathname.split("/").pop(); // lấy tên file hiện tại
+                    // Đánh dấu link đang active
+                    const currentPage = window.location.pathname.split("/").pop();
                     const links = document.querySelectorAll("#sidebar .nav-link");
 
                     links.forEach(link => {
                         const linkPage = link.getAttribute("href");
                         if (linkPage === currentPage) {
-                            link.classList.add("active");
-                            link.classList.add("bg-primary", "text-white", "fw-bold");
+                            link.classList.add("active", "bg-primary", "text-white", "fw-bold");
                         } else {
                             link.classList.remove("active", "bg-primary", "text-white", "fw-bold");
                         }
@@ -298,28 +381,14 @@
                 this.style.boxShadow = 'none';
             });
         });
-
-        // Handle bulk actions
-        document.querySelectorAll('.action-buttons .btn').forEach(button => {
-            button.addEventListener('click', function () {
-                const selectedCount = document.querySelectorAll('tbody input[type="checkbox"]:checked').length;
-                if (selectedCount === 0) {
-                    alert('Vui lòng chọn ít nhất một người dùng để thực hiện thao tác này.');
-                    return;
-                }
-
-                const action = this.textContent.trim();
-                if (confirm(`Bạn có chắc chắn muốn ${action.toLowerCase()} ${selectedCount} người dùng đã chọn?`)) {
-                    // Perform bulk action here
-                    console.log(`Performing ${action} on ${selectedCount} users`);
-                }
-            });
-        });
     </script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Link JS chính -->
     <script src="../../sql-backend/controller/admin/c_accountManager.js"></script>
+    <!-- Link JS sidebar Admin -->
+    <script src="../../public/JS/sidebarAdmin.js"></script>
 </body>
 
 </html>

@@ -40,19 +40,22 @@
                     <h6 class="card-title mb-0">Danh sách sản phẩm</h6>
                     <div class="d-flex align-items-center flex-wrap">
                         <div class="input-group search-box mb-3">
-                            <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm...">
-                            <button class="btn btn-outline-secondary" type="button">
+                            <input type="text" id="search-input" class="form-control"
+                                placeholder="Tìm kiếm sản phẩm...">
+                            <button class="btn btn-outline-secondary" id="btn-search" type="button">
                                 <i class="bi bi-search"></i>
                             </button>
                         </div>
+
                         <div class="action-buttons d-flex">
-                            <button type="button" class="btn btn-success btn-sm">
+                            <button type="button" id="btn-approve-selected" class="btn btn-success btn-sm">
                                 <i class="bi bi-check2-circle me-1"></i> Duyệt mục đã chọn
                             </button>
-                            <button type="button" class="btn btn-danger btn-sm">
+                            <button type="button" id="btn-reject-selected" class="btn btn-danger btn-sm ms-2">
                                 <i class="bi bi-x-circle me-1"></i> Từ chối mục đã chọn
                             </button>
                         </div>
+
                     </div>
                 </div>
 
@@ -73,97 +76,7 @@
                                     <th scope="col" class="text-center" style="width: 15%;">Hành động</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="text-center" data-label="Chọn">
-                                        <input class="form-check-input" type="checkbox">
-                                    </td>
-                                    <td data-label="Ảnh">
-                                        <img src="https://picsum.photos/id/1025/200/200" class="product-img"
-                                            alt="Product Image">
-                                    </td>
-                                    <td data-label="Sản phẩm">
-                                        <div class="product-name">Áo thun Cotton cao cấp</div>
-                                        <div class="product-sku">SKU: AT-001</div>
-                                    </td>
-                                    <td data-label="Danh mục">Thời trang nam</td>
-                                    <td data-label="Người bán">Nguyễn Văn A</td>
-                                    <td data-label="Ngày gửi">08/10/2025</td>
-                                    <td class="text-end" data-label="Giá">250.000₫</td>
-                                    <td class="text-center" data-label="Hành động">
-                                        <div class="btn-group btn-group-custom" role="group">
-                                            <button class="btn btn-outline-success btn-sm" title="Duyệt">
-                                                <i class="bi bi-check-lg"></i>
-                                            </button>
-                                            <button class="btn btn-outline-danger btn-sm" title="Từ chối">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-                                            <button class="btn btn-outline-info btn-sm" title="Xem chi tiết">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center" data-label="Chọn">
-                                        <input class="form-check-input" type="checkbox">
-                                    </td>
-                                    <td data-label="Ảnh">
-                                        <img src="https://picsum.photos/id/24/200/200" class="product-img"
-                                            alt="Product Image">
-                                    </td>
-                                    <td data-label="Sản phẩm">
-                                        <div class="product-name">Laptop Gaming XYZ 2025</div>
-                                        <div class="product-sku">SKU: LT-G25</div>
-                                    </td>
-                                    <td data-label="Danh mục">Điện tử</td>
-                                    <td data-label="Người bán">Trần Thị B</td>
-                                    <td data-label="Ngày gửi">07/10/2025</td>
-                                    <td class="text-end" data-label="Giá">28.500.000₫</td>
-                                    <td class="text-center" data-label="Hành động">
-                                        <div class="btn-group btn-group-custom" role="group">
-                                            <button class="btn btn-outline-success btn-sm" title="Duyệt">
-                                                <i class="bi bi-check-lg"></i>
-                                            </button>
-                                            <button class="btn btn-outline-danger btn-sm" title="Từ chối">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-                                            <button class="btn btn-outline-info btn-sm" title="Xem chi tiết">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center" data-label="Chọn">
-                                        <input class="form-check-input" type="checkbox">
-                                    </td>
-                                    <td data-label="Ảnh">
-                                        <img src="https://picsum.photos/id/180/200/200" class="product-img"
-                                            alt="Product Image">
-                                    </td>
-                                    <td data-label="Sản phẩm">
-                                        <div class="product-name">Giày thể thao Runner Pro</div>
-                                        <div class="product-sku">SKU: GTT-RP9</div>
-                                    </td>
-                                    <td data-label="Danh mục">Thời trang nữ</td>
-                                    <td data-label="Người bán">Lê Văn C</td>
-                                    <td data-label="Ngày gửi">06/10/2025</td>
-                                    <td class="text-end" data-label="Giá">1.200.000₫</td>
-                                    <td class="text-center" data-label="Hành động">
-                                        <div class="btn-group btn-group-custom" role="group">
-                                            <button class="btn btn-outline-success btn-sm" title="Duyệt">
-                                                <i class="bi bi-check-lg"></i>
-                                            </button>
-                                            <button class="btn btn-outline-danger btn-sm" title="Từ chối">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-                                            <button class="btn btn-outline-info btn-sm" title="Xem chi tiết">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                            <tbody id="pendingProduct-table">
                             </tbody>
                         </table>
                     </div>
@@ -194,64 +107,51 @@
         </div>
     </main>
 
+    <!-- Modal Chi Tiết Sản Phẩm -->
+    <div class="modal fade" id="productDetailModal" tabindex="-1" aria-labelledby="productDetailModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="productDetailModalLabel">Chi tiết sản phẩm</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- Hình ảnh sản phẩm -->
+                        <div class="col-md-4 text-center">
+                            <img id="detailImage" src="" alt="Ảnh sản phẩm" class="img-fluid rounded shadow-sm mb-3">
+                        </div>
+
+                        <!-- Thông tin chi tiết -->
+                        <div class="col-md-8">
+                            <h4 id="detailName" class="mb-2"></h4>
+                            <p class="text-muted mb-2"><strong>Danh mục:</strong> <span id="detailCategory"></span></p>
+                            <p class="text-muted mb-2"><strong>Người bán:</strong> <span id="detailSeller"></span></p>
+                            <p class="text-muted mb-2"><strong>Giá:</strong> <span id="detailPrice"></span></p>
+                            <p class="text-muted mb-2"><strong>Số lượng:</strong> <span id="detailQuantity"></span></p>
+                            <p class="text-muted mb-2"><strong>Bảo hành:</strong> <span id="detailWarranty"></span></p>
+                            <p class="text-muted mb-2"><strong>Thẻ tag:</strong> <span id="detailTag"></span></p>
+                            <p class="mt-3"><strong>Mô tả:</strong></p>
+                            <p id="detailDescription" class="text-secondary"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        // Loading sidebar
-        document.addEventListener("DOMContentLoaded", function () {
-            fetch("./navAdminPage.html")
-                .then(res => res.text())
-                .then(data => {
-                    document.getElementById("sidebar").innerHTML = data;
-
-                    // === Sau khi sidebar load xong ===
-                    const currentPage = window.location.pathname.split("/").pop(); // lấy tên file hiện tại
-                    const links = document.querySelectorAll("#sidebar .nav-link");
-
-                    links.forEach(link => {
-                        const linkPage = link.getAttribute("href");
-                        if (linkPage === currentPage) {
-                            link.classList.add("active");
-                            link.classList.add("bg-primary", "text-white", "fw-bold");
-                        } else {
-                            link.classList.remove("active", "bg-primary", "text-white", "fw-bold");
-                        }
-                    });
-                })
-                .catch(err => console.error("Lỗi khi tải sidebar:", err));
-        });
-        // Toggle sidebar on mobile
-        document.getElementById('sidebarToggle').addEventListener('click', function () {
-            document.getElementById('sidebar').classList.toggle('show');
-        });
-
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function (event) {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('sidebarToggle');
-
-            if (window.innerWidth <= 992 &&
-                !sidebar.contains(event.target) &&
-                !toggleBtn.contains(event.target)) {
-                sidebar.classList.remove('show');
-            }
-        });
-
-        // Add hover effects to table rows
-        const tableRows = document.querySelectorAll('tbody tr');
-        tableRows.forEach(row => {
-            row.addEventListener('mouseenter', function () {
-                this.style.transform = 'translateY(-2px)';
-                this.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
-            });
-
-            row.addEventListener('mouseleave', function () {
-                this.style.transform = 'translateY(0)';
-                this.style.boxShadow = 'none';
-            });
-        });
-    </script>
+    <!-- Link JS Sidebar -->
+    <script src="../../public/JS/sidebarAdmin.js"></script>
+    <!-- Link JS chính -->
+    <script src="../../sql-backend/controller/admin/c_inventoryManager.js"></script>
 </body>
 
 </html>

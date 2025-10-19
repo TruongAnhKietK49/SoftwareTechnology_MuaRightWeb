@@ -18,15 +18,15 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="inventory_manager.html">
+        <a class="nav-link" href="#">
             <i class="bi bi-bag"></i>
-            <span class="sidebar-text">Sản phẩm</span>
+            <span class="sidebar-text">Kho hàng</span>
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="inventory_manager.html">
             <i class="bi bi-cart3"></i>
-            <span class="sidebar-text">Đơn hàng</span>
+            <span class="sidebar-text">Đơn sản phẩm</span>
         </a>
     </li>
     <li class="nav-item">
@@ -44,14 +44,14 @@
 </ul>
 <div class="sidebar-footer">
     <div class="user-profile">
-        <img src="https://i.pravatar.cc/40?u=anhkiet" alt="User Avatar">
+        <img src="" alt="User Avatar">
         <div class="user-info sidebar-text">
-            <h6 class="mb-0">Anh Kiệt</h6>
+            <h6 id="username" class="mb-0">Tên người dùng</h6>
             <small>Quản trị viên</small>
         </div>
     </div>
     <div class="d-grid">
-        <button class="btn btn-signout">
+        <button class="btn btn-signout" onclick="logout()">
             <i class="bi bi-box-arrow-right me-2"></i>
             <span class="sidebar-text">Đăng xuất</span>
         </button>
