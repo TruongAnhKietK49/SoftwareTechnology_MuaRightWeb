@@ -79,7 +79,7 @@ router.post("/add", async (req, res) => {
   try {
     const { CustomerId, ProductId, Quantity, UnitPrice } = req.body;
 
-    console.log("Dữ liệu nhận được:", req.body);
+    console.log("Dữ liệu nhận được:", CustomerId);
 
     // Kiểm tra dữ liệu đầu vào
     if (!CustomerId || !ProductId || !Quantity || !UnitPrice) {
@@ -92,13 +92,12 @@ router.post("/add", async (req, res) => {
     const pool = await getPool();
     const request = pool.request();
 
-    // ⚙️ Gán tham số — an toàn, tránh lỗi kiểu “Incorrect syntax near 'Oct'”
+
     request.input("CustomerId", CustomerId);
     request.input("ProductId", ProductId);
     request.input("Quantity", Quantity);
     request.input("UnitPrice", UnitPrice);
 
-    // 🧩 Thực thi query — không cần chèn AddedAt (SQL tự sinh)
     const result = await request.query(`
       INSERT INTO Basket (CustomerId, ProductId, Quantity, UnitPrice)
       VALUES (@CustomerId, @ProductId, @Quantity, @UnitPrice);
