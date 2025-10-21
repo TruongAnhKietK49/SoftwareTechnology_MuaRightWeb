@@ -1,7 +1,6 @@
 // File: orderRoute.js 
 const express = require("express");
 const router = express.Router();
-console.log("✅ Seller Order Route loaded successfully");
 
 const orderController = require("../../controller/seller/c_sellerOrder");
 

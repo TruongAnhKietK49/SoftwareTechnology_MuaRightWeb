@@ -7,50 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../public/CSS/seller/homeSellerPage.css"> 
-    <style>
-        .profile-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .avatar-upload {
-            position: relative;
-            max-width: 150px;
-            margin: 0 auto 20px;
-        }
-        .avatar-preview {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background-color: #eee;
-            border: 5px solid #fff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        .avatar-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .avatar-edit input {
-            display: none;
-        }
-        .avatar-edit label {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #ff7d1a;
-            border: 3px solid #fff;
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            text-align: center;
-            line-height: 35px;
-            color: white;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-    </style>
+
 </head>
 <body>
     <div class="sidebar" id="sidebar">
@@ -75,22 +32,24 @@
 
         <div class="profile-container">
             <form id="profileForm" class="card p-4 shadow-sm">
-                <h5 class="card-title text-center mb-4">Thông tin Cơ bản</h5>
-
                 <div class="avatar-upload">
                     <div class="avatar-preview">
-                        <img id="imagePreview" src="https://placehold.co/150x150?text=NA" alt="Avatar">
-                    </div>
-                    <div class="avatar-edit">
-                        <input type="text" id="imageUrl" placeholder="Dán URL ảnh vào đây" onchange="previewImage(this.value)">
-                        <label for="imageUrl" title="Thay đổi ảnh"><i class="fas fa-camera"></i></label>
+                        <img id="imagePreview" src="https://placehold.co/150x150?text=Avatar" alt="Avatar"/>
                     </div>
                 </div>
 
+                <div class="mb-3">
+                    <label for="imageUrl" class="form-label">URL Ảnh đại diện</label>
+                    <input type="url" class="form-control" id="imageUrl" name="ImageUrl" disabled oninput="previewImage(this.value)">
+                </div>
+
+                <hr>
+                <h5 class="card-title text-center mb-4">Thông tin Cá nhân</h5>
+                
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="fullName" class="form-label">Họ và tên</label>
-                        <input type="text" class="form-control" id="fullName" name="FullName" required>
+                        <input type="text" class="form-control" id="fullName" name="FullName" required disabled> 
                     </div>
                     <div class="col-md-6">
                         <label for="email" class="form-label">Email</label>
@@ -101,55 +60,68 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="phone" class="form-label">Số điện thoại</label>
-                        <input type="tel" class="form-control" id="phone" name="Phone" required>
+                        <input type="tel" class="form-control" id="phone" name="Phone" required disabled>
                     </div>
                     <div class="col-md-6">
                         <label for="address" class="form-label">Địa chỉ cá nhân</label>
-                        <input type="text" class="form-control" id="address" name="Address">
+                        <input type="text" class="form-control" id="address" name="Address" disabled>
                     </div>
                 </div>
-                
-                <hr>
 
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="birthday" class="form-label">Ngày sinh</label>
+                        <input type="date" class="form-control" id="birthday" name="Birthday" disabled>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="gender" class="form-label">Giới tính</label>
+                        <select id="gender" name="Gender" class="form-select" disabled>
+                            <option value="">Chọn giới tính</option>
+                            <option value="Male">Nam</option>
+                            <option value="Female">Nữ</option>
+                            <option value="Other">Khác</option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr>
                 <h5 class="card-title text-center mb-4">Thông tin Cửa hàng</h5>
 
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="storeName" class="form-label">Tên cửa hàng</label>
-                        <input type="text" class="form-control" id="storeName" name="StoreName" required>
+                        <input type="text" class="form-control" id="storeName" name="StoreName" required disabled>
                     </div>
                     <div class="col-md-6">
                         <label for="storeAddress" class="form-label">Địa chỉ Cửa hàng</label>
-                        <input type="text" class="form-control" id="storeAddress" name="StoreAddress">
+                        <input type="text" class="form-control" id="storeAddress" name="StoreAddress" disabled>
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-end mt-4">
-                    <button type="submit" class="btn btn-primary" id="saveProfileBtn">
-                        <i class="fas fa-save"></i> Lưu Thay Đổi
-                    </button>
+                <div class="d-flex justify-content-end mt-4" id="button-group">
+                    <!-- Các nút sẽ được quản lý bằng JavaScript -->
                 </div>
             </form>
         </div>
     </div>
 
-    <button class="btn mobile-toggle" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </button>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const API_URL = "http://localhost:3000"; 
         let sellerId = null;
+        let originalProfileData = {};
+        let isEditMode = false; 
+
+        const form = document.getElementById('profileForm');
+        const editableFields = form.querySelectorAll('input:not([readonly]), select');
+        const buttonGroup = document.getElementById('button-group');
 
         document.addEventListener('DOMContentLoaded', function() {
-            // 1. Kiểm tra tài khoản và lấy Seller ID
             const accountString = localStorage.getItem("account");
             if (!accountString) {
                 window.location.href = "../../template/pages/signIn_page.html";
                 return;
             }
-            
             try {
                 const account = JSON.parse(accountString);
                 if (account.Role !== 'Seller') {
@@ -158,16 +130,13 @@
                 }
                 sellerId = account.AccountId;
                 loadProfile(sellerId);
+                updateButtons();
             } catch (e) {
                 console.error("Lỗi parse Account:", e);
                 window.location.href = "../../template/pages/signIn_page.html";
-                return;
             }
-
-            // 2. Gán sự kiện lưu form
-            document.getElementById('profileForm').addEventListener('submit', handleSaveProfile);
             
-            // 3. Gán sự kiện Đăng xuất
+            // sự kiện Đăng xuất
             document.getElementById('logoutBtn').addEventListener('click', function(e) {
                 e.preventDefault();
                 if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
@@ -176,30 +145,66 @@
                 }
             });
 
-
-
-                // Xử lý Đăng xuất
-        const logoutButton = document.getElementById('logoutBtn');
-        if (logoutButton) {
-            logoutButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
-                    localStorage.removeItem('account');
-                    window.location.href = '../../template/pages/signIn_page.html';
-                }
-            });
-        }
+            form.addEventListener('submit', handleSaveProfile); 
         });
 
-        // ----------------------------------------------------
-        // 1. Load Profile
-        // ----------------------------------------------------
-        async function loadProfile(sellerId) {
+        function updateButtons() {
+            buttonGroup.innerHTML = ''; 
+
+            if (isEditMode) {
+                const cancelButton = document.createElement('button');
+                cancelButton.type = 'button';
+                cancelButton.className = 'btn btn-secondary me-2';
+                cancelButton.innerHTML = '<i class="fas fa-times"></i> Hủy';
+                cancelButton.onclick = handleCancel;
+                
+                const saveButton = document.createElement('button');
+                saveButton.type = 'submit';
+                saveButton.className = 'btn btn-success';
+                saveButton.innerHTML = '<i class="fas fa-save"></i> Lưu Thay Đổi';
+
+                buttonGroup.appendChild(cancelButton);
+                buttonGroup.appendChild(saveButton);
+            } else {
+                const editButton = document.createElement('button');
+                editButton.type = 'button';
+                editButton.className = 'btn btn-primary';
+                editButton.innerHTML = '<i class="fas fa-pencil-alt"></i> Chỉnh Sửa';
+                editButton.onclick = handleEditToggle;
+
+                buttonGroup.appendChild(editButton);
+            }
+        }
+
+        function setFormEditable(isEditable) {
+            editableFields.forEach(field => {
+                field.disabled = !isEditable;
+            });
+        }
+        
+        // Xử lý nút "Chỉnh Sửa"
+        function handleEditToggle() {
+            isEditMode = true;
+            setFormEditable(true);
+            updateButtons(); 
+        }
+
+        // Xử lý nút "Hủy"
+        function handleCancel() {
+            isEditMode = false;
+            fillForm(originalProfileData); 
+            setFormEditable(false);
+            updateButtons(); 
+        }
+        
+        // Tải thông tin 
+        async function loadProfile(id) {
             try {
-                const response = await fetch(`${API_URL}/seller/profile/${sellerId}`);
+                const response = await fetch(`${API_URL}/seller/profile/${id}`);
                 const result = await response.json();
 
                 if (result.success && result.data) {
+                    originalProfileData = { ...result.data }; 
                     fillForm(result.data);
                 } else {
                     alert('Không thể tải thông tin Profile: ' + result.message);
@@ -215,37 +220,42 @@
             document.getElementById('email').value = data.Email || '';
             document.getElementById('phone').value = data.Phone || '';
             document.getElementById('address').value = data.Address || '';
+            
+            if (data.Birthday) {
+                 const date = new Date(data.Birthday);
+                 document.getElementById('birthday').value = date.toISOString().split('T')[0];
+            } else {
+                 document.getElementById('birthday').value = '';
+            }
+
+            document.getElementById('gender').value = data.Gender || '';
             document.getElementById('storeName').value = data.StoreName || '';
             document.getElementById('storeAddress').value = data.StoreAddress || '';
             
             const imageUrl = data.ImageUrl || 'https://placehold.co/150x150?text=NA';
-            document.getElementById('imageUrl').value = data.ImageUrl || '';
-            document.getElementById('imagePreview').src = imageUrl;
+            document.getElementById('imageUrl').value = imageUrl;
+            previewImage(imageUrl);
         }
 
         function previewImage(url) {
             document.getElementById('imagePreview').src = url || 'https://placehold.co/150x150?text=NA';
         }
 
-        // ----------------------------------------------------
-        // 2. Lưu Profile
-        // ----------------------------------------------------
         async function handleSaveProfile(event) {
             event.preventDefault();
-            
             const formData = {
                 FullName: document.getElementById('fullName').value,
-                Email: document.getElementById('email').value,
                 Phone: document.getElementById('phone').value,
                 Address: document.getElementById('address').value,
+                Birthday: document.getElementById('birthday').value || null,
+                Gender: document.getElementById('gender').value,
                 StoreName: document.getElementById('storeName').value,
                 StoreAddress: document.getElementById('storeAddress').value,
                 ImageUrl: document.getElementById('imageUrl').value,
-                // Giả định Birthday và Gender không bắt buộc, có thể thêm vào form nếu cần
             };
 
-            if (!formData.FullName || !formData.Email || !formData.Phone || !formData.StoreName) {
-                alert('Vui lòng điền đầy đủ Họ và tên, Email, Số điện thoại và Tên cửa hàng.');
+            if (!formData.FullName || !formData.Phone || !formData.StoreName) {
+                alert('Vui lòng điền đầy đủ Họ và tên, Số điện thoại và Tên cửa hàng.');
                 return;
             }
 
@@ -260,37 +270,20 @@
                 
                 if (result.success) {
                     alert(result.message);
-                    // Nếu cập nhật thành công, cập nhật lại tên trong localStorage nếu cần
-                    const account = JSON.parse(localStorage.getItem('account'));
-                    if (account) {
-                        account.Username = formData.FullName.split(' ').pop(); // Tạm thời cập nhật Username
-                        localStorage.setItem('account', JSON.stringify(account));
-                    }
-                    loadProfile(sellerId); // Tải lại dữ liệu mới
+                    originalProfileData = { ...result.data }; 
+                    fillForm(result.data); 
+                    
+                    isEditMode = false; 
+                    setFormEditable(false);
+                    updateButtons();
                 } else {
-                    alert('Lưu thất bại: ' + result.message);
+                    alert('Lưu thất bại: ' + (result.message || result.error));
                 }
             } catch (error) {
                 console.error('Lỗi Network/Server:', error);
                 alert('Lỗi kết nối Server khi lưu Profile!');
             }
         }
-        
-        // Hàm phụ trợ cho Sidebar
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('show');
-        }
-
-        document.addEventListener('click', function(event) {
-            const sidebar = document.getElementById('sidebar');
-            const toggle = document.querySelector('.mobile-toggle');
-            
-            if (window.innerWidth <= 768) {
-                if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
-                    sidebar.classList.remove('show');
-                }
-            }
-        });
     </script>
 </body>
 </html>
