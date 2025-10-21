@@ -1,106 +1,152 @@
-// File: sql-backend/controller/c_shipper.js
+// controller/c_shipper.js
 
-const mShipper = require('../models/m_shipper');
+const shipperModel = require('../models/m_shipper'); // Import Model
+// const authService = require('../services/authService'); // Giả định có service mã hóa mật khẩu
 
-// HÀM GIẢ ĐỊNH LẤY ID SHIPPER TỪ SESSION
-// TRONG THỰC TẾ, BẠN CẦN LẤY AccountId TỪ SESSION SAU KHI ĐĂNG NHẬP THÀNH CÔNG
-function getShipperInfoFromSession(req) {
-    // Dữ liệu mẫu (CẦN THAY THẾ BẰNG DỮ LIỆU SESSION THỰC TẾ)
-    return {
-        accountId: 101, // Dùng ID này để truy vấn Profile
-        username: 'Tom'
-    };
+// Controller 1: Lấy thông tin Profile
+async function getProfile(req, res) {
+    const shipperId = req.params.id; // Lấy ID Shipper từ URL (ví dụ: /api/shipper/profile/101)
+
+    // TODO: Thêm logic xác thực Token JWT ở đây
+
+    try {
+        const profileData = await shipperModel.getShipperProfile(shipperId);
+
+        if (profileData) {
+            res.status(200).json({
+                success: true,
+                profile: profileData
+            });
+        } else {
+            res.status(404).json({ success: false, message: 'Không tìm thấy hồ sơ Shipper' });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Lỗi máy chủ khi lấy hồ sơ', error: error.message });
+    }
 }
 
-
-// ------------------------------------------------------------------
-// 1. Logic cho Trang PROFILE (profile.page.html)
-// ------------------------------------------------------------------
-exports.renderProfilePage = async (req, res) => {
-    try {
-        const shipperSession = getShipperInfoFromSession(req);
-        
-        const profileData = await mShipper.getShipperProfile(shipperSession.accountId);
-
-        if (!profileData) {
-            return res.status(404).send("Không tìm thấy hồ sơ Shipper.");
-        }
-        
-        const viewData = {
-            // Chuẩn hóa tên biến để dễ dàng sử dụng trong template
-            fullName: profileData.FullName,
-            shipperId: profileData.ShipperId,
-            rating: profileData.Rating,
-            completedOrders: profileData.CompletedOrders,
-            phone: profileData.PhoneNumber,
-            email: profileData.Email,
-            activeRegion: profileData.ActiveRegion,
-            bankAccount: profileData.BankAccount,
-            hiName: shipperSession.username
-        };
-        
-        // TODO: THAY THẾ bằng hàm render template engine thực tế của bạn (ví dụ: res.render)
-        // Hiện tại dùng res.json để kiểm tra dữ liệu
-        res.json(viewData); 
-
-    } catch (error) {
-        console.error("Lỗi Controller Profile:", error);
-        res.status(500).send("Lỗi máy chủ khi tải hồ sơ.");
+// Controller 2: Cập nhật Profile
+async function updateProfile(req, res) {
+    const shipperId = req.params.id;
+    const updateData = req.body;
+    
+    // 1. Mã hóa mật khẩu mới nếu có
+    if (updateData.newPassword && updateData.newPassword.length > 0) {
+        // updateData.passwordHash = await authService.hashPassword(updateData.newPassword); // Giả định hàm mã hóa
+        updateData.passwordHash = 'hashed_' + updateData.newPassword; // Dùng placeholder
     }
-};
 
-
-// ------------------------------------------------------------------
-// 2. Logic cho Trang PRODUCTS (products.page.html)
-// ------------------------------------------------------------------
-exports.renderProductsPage = async (req, res) => {
     try {
-        const shipperSession = getShipperInfoFromSession(req);
+        await shipperModel.updateShipperProfile(shipperId, updateData);
 
-        // Lấy 2 danh sách đơn hàng
-        const availableOrders = await mShipper.getAvailableOrders();
-        const myOrders = await mShipper.getMyCompletedOrders(shipperSession.accountId);
-
-        const viewData = {
-            hiName: shipperSession.username,
-            availableOrders: availableOrders, // Đơn hàng CHỜ NHẬN
-            myCompletedOrders: myOrders, // Đơn hàng ĐÃ GIAO / HỦY GIAO
-        };
-
-        // TODO: THAY THẾ bằng hàm render template engine thực tế của bạn
-        res.json(viewData); 
-
-    } catch (error) {
-        console.error("Lỗi Controller Products:", error);
-        res.status(500).send("Lỗi máy chủ khi tải danh sách đơn hàng.");
-    }
-};
-
-// ------------------------------------------------------------------
-// 3. Xử lý nhận đơn hàng (Khi bấm nút CHỌN GIAO)
-// ------------------------------------------------------------------
-exports.acceptOrder = async (req, res) => {
-    try {
-        const shipperSession = getShipperInfoFromSession(req);
-        // Đảm bảo request body có chứa orderId (dùng trong form hoặc AJAX)
-        const { orderId } = req.body; 
-
-        if (!orderId) {
-            return res.status(400).send("Thiếu Mã Đơn hàng.");
+        // Logic thay đổi tên (Nếu tên đổi, cần cập nhật trên Front-end)
+        if (updateData.fullName) {
+             // Cập nhật session hoặc token (việc này cần logic JWT/Session)
         }
 
-        const success = await mShipper.acceptOrder(orderId, shipperSession.accountId);
+        res.status(200).json({
+            success: true,
+            message: 'Cập nhật hồ sơ thành công!'
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Lỗi máy chủ khi cập nhật hồ sơ', error: error.message });
+    }
+}
 
+// Controller 3: Đăng xuất (Log Out)
+function logout(req, res) {
+    // 1. Xóa Token JWT hoặc Session ID
+    // res.clearCookie('authToken'); 
+    // req.session.destroy();
+
+    // 2. Trả về tín hiệu chuyển hướng về trang đăng nhập (signIn)
+    res.status(200).json({
+        success: true,
+        message: 'Đăng xuất thành công',
+        redirect: '/signin' // Frontend sẽ tự động chuyển hướng về trang này
+    });
+}
+// controller/c_shipper.js (Phần bổ sung cho các hàm Profile đã có)
+
+const shipperModel = require('../models/m_shipper');
+
+// Controller 4: Lấy danh sách đơn hàng mới (Pending)
+async function getPendingOrders(req, res) {
+    try {
+        const orders = await shipperModel.getPendingOrders();
+        res.status(200).json({ success: true, orders });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Lỗi máy chủ khi lấy đơn hàng mới.', error: error.message });
+    }
+}
+
+// Controller 5: Lấy danh sách đơn hàng của Shipper (My Orders)
+async function getMyOrders(req, res) {
+    const shipperId = req.params.shipperId; // Lấy ShipperId từ URL/Token
+
+    if (!shipperId) return res.status(400).json({ success: false, message: 'Thiếu ID Shipper.' });
+
+    try {
+        const orders = await shipperModel.getMyOrders(shipperId);
+        res.status(200).json({ success: true, orders });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Lỗi máy chủ khi lấy đơn hàng của tôi.', error: error.message });
+    }
+}
+
+// Controller 6: Shipper chấp nhận đơn (Chọn Giao)
+async function acceptOrder(req, res) {
+    const { orderId, shipperId } = req.body; // Cần OrderId và ShipperId
+
+    if (!orderId || !shipperId) return res.status(400).json({ success: false, message: 'Thiếu thông tin OrderId hoặc ShipperId.' });
+
+    try {
+        const success = await shipperModel.acceptOrder(orderId, shipperId);
         if (success) {
-            // Chuyển hướng về lại trang Products sau khi nhận đơn thành công
-            res.redirect('/shipper/products?status=accepted'); 
+            res.status(200).json({ success: true, message: 'Đã nhận đơn hàng thành công! Đang chuyển sang danh sách Đơn hàng của tôi.' });
         } else {
-            // Có thể đơn hàng đã có người nhận hoặc trạng thái không hợp lệ
-            res.status(409).send("Đơn hàng không hợp lệ hoặc đã có Shipper khác nhận.");
+            res.status(400).json({ success: false, message: 'Không thể nhận đơn hàng này (Có thể đã có Shipper khác nhận).' });
         }
-
     } catch (error) {
-        console.error("Lỗi Controller Accept Order:", error);
-        res.status(500).send("Lỗi máy chủ khi xử lý nhận đơn.");
+        res.status(500).json({ success: false, message: 'Lỗi máy chủ khi chấp nhận đơn hàng.', error: error.message });
     }
+}
+
+// Controller 7: Shipper cập nhật trạng thái (Đã Giao / Hủy Giao)
+async function updateOrderStatus(req, res) {
+    const { orderId, shipperId, newState } = req.body;
+    
+    if (!['Delivered', 'Cancelled'].includes(newState)) {
+        return res.status(400).json({ success: false, message: 'Trạng thái cập nhật không hợp lệ.' });
+    }
+    
+    try {
+        const success = await shipperModel.updateOrderStatus(orderId, shipperId, newState);
+        
+        if (success) {
+            let message = (newState === 'Delivered') 
+                ? 'Đơn hàng đã được đánh dấu là Đã Giao thành công!' 
+                : 'Đã hủy đơn hàng và trả lại đơn hàng vào danh sách chờ.';
+            
+            res.status(200).json({ success: true, message });
+        } else {
+            res.status(400).json({ success: false, message: 'Không thể cập nhật trạng thái đơn hàng.' });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Lỗi máy chủ khi cập nhật trạng thái.', error: error.message });
+    }
+}
+
+// Module export (Cần thêm các hàm mới vào module.exports gốc)
+// module.exports = { getProfile, updateProfile, logout, getPendingOrders, getMyOrders, acceptOrder, updateOrderStatus };
+
+module.exports = {
+    getProfile,
+    updateProfile,
+    logout,
+    getPendingOrders,
+    getMyOrders,
+    acceptOrder,
+    updateOrderStatus,
+    // ... các controllers cho đơn hàng sẽ thêm sau
 };
