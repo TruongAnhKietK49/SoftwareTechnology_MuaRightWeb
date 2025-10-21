@@ -10,7 +10,7 @@ async function createUser() {
       Phone: document.getElementById("phone").value,
       PasswordHash: document.getElementById("password").value,
       Role: activeRole,
-      ImageUrl: ''
+      ImageUrl: document.getElementById("image").value,
     };
 
     let profileData = {};

@@ -220,7 +220,7 @@
                     <form id="addUserForm">
                         <div class="mb-3">
                             <label for="username" class="form-label">Tên đăng nhập (Username)</label>
-                            <input type="text" class="form-control" id="username" placeholder="Nhập tên đăng nhập"
+                            <input type="text" class="form-control" id="userName" placeholder="Nhập tên đăng nhập"
                                 required />
                         </div>
 
@@ -304,84 +304,6 @@
             </div>
         </div>
     </div>
-
-
-    <script>
-        // Loading sidebar
-        document.addEventListener("DOMContentLoaded", function () {
-            fetch("./navAdminPage.html")
-                .then(res => res.text())
-                .then(data => {
-                    document.getElementById("sidebar").innerHTML = data;
-                    // Hiển thị tên tài khoản
-                    const account = JSON.parse(localStorage.getItem("account"));
-                    if (account) {
-                        const nameElement = document.querySelector("#sidebar #username");
-                        if (nameElement) {
-                            nameElement.innerText = account.Username;
-                        }
-                        console.log("Tài khoản hiện tại:", account);
-                    } else {
-                        window.location.href = "../../template/pages/signIn_page.html";
-                    }
-                    // Xử lý nút Đăng xuất
-                    const logoutBtn = document.querySelector("#sidebar .btn-signout");
-                    if (logoutBtn) {
-                        logoutBtn.addEventListener("click", () => {
-                            if (confirm("Bạn có chắc muốn đăng xuất không?")) {
-                                localStorage.removeItem("account");
-                                window.location.href = "../../template/pages/signIn_page.html";
-                            }
-                        });
-                    }
-
-                    // Đánh dấu link đang active
-                    const currentPage = window.location.pathname.split("/").pop();
-                    const links = document.querySelectorAll("#sidebar .nav-link");
-
-                    links.forEach(link => {
-                        const linkPage = link.getAttribute("href");
-                        if (linkPage === currentPage) {
-                            link.classList.add("active", "bg-primary", "text-white", "fw-bold");
-                        } else {
-                            link.classList.remove("active", "bg-primary", "text-white", "fw-bold");
-                        }
-                    });
-                })
-                .catch(err => console.error("Lỗi khi tải sidebar:", err));
-        });
-
-        // Toggle sidebar on mobile
-        document.getElementById('sidebarToggle').addEventListener('click', function () {
-            document.getElementById('sidebar').classList.toggle('show');
-        });
-
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function (event) {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('sidebarToggle');
-
-            if (window.innerWidth <= 992 &&
-                !sidebar.contains(event.target) &&
-                !toggleBtn.contains(event.target)) {
-                sidebar.classList.remove('show');
-            }
-        });
-
-        // Add hover effects to table rows
-        const tableRows = document.querySelectorAll('tbody tr');
-        tableRows.forEach(row => {
-            row.addEventListener('mouseenter', function () {
-                this.style.transform = 'translateY(-2px)';
-                this.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
-            });
-
-            row.addEventListener('mouseleave', function () {
-                this.style.transform = 'translateY(0)';
-                this.style.boxShadow = 'none';
-            });
-        });
-    </script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

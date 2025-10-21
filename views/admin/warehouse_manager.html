@@ -11,7 +11,7 @@
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="/public/CSS/admin/inventoryManager.css">
+    <link rel="stylesheet" href="/public/CSS/admin/productOrder.css">
 
 </head>
 
@@ -48,11 +48,9 @@
                         </div>
 
                         <div class="action-buttons d-flex">
-                            <button type="button" id="btn-approve-selected" class="btn btn-success btn-sm">
-                                <i class="bi bi-check2-circle me-1"></i> Duyệt mục đã chọn
-                            </button>
-                            <button type="button" id="btn-reject-selected" class="btn btn-danger btn-sm ms-2">
-                                <i class="bi bi-x-circle me-1"></i> Từ chối mục đã chọn
+                            <button type="button" id="btn-reject-selected" class="btn btn-danger btn-sm ms-2"
+                                onclick="removeSelectedProducts()">
+                                <i class="bi bi-x-circle me-1"></i> Xoá mục đã chọn
                             </button>
                         </div>
 
@@ -71,12 +69,12 @@
                                     <th scope="col">Tên sản phẩm</th>
                                     <th scope="col">Danh mục</th>
                                     <th scope="col">Người bán</th>
-                                    <th scope="col">Ngày gửi</th>
+                                    <th scope="col">Số lượng</th>
                                     <th scope="col" class="text-end">Giá</th>
                                     <th scope="col" class="text-center" style="width: 15%;">Hành động</th>
                                 </tr>
                             </thead>
-                            <tbody id="pendingProduct-table">
+                            <tbody id="Product-table">
                             </tbody>
                         </table>
                     </div>
@@ -151,7 +149,7 @@
     <!-- Link JS Sidebar -->
     <script src="../../public/JS/sidebarAdmin.js"></script>
     <!-- Link JS chính -->
-    <script src="../../sql-backend/controller/admin/c_inventoryManager.js"></script>
+    <script src="../../sql-backend/controller/admin/c_warehouseManager.js"></script>
 </body>
 
 </html>

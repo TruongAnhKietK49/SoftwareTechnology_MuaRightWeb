@@ -83,6 +83,10 @@ CREATE TABLE Product (
 );
 DROP Table Product
 
+ALTER TABLE Product
+ADD Brand NVARCHAR(100) NOT NULL DEFAULT('Unknown');
+
+
 CREATE TABLE Review (
     ReviewId     INT IDENTITY(1,1) PRIMARY KEY,
     ProductId    INT NOT NULL,
@@ -121,12 +125,12 @@ CREATE TABLE OrderProduct (
     TotalAmount  DECIMAL(18,2) NOT NULL DEFAULT(0),
     State        NVARCHAR(30) NOT NULL DEFAULT('Pending'),
     ApprovedAt   DATETIME2 NULL,
+    ShippedAt    DATETIME2 NULL,
     DeliveredAt  DATETIME2 NULL,
-    CreatedAt    DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAt    DATETIME2 NULL,
     CONSTRAINT FK_Order_Customer FOREIGN KEY (CustomerId) REFERENCES CustomerProfile(CustomerId),
     CONSTRAINT FK_Order_Shipper FOREIGN KEY (ShipperId) REFERENCES ShipperProfile(ShipperId),
-    CONSTRAINT CHK_Order_State CHECK (State IN ('Pending','Approved','Processing','Shipped','Delivered','Cancelled'))
+    CONSTRAINT CHK_Order_State CHECK (State IN ('Pending','Approved','Shipped','Delivered','Cancelled'))
 );
 DROP Table OrderProduct
 
@@ -162,35 +166,48 @@ CREATE TABLE Voucher (
 );
 Drop Table Voucher
 
+
+-- Bảng trung gian để biết Customer có dùng voucher đó chưa
+CREATE TABLE VoucherUsage (
+    UsageId     INT IDENTITY(1,1) PRIMARY KEY,
+    VoucherId   INT NOT NULL,
+    CustomerId  INT NOT NULL,
+    OrderId     INT NULL,             -- đơn hàng mà voucher được áp dụng
+    UsedDate    DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
+
+    CONSTRAINT FK_VoucherUsage_Voucher FOREIGN KEY (VoucherId) REFERENCES Voucher(VoucherId),
+    CONSTRAINT FK_VoucherUsage_Customer FOREIGN KEY (CustomerId) REFERENCES CustomerProfile(CustomerId),
+
+    -- 🔒 Mỗi khách hàng chỉ được dùng 1 lần / 1 voucher
+    CONSTRAINT UQ_VoucherUsage UNIQUE (VoucherId, CustomerId)
+);
+
+
+-- Example data for testing
 SELECT * FROM Account
+DBCC CHECKIDENT ('Account', RESEED, 0);
+DELETE FROM Account
 
-DECLARE @NewAdminId INT;
-
--- 1. Thêm vào Account
-INSERT INTO Account (Username, Email, Phone, PasswordHash, Role, State, ImageUrl)
-VALUES (
-    N'admin01',
-    N'admin01@gmail.com',
-    N'0909123456',
-    N'123456',
-    N'Admin',
-    N'Active',
-    N'https://example.com/avatar.png'
-);
-
--- 2. Lấy AccountId vừa tạo
-SET @NewAdminId = SCOPE_IDENTITY();
-
--- 3. Thêm vào AdminProfile
-INSERT INTO AdminProfile (AdminId, FullName, Birthday, Gender, Position, Note)
-VALUES (
-    @NewAdminId, 
-    N'Nguyễn Văn Quản Trị', 
-    '1990-05-12', 
-    N'Nam', 
-    N'Quản lý hệ thống', 
-    N'Quản lý toàn bộ người dùng và hệ thống.'
-);
-Delete Account Where Username = 'tienthanh'
 SELECT * FROM Product
+DBCC CHECKIDENT ('Product', RESEED, 0);
 Delete From Product
+
+SELECT * FROM Review
+DBCC CHECKIDENT ('Review', RESEED, 0);
+Delete From Review
+
+SELECT * FROM Basket
+DBCC CHECKIDENT ('Basket', RESEED, 0);
+Delete From Basket
+
+SELECT * FROM OrderProduct
+DBCC CHECKIDENT ('OrderProduct', RESEED, 0);
+Delete From OrderProduct
+
+SELECT * FROM OrderItem
+DBCC CHECKIDENT ('OrderItem', RESEED, 0);
+Delete From OrderItem
+
+SELECT * FROM Voucher
+DBCC CHECKIDENT ('Voucher', RESEED, 0);
+Delete From Voucher
