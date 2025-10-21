@@ -207,21 +207,12 @@ async function insertVoucher() {
 
 // Run functions
 async function run() {
-  // 1. CHÈN TÀI KHOẢN GỐC (Đã chạy thành công, không phụ thuộc ai)
   await insertAccount();
-
-  // 2. CHÈN BẢNG PHỤ THUỘC CẤP 1 (Product, Voucher - phụ thuộc Seller/Admin)
-  await insertProduct(); 
-  await insertVoucher(); 
-
-  // 3. CHÈN BẢNG PHỤ THUỘC CẤP 2 (OrderProduct - phụ thuộc Customer/Shipper)
-  //    *Lưu ý: Phải chèn OrderProduct trước OrderItem
-  await insertOrderProduct(); 
-
-  // 4. CHÈN BẢNG PHỤ THUỘC CẤP 3 (Các chi tiết và giao dịch cuối)
-  //    *Các bảng này phụ thuộc Product và/hoặc OrderProduct đã được tạo ở trên.
-  await insertOrderItem(); 
-  await insertReview(); 
-  await insertBasket(); 
+  await insertProduct();
+  await insertReview();
+  await insertBasket();
+  await insertOrderProduct();
+  await insertOrderItem();
+  await insertVoucher();
 }
 run();
