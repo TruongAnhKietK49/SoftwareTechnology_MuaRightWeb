@@ -209,7 +209,7 @@ async function insertVoucher() {
 async function run() {
   await insertAccount();
   await insertProduct();
-  await  insertReview();
+  await insertReview();
   await insertBasket();
   await insertOrderProduct();
   await insertOrderItem();

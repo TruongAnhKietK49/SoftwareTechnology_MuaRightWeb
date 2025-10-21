@@ -201,6 +201,7 @@ DBCC CHECKIDENT ('Basket', RESEED, 0);
 Delete From Basket
 
 SELECT * FROM OrderProduct
+WHERE State = 'Delivered'
 DBCC CHECKIDENT ('OrderProduct', RESEED, 0);
 Delete From OrderProduct
 

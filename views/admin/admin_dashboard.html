@@ -50,8 +50,8 @@
                             <div class="stats-icon primary">
                                 <i class="bi bi-cart3"></i>
                             </div>
-                            <h3 class="stats-value">1,248</h3>
-                            <p class="stats-label">Tổng đơn hàng</p>
+                            <h3 class="stats-value" id="totalOrders">1,248</h3>
+                            <p class="stats-label">Tổng đơn hàng hệ thống</p>
                             <div class="stats-change positive">
                                 <i class="bi bi-arrow-up-right me-1"></i> 12.5% so với tháng trước
                             </div>
@@ -64,7 +64,7 @@
                             <div class="stats-icon success">
                                 <i class="bi bi-currency-dollar"></i>
                             </div>
-                            <h3 class="stats-value">328.5M</h3>
+                            <h3 class="stats-value" id="totalRevenue">328.5M</h3>
                             <p class="stats-label">Doanh thu</p>
                             <div class="stats-change positive">
                                 <i class="bi bi-arrow-up-right me-1"></i> 8.3% so với tháng trước
@@ -78,8 +78,8 @@
                             <div class="stats-icon warning">
                                 <i class="bi bi-people"></i>
                             </div>
-                            <h3 class="stats-value">5,842</h3>
-                            <p class="stats-label">Người dùng mới</p>
+                            <h3 class="stats-value" id="totalUsers">5,842</h3>
+                            <p class="stats-label">Người dùng hệ thống</p>
                             <div class="stats-change positive">
                                 <i class="bi bi-arrow-up-right me-1"></i> 5.7% so với tháng trước
                             </div>
@@ -92,8 +92,8 @@
                             <div class="stats-icon danger">
                                 <i class="bi bi-bag"></i>
                             </div>
-                            <h3 class="stats-value">324</h3>
-                            <p class="stats-label">Sản phẩm mới</p>
+                            <h3 class="stats-value" id="totalProducts">324</h3>
+                            <p class="stats-label">Sản phẩm đang bán</p>
                             <div class="stats-change negative">
                                 <i class="bi bi-arrow-down-right me-1"></i> 2.1% so với tháng trước
                             </div>
@@ -117,8 +117,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="chart-placeholder">
-                            <i class="bi bi-bar-chart me-2"></i> Biểu đồ doanh thu
+                        <div class="card-body">
+                            <canvas id="revenueChart" height="150"></canvas>
                         </div>
                     </div>
                 </div>
@@ -252,20 +252,60 @@
                     </div>
                 </div>
 
-                <!-- Traffic Sources -->
+                <!-- Tạo Voucher -->
                 <div class="col-xl-6">
-                    <div class="chart-container">
-                        <div class="chart-header">
-                            <h4 class="chart-title">Nguồn truy cập</h4>
-                            <div class="chart-actions">
-                                <button class="btn btn-outline-primary btn-sm">Chi tiết</button>
-                            </div>
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center bg-info">
+                            <h4 class="card-title mb-0">Tạo Voucher</h4>
+                            <button class="btn btn-primary btn-sm">Danh sách</button>
                         </div>
-                        <div class="chart-placeholder">
-                            <i class="bi bi-pie-chart me-2"></i> Biểu đồ nguồn truy cập
+                        <div class="card-body">
+                            <form id="createVoucherForm">
+                                <div class="mb-3">
+                                    <label for="voucherCode" class="form-label">Mã Voucher</label>
+                                    <input type="text" class="form-control" id="voucherCode" placeholder="VD: SALE10"
+                                        required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="discountType" class="form-label">Loại giảm</label>
+                                    <select class="form-select" id="discountType" required>
+                                        <option value="Percent">Phần trăm (%)</option>
+                                        <option value="Fixed">Số tiền cố định (VNĐ)</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="discountVal" class="form-label">Giảm giá</label>
+                                    <input type="number" class="form-control" id="discountVal"
+                                        placeholder="VD: 10 hoặc 40000" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="minOrderAmt" class="form-label">Giá trị đơn tối thiểu</label>
+                                    <input type="number" class="form-control" id="minOrderAmt" placeholder="VD: 200000"
+                                        required>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="validFrom" class="form-label">Ngày có hiệu lực</label>
+                                        <input type="date" class="form-control" id="validFrom" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="validTo" class="form-label">Ngày kết thúc</label>
+                                        <input type="date" class="form-control" id="validTo" required>
+                                    </div>
+                                </div>
+
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary">Tạo Voucher</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </main>
@@ -288,10 +328,11 @@
             });
         });
     </script>
-     <!-- Link JS sidebar Admin -->
+    <!-- Link JS sidebar Admin -->
     <script src="../../public/JS/sidebarAdmin.js"></script>
     <!-- Link JS chính -->
-     <script src="../../sql-backend/controller/admin/c_dashboard.js"></script>
+    <script src="../../sql-backend/controller/admin/c_dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 
 </html>

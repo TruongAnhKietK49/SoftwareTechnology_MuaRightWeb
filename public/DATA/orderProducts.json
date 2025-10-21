@@ -10,8 +10,8 @@
     "ShippingFee": 30000.0,
     "TotalAmount": 2830000.0,
     "State": "Delivered",
-    "ApprovedAt": "2025-10-14T10:05:00Z",
-    "DeliveredAt": "2025-10-15T09:00:00Z",
+    "ApprovedAt": "2025-8-14T10:05:00Z",
+    "DeliveredAt": "2025-8-15T09:00:00Z",
     "UpdatedAt": null
   },
   {
@@ -265,9 +265,9 @@
     "DiscountAmt": 0.0,
     "ShippingFee": 30000.0,
     "TotalAmount": 3630000.0,
-    "State": "Approved",
+    "State": "Delivered",
     "ApprovedAt": "2025-10-19T08:00:00Z",
-    "DeliveredAt": null,
+    "DeliveredAt": "2025-9-19T08:00:00Z",
     "UpdatedAt": null
   },
   {
@@ -280,9 +280,9 @@
     "DiscountAmt": 0.0,
     "ShippingFee": 40000.0,
     "TotalAmount": 6240000.0,
-    "State": "Approved",
-    "ApprovedAt": "2025-10-18T09:10:00Z",
-    "DeliveredAt": null,
+    "State": "Delivered",
+    "ApprovedAt": "2025-7-18T09:10:00Z",
+    "DeliveredAt": "2025-7-19T08:00:00Z",
     "UpdatedAt": null
   },
   {
@@ -386,9 +386,9 @@
     "DiscountAmt": 0.0,
     "ShippingFee": 30000.0,
     "TotalAmount": 3830000.0,
-    "State": "Shipped",
-    "ApprovedAt": "2025-10-20T08:00:00Z",
-    "DeliveredAt": null,
+    "State": "Delivered",
+    "ApprovedAt": "2025-6-20T08:00:00Z",
+    "DeliveredAt": "2025-6-21T08:00:00Z",
     "UpdatedAt": null
   },
   {
