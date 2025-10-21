@@ -10,6 +10,7 @@ CREATE TABLE Account (
 	Role			NVARCHAR(20) NOT NULL,
     State           NVARCHAR(20) NOT NULL DEFAULT('Active'),
     ImageUrl        NVARCHAR(1000) NULL,
+    CreatedAt DATETIME2 DEFAULT SYSUTCDATETIME(),
 	CONSTRAINT CHK_Account_Role CHECK (Role IN ('Customer','Seller','Shipper','Admin'))
 )
 Drop Table Account
@@ -24,6 +25,7 @@ CREATE TABLE CustomerProfile (
     CONSTRAINT FK_CustomerProfile_Account FOREIGN KEY (CustomerId) 
         REFERENCES Account(AccountId) ON DELETE CASCADE
 );
+
 DROP Table CustomerProfile
 
 CREATE TABLE SellerProfile (
@@ -38,6 +40,7 @@ CREATE TABLE SellerProfile (
     CONSTRAINT FK_SellerProfile_Account FOREIGN KEY (SellerId) 
         REFERENCES Account(AccountId) ON DELETE CASCADE
 );
+
 DROP Table SellerProfile
 
 CREATE TABLE ShipperProfile (
@@ -78,14 +81,12 @@ CREATE TABLE Product (
     Warranty     NVARCHAR(200) NULL,
     ImageUrl     NVARCHAR(1000) NOT NULL,
     TagName      NVARCHAR(200) NOT NULL,
+    Brand NVARCHAR(100) NOT NULL DEFAULT('Unknown'),
+    CreatedAt DATETIME2 DEFAULT SYSUTCDATETIME(),
     CONSTRAINT FK_Product_Seller FOREIGN KEY (SellerId) 
         REFERENCES SellerProfile(SellerId)
 );
 DROP Table Product
-
-ALTER TABLE Product
-ADD Brand NVARCHAR(100) NOT NULL DEFAULT('Unknown');
-
 
 CREATE TABLE Review (
     ReviewId     INT IDENTITY(1,1) PRIMARY KEY,

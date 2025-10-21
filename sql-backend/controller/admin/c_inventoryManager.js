@@ -60,7 +60,18 @@ function renderProductRow(p, index, tableBody) {
       <div class="product-name">${p.NameProduct || "Không có tên"}</div>
       <div class="product-sku">SKU: SP-${1000 + index}</div>
     </td>
-    <td data-label="Danh mục">${p.Category || "Khác"}</td>
+    <td data-label="Danh mục" style="font-weight:600; color:${
+      p.Category === "Nam"
+        ? "#007bff"
+        : p.Category === "Nữ"
+        ? "#dc3545"
+        : "#6c757d"
+    }">
+      ${
+        p.Category === "Nam" ? "Nam 👔" : p.Category === "Nữ" ? "Nữ 💄" : "Khác 🎃"
+      }
+    </td>
+
     <td data-label="Người bán">${
       p.SellerName || "Người bán #" + p.SellerId
     }</td>

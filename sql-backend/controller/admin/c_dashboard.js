@@ -128,11 +128,80 @@ async function loadRevenueChart() {
   }
 }
 
-// Gọi hàm khi trang tải xong
-document.addEventListener("DOMContentLoaded", loadRevenueChart);
+async function loadRecentActivities() {
+  try {
+    const res = await fetch("http://localhost:3000/admin/recent-activity");
+    if (!res.ok) throw new Error("Lỗi tải hoạt động gần đây");
+    const activities = await res.json();
+
+    const container = document.querySelector(".activity-list");
+    container.innerHTML = "";
+
+    activities.forEach((act) => {
+      const html = `
+        <div class="activity-item">
+          <div class="activity-icon ${act.Color}">
+            <i class="${act.Icon}"></i>
+          </div>
+          <div class="activity-content">
+            <div class="activity-title">${act.Title}</div>
+            <div class="activity-time">${timeAgo(new Date(act.Time))}</div>
+          </div>
+        </div>
+      `;
+      container.insertAdjacentHTML("beforeend", html);
+    });
+  } catch (err) {
+    console.error("❌ Lỗi load hoạt động:", err);
+  }
+}
+
+// 🕓 Hàm hiển thị "x phút trước"
+function timeAgo(time) {
+  const diff = Math.floor((Date.now() - time.getTime()) / 60000);
+  if (diff < 1) return "Vừa xong";
+  if (diff < 60) return `${diff} phút trước`;
+  const hours = Math.floor(diff / 60);
+  if (hours < 24) return `${hours} giờ trước`;
+  const days = Math.floor(hours / 24);
+  return `${days} ngày trước`;
+}
+
+async function loadTopProducts() {
+  try {
+    const res = await fetch("http://localhost:3000/admin/top-products");
+    const data = await res.json();
+
+    const tbody = document.querySelector("#topProductsTable");
+    tbody.innerHTML = "";
+
+    data.forEach((item) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>
+          <div class="d-flex align-items-center">
+            <img src="${item.ImageUrl}" class="rounded me-3"
+                alt="${item.NameProduct}" style="width: 40px; height: 40px; object-fit: cover;">
+            <div>
+              <div class="fw-semibold">${item.NameProduct}</div>
+              <small class="text-muted">${item.Category}</small>
+            </div>
+          </div>
+        </td>
+        <td class="text-center">${item.TotalSold}</td>
+        <td class="text-end">${item.Revenue.toLocaleString("vi-VN")}₫</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch (err) {
+    console.error("Lỗi khi tải top sản phẩm:", err);
+  }
+}
 
 document.addEventListener(
   "DOMContentLoaded",
   () => loadingStatistics(),
-  loadRevenueChart()
+  loadRevenueChart(),
+  loadRecentActivities(),
+  loadTopProducts()
 );

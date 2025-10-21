@@ -1,5 +1,4 @@
 // Insert dữ liệu mẫu vào bảng (chạy 1 lần)
-const { log } = require("console");
 const { getPool, closePool } = require("./routes/config");
 
 // Đọc file JSON
@@ -128,7 +127,7 @@ async function insertBasket() {
         INSERT INTO Basket (${cols.join(", ")})
         VALUES (${cols.map((c) => `@${c}`).join(", ")});
       `);
-      console.log(`✔ Insert Basket: ${basket.BasketId}`);
+      console.log(`✔ Insert Basket: ProductId ${basket.ProductId} và CustomerId ${basket.CustomerId}`);
     }
   } catch (error) {
     console.log("Lỗi khi insert-basket: ", error);
