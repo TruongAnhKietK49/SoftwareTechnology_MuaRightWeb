@@ -137,8 +137,8 @@ async function testGetAccount(filterRole = "All") {
     // --- Nút Xóa ---
     const deleteButtons = tableAccount.querySelectorAll(".btn-outline-danger");
     deleteButtons.forEach((btn, i) => {
-      btn.addEventListener("click", async () => {
-        const username = visibleAccounts[i].Username;
+    btn.addEventListener("click", async () => {
+    const username = visibleAccounts[i].Username;
         if (!confirm(`Bạn có chắc muốn xóa tài khoản "${username}" không?`))
           return;
 
