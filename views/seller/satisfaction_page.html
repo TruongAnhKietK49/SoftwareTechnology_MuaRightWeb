@@ -1,6 +1,3 @@
-<!-- Import menu của seller vào -->
-<!-- Hiển thị đánh giá của khách hàng về sản phẩm của shop -->
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -27,8 +24,8 @@
             <li><a href="products_page.html"><i class="fas fa-box"></i> Quản lý sản phẩm</a></li>
             <li><a href="orders_page.html"><i class="fas fa-shopping-cart"></i> Quản lý đơn hàng</a></li>
             <li><a href="satisfaction_page.html" class="active"><i class="fas fa-chart-bar"></i> Thống kê doanh thu</a></li>
-            <li><a href="#settings"><i class="fas fa-cog"></i> Cài đặt</a></li>
-            <li><a href="#logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+            <li><a href="profileSeller_page.html"><i class="fas fa-cog"></i> Cài đặt trang cá nhân</a></li>
+            <li><a href="#logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
         </ul>
     </div>
 
@@ -230,6 +227,18 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             loadStatistics();
+            // Xử lý Đăng xuất
+        const logoutButton = document.getElementById('logoutBtn');
+        if (logoutButton) {
+            logoutButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
+                    localStorage.removeItem('account');
+                    window.location.href = '../../template/pages/signIn_page.html';
+                }
+            });
+    }
+            
         });
 
         function loadStatistics() {
@@ -244,11 +253,255 @@
             updateStatistics();
         }
 
-        // function updateStatistics() {
-        //     // Update summary stats
-        //     document.getElementById('totalRevenue').textContent = formatPrice(statisticsData.summary.totalRevenue);
-        //     document.getElementById('rev
+        function updateStatistics() {
+            // Update summary stats
+            document.getElementById('totalRevenue').textContent = formatPrice(statisticsData.summary.totalRevenue);
+            document.getElementById('revenueTrend').innerHTML = `<i class="fas fa-arrow-up"></i> +${statisticsData.summary.revenueTrend}%`;
+            
+            document.getElementById('totalOrders').textContent = statisticsData.summary.totalOrders;
+            document.getElementById('ordersTrend').innerHTML = `<i class="fas fa-arrow-up"></i> +${statisticsData.summary.ordersTrend}%`;
+            
+            document.getElementById('productsSold').textContent = statisticsData.summary.productsSold;
+            document.getElementById('productsTrend').innerHTML = `<i class="fas fa-arrow-up"></i> +${statisticsData.summary.productsTrend}%`;
+            
+            document.getElementById('newCustomers').textContent = statisticsData.summary.newCustomers;
+            document.getElementById('customersTrend').innerHTML = `<i class="fas fa-arrow-up"></i> +${statisticsData.summary.customersTrend}%`;
 
-</script>
+            // Load charts
+            loadRevenueChart();
+            loadCategoryChart();
+            loadWeeklyChart();
+            
+            // Load top products table
+            loadTopProductsTable();
+        }
+
+        function loadRevenueChart() {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            
+            if (revenueChartInstance) {
+                revenueChartInstance.destroy();
+            }
+            
+            revenueChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: statisticsData.revenueChart.labels,
+                    datasets: [{
+                        label: 'Doanh thu (triệu đồng)',
+                        data: statisticsData.revenueChart.revenue,
+                        borderColor: '#ff7d1a',
+                        backgroundColor: 'rgba(255, 125, 26, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3
+                    }, {
+                        label: 'Số đơn hàng',
+                        data: statisticsData.revenueChart.orders,
+                        borderColor: '#1976d2',
+                        backgroundColor: 'rgba(25, 118, 210, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function loadCategoryChart() {
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            
+            if (categoryChartInstance) {
+                categoryChartInstance.destroy();
+            }
+            
+            categoryChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: statisticsData.categoryChart.labels,
+                    datasets: [{
+                        data: statisticsData.categoryChart.data,
+                        backgroundColor: [
+                            '#ff7d1a',
+                            '#1976d2',
+                            '#388e3c'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 13,
+                                    weight: '600'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function loadWeeklyChart() {
+            const ctx = document.getElementById('weeklyChart').getContext('2d');
+            
+            if (weeklyChartInstance) {
+                weeklyChartInstance.destroy();
+            }
+            
+            weeklyChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: statisticsData.weeklyChart.labels,
+                    datasets: [{
+                        label: 'Doanh thu (triệu đồng)',
+                        data: statisticsData.weeklyChart.data,
+                        backgroundColor: '#ff7d1a',
+                        borderRadius: 8,
+                        barThickness: 50
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function loadTopProductsTable() {
+            const tbody = document.getElementById('topProductsTable');
+            tbody.innerHTML = '';
+
+            statisticsData.topProducts.forEach(product => {
+                const rankClass = product.rank === 1 ? 'rank-1' : 
+                                 product.rank === 2 ? 'rank-2' : 
+                                 product.rank === 3 ? 'rank-3' : 'rank-other';
+                
+                const rankIcon = product.rank === 1 ? '<i class="fas fa-crown"></i>' :
+                                product.rank === 2 ? '<i class="fas fa-medal"></i>' :
+                                product.rank === 3 ? '<i class="fas fa-award"></i>' :
+                                product.rank;
+
+                const row = `
+                    <tr>
+                        <td>
+                            <div class="product-rank ${rankClass}">
+                                ${rankIcon}
+                            </div>
+                        </td>
+                        <td><strong>${product.name}</strong></td>
+                        <td>${product.category}</td>
+                        <td><strong>${product.sold}</strong> sản phẩm</td>
+                        <td><strong style="color: var(--primary-orange);">${formatPrice(product.revenue)}</strong></td>
+                        <td>
+                            <div class="d-flex align-items-center gap-1">
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <strong>${product.rating}</strong>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function changeTimePeriod(period) {
+            currentPeriod = period;
+            
+            // Update active button
+            document.querySelectorAll('.btn-filter').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update chart title
+            const titles = {
+                'today': 'Biểu đồ doanh thu hôm nay',
+                '7days': 'Biểu đồ doanh thu 7 ngày',
+                '30days': 'Biểu đồ doanh thu 30 ngày',
+                '3months': 'Biểu đồ doanh thu 3 tháng',
+                '6months': 'Biểu đồ doanh thu 6 tháng',
+                '1year': 'Biểu đồ doanh thu 1 năm',
+                'custom': 'Biểu đồ doanh thu tùy chỉnh'
+            };
+            document.getElementById('chartTitle').textContent = titles[period];
+            
+            // TODO: Fetch new data based on period
+            // fetch('/api/seller/statistics?period=' + period)
+            //     .then(res => res.json())
+            //     .then(data => {
+            //         statisticsData = data;
+            //         updateStatistics();
+            //     });
+            
+            // For demo, just reload with current data
+            loadStatistics();
+        }
+
+        function formatPrice(price) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-toggle');
+            
+            if (window.innerWidth <= 768) {
+                if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+                    sidebar.classList.remove('show');
+                }
+            }
+        });
+    </script>
 </body>
 </html>
