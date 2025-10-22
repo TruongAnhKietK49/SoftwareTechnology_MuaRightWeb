@@ -9,10 +9,23 @@ app.use(bodyParser.json());
 const accountRoutes = require("./routes/Admin/accountRoute");
 const adminProfileRoutes = require("./routes/Admin/adminProfileRoute");
 const inventoryRoutes = require("./routes/Admin/inventoryRoute");
-app.use("/admin", adminProfileRoutes, accountRoutes, inventoryRoutes);
+const warehouseRoutes = require("./routes/Admin/warehouseRoute");
+const dashboardRoutes = require("./routes/Admin/dashboardRoute")
+app.use("/admin", adminProfileRoutes, accountRoutes, inventoryRoutes, warehouseRoutes, dashboardRoutes);
 
+const sellerDashboardRoutes = require("./routes/Seller/sellerDashboardRoute");
 const productRoutes = require("./routes/Seller/productRoute");
-app.use("/seller", productRoutes);
+const sellerOrderRoute = require('./routes/Seller/orderRoute');
+const statisticRoutes = require("./routes/Seller/statisticRoute");
+const profileRoutes = require("./routes/Seller/profileRoute");
+app.use(
+  "/seller",
+  sellerOrderRoute,
+  sellerDashboardRoutes,
+  productRoutes,
+  statisticRoutes,
+  profileRoutes
+);
 
 const signUpRoutes = require("./routes/signUpRoute")
 const signInRoutes = require("./routes/signInRoute")

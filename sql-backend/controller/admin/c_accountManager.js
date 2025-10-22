@@ -15,7 +15,6 @@ async function testGetAccount(filterRole = "All") {
     const accounts = await getAccount();
     allAccountsCache = accounts;
     console.log(accounts);
-    
 
     // Xác định tbody theo role
     const tableMap = {
@@ -138,8 +137,8 @@ async function testGetAccount(filterRole = "All") {
     // --- Nút Xóa ---
     const deleteButtons = tableAccount.querySelectorAll(".btn-outline-danger");
     deleteButtons.forEach((btn, i) => {
-      btn.addEventListener("click", async () => {
-        const username = filteredAccounts[i].Username;
+    btn.addEventListener("click", async () => {
+    const username = visibleAccounts[i].Username;
         if (!confirm(`Bạn có chắc muốn xóa tài khoản "${username}" không?`))
           return;
 
@@ -162,7 +161,7 @@ async function testGetAccount(filterRole = "All") {
     const editButtons = tableAccount.querySelectorAll(".btn-outline-primary");
     editButtons.forEach((btn, i) => {
       btn.addEventListener("click", () => {
-        const account = filteredAccounts[i];
+        const account = visibleAccounts[i];
         document.getElementById("editEmail").value = account.Email || "";
         document.getElementById("editPhone").value = account.Phone || "";
         document.getElementById("editState").value = account.State || "";
@@ -359,7 +358,7 @@ document.querySelectorAll(".action-buttons .btn").forEach((button) => {
 
 // --- Xử lý thêm người dùng mới ---
 document.getElementById("btnAddUser").addEventListener("click", async () => {
-  const username = document.getElementById("username").value.trim();
+  const username = document.getElementById("userName").value.trim();
   const email = document.getElementById("email").value.trim();
   const phone = document.getElementById("phone").value.trim();
   const password = document.getElementById("password").value.trim();

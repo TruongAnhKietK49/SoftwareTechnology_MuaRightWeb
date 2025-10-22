@@ -525,3 +525,12 @@ body {
         display: block;
     }
 }
+
+.product-name-clickable {
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+}
+
+.product-name-clickable:hover {
+    color: var(--primary-color, #0d6efd);
+}

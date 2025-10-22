@@ -1,49 +1,99 @@
 const express = require("express");
 const router = express.Router();
-const fs = require("fs");
-const path = require("path");
+const productController = require("../../controller/seller/c_sellerProduct");
+const fs = require('fs');
+const path = require('path');
 
 const pendingPath = path.join(
   __dirname,
   "../../../public/DATA/pendingProducts.json"
 );
 
-// 📥 POST: seller gửi sản phẩm pending
-router.post("/pendingProducts", async (req, res) => {
-  try {
-    const newProducts = req.body; // mảng sản phẩm
-    // Đọc file cũ
-    let currentData = [];
-    if (fs.existsSync(pendingPath)) {
-      const raw = fs.readFileSync(pendingPath, "utf8");
-      if (raw.trim() !== "") currentData = JSON.parse(raw);
+// 🔍 GET: Admin lấy danh sách sản phẩm chờ duyệt
+// URL: GET /seller/pendingProducts 
+router.get("/pendingProducts", (req, res) => {
+    try {
+        if (!fs.existsSync(pendingPath)) {
+            return res.status(200).json([]);
+        }
+
+        const data = fs.readFileSync(pendingPath, "utf8");
+        const pendingList = JSON.parse(data);
+        
+        // Trả về danh sách chờ duyệt
+        res.status(200).json(pendingList);
+    } catch (error) {
+        console.error("❌ Lỗi khi lấy danh sách chờ duyệt:", error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
     }
-
-    // Gộp dữ liệu mới vào file cũ
-    const updated = [...currentData, ...newProducts];
-
-    fs.writeFileSync(pendingPath, JSON.stringify(updated, null, 2), "utf8");
-
-    res
-      .status(200)
-      .json({ message: "Đã thêm sản phẩm vào danh sách chờ duyệt" });
-  } catch (error) {
-    console.error("❌ Lỗi khi thêm sản phẩm chờ duyệt:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
 });
 
-// 📤 GET: adminProduct.html lấy danh sách pending
-router.get("/pendingProducts", (req, res) => {
-  try {
-    if (!fs.existsSync(pendingPath)) return res.json([]);
+// [GET] Lấy danh sách sản phẩm ĐÃ ĐƯỢC DUYỆT của một người bán
+// URL: GET /seller/products/:sellerId
+router.get("/products/:sellerId", async (req, res) => {
+    try {
+        const sellerId = parseInt(req.params.sellerId);
+        const products = await productController.getProducts(sellerId);
+        res.json({ success: true, data: products });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
 
-    const data = JSON.parse(fs.readFileSync(pendingPath, "utf8"));
-    res.json(data);
-  } catch (error) {
-    console.error("❌ Lỗi khi đọc pendingProducts:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+// Người bán gửi một sản phẩm mới để CHỜ DUYỆT
+// URL: POST /seller/products/submit
+router.post("/products/submit", async (req, res) => {
+    try {
+        const newProduct = req.body;
+        if (!newProduct || !newProduct.NameProduct || !newProduct.SellerId) {
+             return res.status(400).json({ success: false, message: "Thiếu dữ liệu sản phẩm quan trọng." });
+        }
+        
+        let pendingList = [];
+        if (fs.existsSync(pendingPath)) {
+            const data = fs.readFileSync(pendingPath, "utf8");
+            if (data.trim() !== "") pendingList = JSON.parse(data); 
+        }
+
+        // Thêm sản phẩm mới vào danh sách
+        pendingList.push(newProduct);
+
+        // Ghi lại danh sách đã cập nhật vào file JSON
+        fs.writeFileSync(pendingPath, JSON.stringify(pendingList, null, 2), "utf8");
+
+        res.status(201).json({ 
+            success: true, 
+            message: "✅ Sản phẩm đã được gửi đi và chờ Admin duyệt!" 
+        });
+
+    } catch (err) {
+        console.error("❌ Lỗi khi gửi sản phẩm chờ duyệt:", err);
+        res.status(500).json({ success: false, message: "Lỗi Server nội bộ: Không thể lưu sản phẩm chờ duyệt." });
+    }
+});
+
+// Cập nhật thông tin một sản phẩm ĐÃ ĐƯỢC DUYỆT
+// URL: PUT /seller/products/:productId
+router.put("/products/:productId", async (req, res) => {
+    try {
+        const productId = parseInt(req.params.productId);
+        const result = await productController.updateProduct(productId, req.body);
+        res.json(result);
+    } catch (err) {
+        res.status(404).json({ success: false, message: err.message });
+    }
+});
+
+// Xóa một sản phẩm
+// URL: DELETE /seller/products/:productId
+router.delete("/products/:productId", async (req, res) => {
+    try {
+        const productId = parseInt(req.params.productId);
+        const result = await productController.deleteProduct(productId);
+        res.json(result);
+    } catch (err) {
+        res.status(404).json({ success: false, message: err.message });
+    }
 });
 
 module.exports = router;

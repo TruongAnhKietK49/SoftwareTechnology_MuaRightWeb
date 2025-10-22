@@ -1,16 +1,18 @@
-let pendingProducts = [];
+let Products = [];
 let filteredProducts = [];
 let currentPage = 1;
 const itemsPerPage = 5;
 
-// 🧭 Tải danh sách sản phẩm chờ duyệt
-async function loadPendingProducts() {
+// 🧭 Tải danh sách sản phẩm
+async function loadProducts() {
   try {
-    const res = await fetch("http://localhost:3000/seller/pendingProducts");
+    const res = await fetch("http://localhost:3000/admin/Products");
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-    pendingProducts = await res.json();
-    filteredProducts = [...pendingProducts];
+    Products = await res.json();
+    filteredProducts = [...Products];
     renderProducts(1);
+    console.log("✅ Tải danh sách sản phẩm:", Products);
+    
   } catch (err) {
     console.error("❌ Lỗi khi tải danh sách sản phẩm chờ duyệt:", err);
   }
@@ -18,14 +20,14 @@ async function loadPendingProducts() {
 
 // 📦 Render danh sách theo trang
 function renderProducts(page = 1) {
-  const tableBody = document.getElementById("pendingProduct-table");
+  const tableBody = document.getElementById("Product-table");
   tableBody.innerHTML = "";
 
   if (!filteredProducts || filteredProducts.length === 0) {
     tableBody.innerHTML = `
       <tr>
         <td colspan="8" class="text-center text-muted py-4">
-          Không có sản phẩm nào đang chờ duyệt
+          Không có sản phẩm nào
         </td>
       </tr>`;
     renderPagination();
@@ -37,7 +39,7 @@ function renderProducts(page = 1) {
   const pageItems = filteredProducts.slice(start, end);
 
   pageItems.forEach((p, index) => {
-    const globalIndex = pendingProducts.indexOf(p);
+    const globalIndex = Products.indexOf(p);
     renderProductRow(p, globalIndex, tableBody);
   });
 
@@ -60,33 +62,17 @@ function renderProductRow(p, index, tableBody) {
       <div class="product-name">${p.NameProduct || "Không có tên"}</div>
       <div class="product-sku">SKU: SP-${1000 + index}</div>
     </td>
-    <td data-label="Danh mục" style="font-weight:600; color:${
-      p.Category === "Nam"
-        ? "#007bff"
-        : p.Category === "Nữ"
-        ? "#dc3545"
-        : "#6c757d"
-    }">
-      ${
-        p.Category === "Nam" ? "Nam 👔" : p.Category === "Nữ" ? "Nữ 💄" : "Khác 🎃"
-      }
-    </td>
-
+    <td data-label="Danh mục">${p.Category || "Khác"}</td>
     <td data-label="Người bán">${
       p.SellerName || "Người bán #" + p.SellerId
     }</td>
-    <td data-label="Ngày gửi">${new Date(
-      p.CreatedAt || Date.now()
-    ).toLocaleDateString("vi-VN")}</td>
+    <td data-label="Số lượng"> ${p.Quantity || 0}</td>
     <td class="text-end" data-label="Giá">${Number(p.Price || 0).toLocaleString(
       "vi-VN"
     )}₫</td>
     <td class="text-center" data-label="Hành động">
       <div class="btn-group btn-group-custom" role="group">
-        <button class="btn btn-outline-success btn-sm" title="Duyệt" onclick="approveProduct(${index})">
-          <i class="bi bi-check-lg"></i>
-        </button>
-        <button class="btn btn-outline-danger btn-sm" title="Từ chối" onclick="rejectProduct(${index})">
+        <button class="btn btn-outline-danger btn-sm" title="Từ chối" onclick="removeProduct(${index})">
           <i class="bi bi-x-lg"></i>
         </button>
         <button class="btn btn-outline-info btn-sm" title="Xem chi tiết" onclick="viewProductDetail(${index})">
@@ -96,6 +82,86 @@ function renderProductRow(p, index, tableBody) {
     </td>
   `;
   tableBody.appendChild(tr);
+}
+
+// 🗑️ Xóa sản phẩm
+async function removeProduct(index) {
+  const nameProduct = filteredProducts[index].NameProduct;
+  const productId = filteredProducts[index].ProductId;
+  console.log("🗑️ Đang xóa sản phẩm có ID:", productId);
+
+  if (!confirm("Bạn có chắc chắn muốn xóa sản phẩm " + nameProduct + "?"))
+    return;
+
+  try {
+    const res = await fetch(
+      `http://localhost:3000/admin/products/${productId}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || "Không thể xóa sản phẩm");
+    }
+
+    const data = await res.json();
+    alert(data.message || "Xóa sản phẩm thành công!");
+
+    // ✅ Xóa sản phẩm khỏi danh sách hiển thị
+    filteredProducts.splice(index, 1);
+
+    // ✅ Gọi hàm render lại bảng
+    renderProducts(currentPage);
+  } catch (error) {
+    console.error("❌ Lỗi khi xóa sản phẩm:", error);
+    alert("Đã xảy ra lỗi khi xóa sản phẩm!");
+  }
+}
+
+// 📦 Xóa tất cả sản phẩm chọn
+async function removeSelectedProducts() {
+  const checkboxes = document.querySelectorAll(
+    "tbody input.form-check-input:checked"
+  );
+  if (checkboxes.length === 0) {
+    alert("Vui lòng chọn ít nhất một sản phẩm để xóa!");
+    return;
+  }
+
+  if (!confirm(`Bạn có chắc muốn xóa ${checkboxes.length} sản phẩm đã chọn?`))
+    return;
+
+  const selectedIds = Array.from(checkboxes).map((cb) => {
+    const index = cb.dataset.index;
+    return filteredProducts[index].ProductId;
+  });
+
+  try {
+    for (const id of selectedIds) {
+      const res = await fetch(`http://localhost:3000/admin/products/${id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        console.error(`❌ Lỗi khi xóa sản phẩm ${id}:`, err.error);
+      } else {
+        console.log(`🗑️ Đã xóa sản phẩm ID: ${id}`);
+      }
+    }
+
+    alert("✅ Xóa sản phẩm thành công!");
+
+    // ✅ Cập nhật lại danh sách sản phẩm hiển thị
+    filteredProducts = filteredProducts.filter(
+      (p) => !selectedIds.includes(p.ProductId)
+    );
+    renderProducts(currentPage);
+  } catch (error) {
+    console.error("❌ Lỗi khi xóa sản phẩm:", error);
+    alert("Đã xảy ra lỗi khi xóa sản phẩm!");
+  }
 }
 
 // 📄 Phân trang
@@ -146,134 +212,14 @@ function setupSelectAllCheckbox() {
   selectAllCheckbox.addEventListener("change", (e) => {
     const isChecked = e.target.checked;
     document
-      .querySelectorAll("#pendingProduct-table .form-check-input")
+      .querySelectorAll("#Product-table .form-check-input")
       .forEach((cb) => (cb.checked = isChecked));
   });
 }
 
-// ✅ DUYỆT 1 sản phẩm
-async function approveProduct(index) {
-  const product = pendingProducts[index];
-  if (!product) return;
-  if (!confirm(`Duyệt sản phẩm "${product.NameProduct}"?`)) return;
-
-  try {
-    const res = await fetch("http://localhost:3000/admin/approveProduct", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ product }),
-    });
-    const data = await res.json();
-
-    if (res.ok) {
-      alert("✅ Đã duyệt sản phẩm thành công!");
-      pendingProducts.splice(index, 1);
-      filteredProducts = [...pendingProducts];
-      renderProducts(1);
-    } else {
-      alert("❌ " + data.error);
-    }
-  } catch (err) {
-    console.error("❌ Lỗi duyệt sản phẩm:", err);
-  }
-}
-
-// ❌ TỪ CHỐI 1 sản phẩm
-async function rejectProduct(index) {
-  const product = pendingProducts[index];
-  if (!product) return;
-  if (!confirm(`Từ chối sản phẩm "${product.NameProduct}"?`)) return;
-
-  try {
-    const res = await fetch("http://localhost:3000/admin/rejectProduct", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ NameProduct: product.NameProduct }),
-    });
-    const data = await res.json();
-
-    if (res.ok) {
-      alert("🗑️ Đã từ chối sản phẩm!");
-      pendingProducts.splice(index, 1);
-      filteredProducts = [...pendingProducts];
-      renderProducts(1);
-    } else {
-      alert("❌ " + data.error);
-    }
-  } catch (err) {
-    console.error("❌ Lỗi khi từ chối:", err);
-  }
-}
-
-// ✅ DUYỆT các mục đã chọn
-async function approveSelectedProducts() {
-  const checked = [
-    ...document.querySelectorAll(
-      "#pendingProduct-table .form-check-input:checked"
-    ),
-  ];
-  if (checked.length === 0)
-    return alert("⚠️ Vui lòng chọn ít nhất 1 sản phẩm!");
-  if (!confirm(`Duyệt ${checked.length} sản phẩm được chọn?`)) return;
-
-  for (const cb of checked) {
-    const index = parseInt(cb.dataset.index);
-    await approveProduct(index);
-  }
-}
-
-// ❌ TỪ CHỐI các mục đã chọn
-async function rejectSelectedProducts() {
-  const checked = [
-    ...document.querySelectorAll(
-      "#pendingProduct-table .form-check-input:checked"
-    ),
-  ];
-  if (checked.length === 0)
-    return alert("⚠️ Vui lòng chọn ít nhất 1 sản phẩm!");
-  if (!confirm(`Từ chối ${checked.length} sản phẩm được chọn?`)) return;
-
-  for (const cb of checked) {
-    const index = parseInt(cb.dataset.index);
-    await rejectProduct(index);
-  }
-}
-
-// 🔍 Tìm kiếm
-function normalizeString(str = "") {
-  return str
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/đ/g, "d")
-    .replace(/Đ/g, "D")
-    .toLowerCase()
-    .trim();
-}
-
-function handleSearch(keyword) {
-  const kw = normalizeString(keyword);
-  if (!kw) {
-    filteredProducts = [...pendingProducts];
-  } else {
-    filteredProducts = pendingProducts.filter((p) => {
-      const name = normalizeString(p.NameProduct || "");
-      const category = normalizeString(p.Category || "");
-      const tag = normalizeString(p.TagName || "");
-      const seller = normalizeString(p.SellerName || "");
-      return (
-        name.includes(kw) ||
-        category.includes(kw) ||
-        tag.includes(kw) ||
-        seller.includes(kw)
-      );
-    });
-  }
-  renderProducts(1);
-}
-
 // 👁️ Xem chi tiết sản phẩm
 function viewProductDetail(index) {
-  const product = pendingProducts[index];
+  const product = Products[index];
   if (!product) return;
 
   document.getElementById("detailImage").src =
@@ -328,13 +274,7 @@ window.addEventListener("focusin", () => {
 
 // 🚀 Khi trang load
 document.addEventListener("DOMContentLoaded", () => {
-  loadPendingProducts();
-  document
-    .getElementById("btn-approve-selected")
-    ?.addEventListener("click", approveSelectedProducts);
-  document
-    .getElementById("btn-reject-selected")
-    ?.addEventListener("click", rejectSelectedProducts);
+  loadProducts();
 
   const searchInput = document.getElementById("search-input");
   const searchBtn = document.getElementById("btn-search");

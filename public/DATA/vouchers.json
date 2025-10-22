@@ -1,0 +1,122 @@
+[
+  {
+    "Code": "SALE5",
+    "CreatedBySeller": 9,
+    "CreatedByAdmin": null,
+    "CustomerId": null,
+    "DiscountType": "Percent",
+    "DiscountVal": 5.0,
+    "MinOrderAmt": 1000000.0,
+    "ValidFrom": "2025-09-01T00:00:00Z",
+    "ValidTo": "2025-12-31T23:59:59Z",
+    "IsActive": 1
+  },
+  {
+    "Code": "SHIPFREE40K",
+    "CreatedBySeller": null,
+    "CreatedByAdmin": 21,
+    "CustomerId": null,
+    "DiscountType": "Fixed",
+    "DiscountVal": 40000.0,
+    "MinOrderAmt": 800000.0,
+    "ValidFrom": "2025-10-01T00:00:00Z",
+    "ValidTo": "2025-12-31T23:59:59Z",
+    "IsActive": 1
+  },
+  {
+    "Code": "NEWUSER10",
+    "CreatedBySeller": null,
+    "CreatedByAdmin": 22,
+    "CustomerId": null,
+    "DiscountType": "Percent",
+    "DiscountVal": 10.0,
+    "MinOrderAmt": 500000.0,
+    "ValidFrom": "2025-08-15T00:00:00Z",
+    "ValidTo": "2025-12-31T23:59:59Z",
+    "IsActive": 1
+  },
+  {
+    "Code": "SALE15",
+    "CreatedBySeller": 9,
+    "CreatedByAdmin": null,
+    "CustomerId": null,
+    "DiscountType": "Percent",
+    "DiscountVal": 15.0,
+    "MinOrderAmt": 2000000.0,
+    "ValidFrom": "2025-09-10T00:00:00Z",
+    "ValidTo": "2025-12-31T23:59:59Z",
+    "IsActive": 1
+  },
+  {
+    "Code": "FIXED80K",
+    "CreatedBySeller": 10,
+    "CreatedByAdmin": null,
+    "CustomerId": null,
+    "DiscountType": "Fixed",
+    "DiscountVal": 80000.0,
+    "MinOrderAmt": 2500000.0,
+    "ValidFrom": "2025-10-01T00:00:00Z",
+    "ValidTo": "2026-01-31T23:59:59Z",
+    "IsActive": 1
+  },
+  {
+    "Code": "VIP20",
+    "CreatedBySeller": null,
+    "CreatedByAdmin": 21,
+    "CustomerId": null,
+    "DiscountType": "Percent",
+    "DiscountVal": 20.0,
+    "MinOrderAmt": 3000000.0,
+    "ValidFrom": "2025-09-20T00:00:00Z",
+    "ValidTo": "2026-02-01T23:59:59Z",
+    "IsActive": 1
+  },
+  {
+    "Code": "SHIPFREE60K",
+    "CreatedBySeller": 11,
+    "CreatedByAdmin": null,
+    "CustomerId": null,
+    "DiscountType": "Fixed",
+    "DiscountVal": 60000.0,
+    "MinOrderAmt": 1500000.0,
+    "ValidFrom": "2025-10-05T00:00:00Z",
+    "ValidTo": "2025-12-31T23:59:59Z",
+    "IsActive": 1
+  },
+  {
+    "Code": "AUTUMN12",
+    "CreatedBySeller": 12,
+    "CreatedByAdmin": null,
+    "CustomerId": null,
+    "DiscountType": "Percent",
+    "DiscountVal": 12.0,
+    "MinOrderAmt": 1000000.0,
+    "ValidFrom": "2025-09-15T00:00:00Z",
+    "ValidTo": "2025-12-31T23:59:59Z",
+    "IsActive": 1
+  },
+  {
+    "Code": "ADMINFIX100K",
+    "CreatedBySeller": null,
+    "CreatedByAdmin": 22,
+    "CustomerId": null,
+    "DiscountType": "Fixed",
+    "DiscountVal": 100000.0,
+    "MinOrderAmt": 3000000.0,
+    "ValidFrom": "2025-10-01T00:00:00Z",
+    "ValidTo": "2026-03-01T23:59:59Z",
+    "IsActive": 1
+  },
+  {
+    "Code": "SELLER9SALE10",
+    "CreatedBySeller": 15,
+    "CreatedByAdmin": null,
+    "CustomerId": null,
+    "DiscountType": "Percent",
+    "DiscountVal": 10.0,
+    "MinOrderAmt": 1200000.0,
+    "ValidFrom": "2025-09-25T00:00:00Z",
+    "ValidTo": "2026-01-15T23:59:59Z",
+    "IsActive": 1
+  }
+]

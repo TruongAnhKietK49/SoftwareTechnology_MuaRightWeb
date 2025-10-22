@@ -7,7 +7,7 @@
         "Phone": "0912345678",
         "PasswordHash": "123456",
         "Role": "Customer",
-        "ImageUrl": ""
+        "ImageUrl": "https://www.bing.com/th/id/OIP.cN99ckW5sNZ8oZESuFbRtQHaEK?w=167&h=211&c=8&rs=1&qlt=90&o=6&cb=12&dpr=1.4&pid=3.1&rm=2"
       },
       {
         "FullName": "Nguyễn Văn A",
@@ -24,7 +24,7 @@
         "Phone": "0923456789",
         "PasswordHash": "123456",
         "Role": "Customer",
-        "ImageUrl": ""
+        "ImageUrl": "https://www.bing.com/th/id/OIP.dE8GKnAby4iqZvZbGsz51QHaNN?w=160&h=211&c=8&rs=1&qlt=90&o=6&cb=12&dpr=1.4&pid=3.1&rm=2"
       },
       {
         "FullName": "Trần Thị B",
@@ -33,6 +33,113 @@
         "Gender": "Nữ",
         "Balance": 2500000.0
       }
+    ],
+    [
+      {
+        "Username": "nguyenvanc",
+        "Email": "nguyenvanc@example.com",
+        "Phone": "0934567890",
+        "PasswordHash": "123456",
+        "Role": "Customer",
+        "ImageUrl": "https://www.bing.com/th/id/OIP.wHhavkBcU06qNap7QWyuFAHaLH?w=160&h=211&c=8&rs=1&qlt=90&o=6&cb=12&dpr=1.4&pid=3.1&rm=2"
+      },
+      {
+        "FullName": "Nguyễn Văn C",
+        "Address": "789 Đường Phạm Ngũ Lão, TP. HCM",
+        "Birthday": "1988-08-15",
+        "Gender": "Nam",
+        "Balance": 2500000.0
+      }
+    ],
+    [
+      {
+        "Username": "linh_rose",
+        "Email": "linh.rose@gmail.com",
+        "Phone": "0901111222",
+        "PasswordHash": "hashed_linh123",
+        "Role": "Customer",
+        "State": "Active",
+        "ImageUrl": "https://www.bing.com/th/id/OIP.uWKJI2ZMIOevl3f3rzFd1gHaNJ?w=160&h=211&c=8&rs=1&qlt=90&o=6&cb=12&dpr=1.4&pid=3.1&rm=2"
+      },
+      {
+        "FullName": "Nguyễn Thị Linh",
+        "Address": "123 Nguyễn Trãi, Quận 5, TP. Hồ Chí Minh",
+        "Birthday": "1998-04-15",
+        "Gender": "Nữ",
+        "Balance": 1580000.0
+      }
+    ],
+    [
+      {
+        "Username": "thanh_vo",
+        "Email": "thanh.vo@gmail.com",
+        "Phone": "0902222333",
+        "PasswordHash": "hashed_thanh123",
+        "Role": "Customer",
+        "State": "Active",
+        "ImageUrl": "https://www.bing.com/th/id/OIP.Big-1RIQYerSsmEJMPyqNQHaEK?w=167&h=211&c=8&rs=1&qlt=90&o=6&cb=12&dpr=1.4&pid=3.1&rm=2"
+      },
+      {
+        "FullName": "Võ Minh Thanh",
+        "Address": "56 Lê Duẩn, Quận Hải Châu, TP. Đà Nẵng",
+        "Birthday": "1995-09-10",
+        "Gender": "Nam",
+        "Balance": 2485000.0
+      }
+    ],
+    [
+      {
+        "Username": "quynh_bloom",
+        "Email": "quynh.bloom@gmail.com",
+        "Phone": "0903333444",
+        "PasswordHash": "hashed_quynh123",
+        "Role": "Customer",
+        "State": "Active",
+        "ImageUrl": "https://www.bing.com/th/id/OIP.P_ZvebliNWCjWHr31JnidQHaKP?w=160&h=211&c=8&rs=1&qlt=90&o=6&cb=12&dpr=1.4&pid=3.1&rm=2"
+      },
+      {
+        "FullName": "Phạm Quỳnh Hoa",
+        "Address": "12A Trần Hưng Đạo, TP. Hà Nội",
+        "Birthday": "2000-01-23",
+        "Gender": "Nữ",
+        "Balance": 980000.0
+      }
+    ],
+    [
+      {
+        "Username": "minh_pham",
+        "Email": "minh.pham@gmail.com",
+        "Phone": "0904444555",
+        "PasswordHash": "hashed_minh123",
+        "Role": "Customer",
+        "State": "Active",
+        "ImageUrl": "https://www.bing.com/th/id/OIP.yHOcVFAa7ateaDJTJR7xYQHaOO?w=160&h=211&c=8&rs=1&qlt=90&o=6&cb=12&dpr=1.4&pid=3.1&rm=2"
+      },
+      {
+        "FullName": "Trần Minh Phúc",
+        "Address": "45 Nguyễn Văn Cừ, TP. Cần Thơ",
+        "Birthday": "1997-03-11",
+        "Gender": "Nam",
+        "Balance": 3150000.0
+      }
+    ],
+    [
+      {
+        "Username": "trang_nguyen",
+        "Email": "trang.nguyen@gmail.com",
+        "Phone": "0905555666",
+        "PasswordHash": "hashed_trang123",
+        "Role": "Customer",
+        "State": "Active",
+        "ImageUrl": "https://www.bing.com/th/id/OIP.H23nnzoJLvxUvGP8LJqBlgHaKd?w=160&h=211&c=8&rs=1&qlt=90&o=6&cb=12&dpr=1.4&pid=3.1&rm=2"
+      },
+      {
+        "FullName": "Ngô Thu Trang",
+        "Address": "78 Lý Tự Trọng, Quận 1, TP. Hồ Chí Minh",
+        "Birthday": "2001-07-04",
+        "Gender": "Nữ",
+        "Balance": 1420000.0
+      }
     ]
   ],
   "seller": [
@@ -40,10 +147,10 @@
       {
         "Username": "leminhc",
         "Email": "leminhc@example.com",
-        "Phone": "0934567890",
+        "Phone": "0934567860",
         "PasswordHash": "123456",
         "Role": "Seller",
-        "ImageUrl": ""
+        "ImageUrl": "https://www.bing.com/th/id/OIP.ngO4SErDVi6vXX0qcF3i4wHaL2?w=160&h=211&c=8&rs=1&qlt=90&o=6&cb=12&dpr=1.4&pid=3.1&rm=2"
       },
       {
         "FullName": "Lê Minh C",
@@ -62,7 +169,7 @@
         "Phone": "0898765432",
         "PasswordHash": "123456",
         "Role": "Seller",
-        "ImageUrl": ""
+        "ImageUrl": "https://www.bing.com/th/id/OIP.Hr0_9ndp37Fmovb161x88QHaKa?w=160&h=211&c=8&rs=1&qlt=90&o=6&cb=12&dpr=1.4&pid=3.1&rm=2"
       },
       {
         "FullName": "Nguyễn Văn D",
@@ -72,6 +179,106 @@
         "StoreName": "Cửa Hàng Văn D",
         "StoreAddress": "321 Đường Trần Hưng Đạo, TP. HCM",
         "Balance": 5000000.0
+      }
+    ],
+    [
+      {
+        "Username": "mr_perfume",
+        "Email": "mrperfume.shop@gmail.com",
+        "Phone": "0906666777",
+        "PasswordHash": "hashed_seller1",
+        "Role": "Seller",
+        "State": "Active",
+        "ImageUrl": "https://meliawedding.com.vn/wp-content/uploads/2022/04/hinh-anh-anime-1-scaled.jpg"
+      },
+      {
+        "FullName": "Nguyễn Minh Quân",
+        "Address": "123 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh",
+        "Birthday": "1988-06-21",
+        "Gender": "Nam",
+        "StoreName": "MuaRight",
+        "StoreAddress": "280 An Dương Vương, P.8, Quận 5, TP.HCM",
+        "Balance": 18500000.0
+      }
+    ],
+    [
+      {
+        "Username": "luxury_aroma",
+        "Email": "luxury.aroma@gmail.com",
+        "Phone": "0907777888",
+        "PasswordHash": "hashed_seller2",
+        "Role": "Seller",
+        "State": "Active",
+        "ImageUrl": "https://i.pinimg.com/originals/78/9c/65/789c659712d586aea21be470b200ab6f.jpg"
+      },
+      {
+        "FullName": "Trần Thu Hà",
+        "Address": "45A Hai Bà Trưng, Quận 3, TP. Hồ Chí Minh",
+        "Birthday": "1992-09-05",
+        "Gender": "Nữ",
+        "StoreName": "MuaRight",
+        "StoreAddress": "280 An Dương Vương, P.8, Quận 5, TP.HCM",
+        "Balance": 25700000.0
+      }
+    ],
+    [
+      {
+        "Username": "scent_house",
+        "Email": "scent.house@gmail.com",
+        "Phone": "0908888999",
+        "PasswordHash": "hashed_seller3",
+        "Role": "Seller",
+        "State": "Active",
+        "ImageUrl": "https://khoinguonsangtao.vn/wp-content/uploads/2022/07/anh-anime-phong-canh-thanh-pho-tu-xa.jpeg"
+      },
+      {
+        "FullName": "Phạm Quốc Duy",
+        "Address": "89 Trần Hưng Đạo, Quận 1, TP. Hà Nội",
+        "Birthday": "1990-12-15",
+        "Gender": "Nam",
+        "StoreName": "MuaRight",
+        "StoreAddress": "280 An Dương Vương, P.8, Quận 5, TP.HCM",
+        "Balance": 19450000.0
+      }
+    ],
+    [
+      {
+        "Username": "perfume_paris",
+        "Email": "perfume.paris@gmail.com",
+        "Phone": "0909999000",
+        "PasswordHash": "hashed_seller4",
+        "Role": "Seller",
+        "State": "Active",
+        "ImageUrl": "https://cdn.pixabay.com/photo/2024/06/19/07/16/girl-8839336_1280.jpg"
+      },
+      {
+        "FullName": "Lê Thanh Vân",
+        "Address": "22 Lý Thường Kiệt, Quận 10, TP. Hồ Chí Minh",
+        "Birthday": "1987-11-03",
+        "Gender": "Nữ",
+        "StoreName": "MuaRight",
+        "StoreAddress": "280 An Dương Vương, P.8, Quận 5, TP.HCM",
+        "Balance": 31200000.0
+      }
+    ],
+    [
+      {
+        "Username": "fragrance_vn",
+        "Email": "fragrance.vn@gmail.com",
+        "Phone": "0910000111",
+        "PasswordHash": "hashed_seller5",
+        "Role": "Seller",
+        "State": "Active",
+        "ImageUrl": "https://tse4.mm.bing.net/th/id/OIP.rIDQfFLLQkmR6bbK0Dog6AHaHa?cb=12&pid=ImgDet&w=184&h=184&c=7&dpr=1.4&o=7&rm=3"
+      },
+      {
+        "FullName": "Đặng Hải Nam",
+        "Address": "77 Phan Chu Trinh, Quận Hải Châu, TP. Đà Nẵng",
+        "Birthday": "1991-02-28",
+        "Gender": "Nam",
+        "StoreName": "MuaRight",
+        "StoreAddress": "280 An Dương Vương, P.8, Quận 5, TP.HCM",
+        "Balance": 22500000.0
       }
     ]
   ],
@@ -83,7 +290,7 @@
         "Phone": "0989111222",
         "PasswordHash": "hashed_pw_long",
         "Role": "Shipper",
-        "ImageUrl": "https://example.com/images/shipper_long.jpg"
+        "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.ymcYaXHRz1vGUYke7TgIYwHaHa?cb=12&pid=ImgDet&w=184&h=184&c=7&dpr=1.4&o=7&rm=3"
       },
       {
         "FullName": "Nguyễn Văn Long",
@@ -103,7 +310,7 @@
         "Phone": "0977555444",
         "PasswordHash": "hashed_pw_lan",
         "Role": "Shipper",
-        "ImageUrl": "https://example.com/images/shipper_lan.jpg"
+        "ImageUrl": "https://tse4.mm.bing.net/th/id/OIP.pNFzOJAliBEJnvW5tHNLrQHaJ_?cb=12&pid=ImgDet&w=184&h=248&c=7&dpr=1.4&o=7&rm=3"
       },
       {
         "FullName": "Trần Thị Lan",
@@ -114,6 +321,107 @@
         "LicenseNo": "59C1-99888",
         "Region": "Quận 3, Quận 10, Phú Nhuận",
         "Balance": 150000.0
+      }
+    ],
+    [
+      {
+        "Username": "shipper_tuan",
+        "Email": "tuan.shipper@gmail.com",
+        "Phone": "0911111222",
+        "PasswordHash": "hashed_shipper1",
+        "Role": "Shipper",
+        "State": "Active",
+        "ImageUrl": "https://tse2.mm.bing.net/th/id/OIP.P6peAKqt2Jq2jSl-DyMJ5QAAAA?cb=12&pid=ImgDet&w=184&h=229&c=7&dpr=1.4&o=7&rm=3"
+      },
+      {
+        "FullName": "Nguyễn Minh Tuan",
+        "Address": "123 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh",
+        "Birthday": "1988-06-21",
+        "Gender": "Nam",
+        "VehicleInfo": "Xe máy Yamaha Sirius",
+        "LicenseNo": "59C1-99888",
+        "Region": "Quận 3, Quận 10, Phú Nhuận",
+        "Balance": 150000.0
+      }
+    ],
+    [
+      {
+        "Username": "shipper_huy",
+        "Email": "huy.shipper@gmail.com",
+        "Phone": "0912222333",
+        "PasswordHash": "hashed_shipper2",
+        "Role": "Shipper",
+        "State": "Active",
+        "ImageUrl": "https://tse2.mm.bing.net/th/id/OIP.F1BURZlI6HM5jEWk3DOcCwHaHY?cb=12&pid=ImgDet&w=184&h=182&c=7&dpr=1.4&o=7&rm=3"
+      },
+      {
+        "FullName": "Nguyễn Văn Huy",
+        "Address": "45 Nguyễn Trãi, Quận 5, TP.HCM",
+        "Birthday": "1996-05-12",
+        "Gender": "Nam",
+        "VehicleInfo": "Xe máy Yamaha Sirius",
+        "LicenseNo": "59C1-99888",
+        "Region": "Quận 3, Quận 10, Phú Nhuận",
+        "Balance": 150000.0
+      }
+    ],
+    [
+      {
+        "Username": "shipper_hoang",
+        "Email": "hoang.shipper@gmail.com",
+        "Phone": "0913333444",
+        "PasswordHash": "hashed_shipper3",
+        "Role": "Shipper",
+        "State": "Active",
+        "ImageUrl": "https://tse4.mm.bing.net/th/id/OIP.Adc5v77O5bPQeZFpplf5QAHaKk?cb=12&pid=ImgDet&w=184&h=263&c=7&dpr=1.4&o=7&rm=3"
+      },
+      {
+        "FullName": "Nguyễn Văn Hoàng",
+        "Address": "120 Lê Văn Sỹ, Quận 3, TP.HCM",
+        "Birthday": "1998-09-25",
+        "Gender": "Nam",
+        "VehicleInfo": "Xe máy Yamaha Sirius",
+        "LicenseNo": "59C1-99888",
+        "Region": "Quận 3, Quận 10, Phú Nhuận",
+        "Balance": 150000.0
+      }
+    ]
+  ],
+  "admin": [
+    [
+      {
+        "Username": "admin_01",
+        "Email": "admin01@muaright.vn",
+        "Phone": "0999996666",
+        "PasswordHash": "admin01",
+        "Role": "Admin",
+        "State": "Active",
+        "ImageUrl": "https://tse1.mm.bing.net/th/id/OIP.La6PVLzEDw0-2pKs8HPGMQHaJZ?cb=12&pid=ImgDet&w=184&h=233&c=7&dpr=1.4&o=7&rm=3"
+      },
+      {
+        "FullName": "Trương Anh Kiệt",
+        "Birthday": "2005-09-10",
+        "Gender": "Nam",
+        "Position": "Quản lý hệ thống",
+        "Note": "Phụ trách giám sát toàn bộ hoạt động của hệ thống và bảo mật dữ liệu."
+      }
+    ],
+    [
+      {
+        "Username": "admin_02",
+        "Email": "admin02@muaright.vn",
+        "Phone": "0916666777",
+        "PasswordHash": "admin02",
+        "Role": "Admin",
+        "State": "Active",
+        "ImageUrl": "https://kynguyenlamdep.com/wp-content/uploads/2022/08/anh-anime-toc-hong-cute.jpg"
+      },
+      {
+        "FullName": "Ngô Ý Nhi",
+        "Birthday": "2005-01-26",
+        "Gender": "Nữ",
+        "Position": "Quản lý hệ thống",
+        "Note": "Phụ trách đảm bảo độ hài lòng của khách hàng và ăn uống ngủ nghỉ!"
       }
     ]
   ]

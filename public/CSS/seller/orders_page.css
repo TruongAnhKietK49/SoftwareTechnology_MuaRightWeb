@@ -579,3 +579,21 @@ body {
         gap: 15px;
     }
 }
+
+.order-status-label {
+    background-color: #071b2f;
+    color: #fff;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.btn-outline-primary {
+    border-color: #ff7d1a;
+    color: #ff7d1a;
+}
+.btn-outline-primary:hover {
+    background-color: #ff7d1a;
+    color: #fff;
+}

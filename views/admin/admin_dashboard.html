@@ -50,8 +50,8 @@
                             <div class="stats-icon primary">
                                 <i class="bi bi-cart3"></i>
                             </div>
-                            <h3 class="stats-value">1,248</h3>
-                            <p class="stats-label">Tổng đơn hàng</p>
+                            <h3 class="stats-value" id="totalOrders">1,248</h3>
+                            <p class="stats-label">Tổng đơn hàng hệ thống</p>
                             <div class="stats-change positive">
                                 <i class="bi bi-arrow-up-right me-1"></i> 12.5% so với tháng trước
                             </div>
@@ -64,7 +64,7 @@
                             <div class="stats-icon success">
                                 <i class="bi bi-currency-dollar"></i>
                             </div>
-                            <h3 class="stats-value">328.5M</h3>
+                            <h3 class="stats-value" id="totalRevenue">328.5M</h3>
                             <p class="stats-label">Doanh thu</p>
                             <div class="stats-change positive">
                                 <i class="bi bi-arrow-up-right me-1"></i> 8.3% so với tháng trước
@@ -78,8 +78,8 @@
                             <div class="stats-icon warning">
                                 <i class="bi bi-people"></i>
                             </div>
-                            <h3 class="stats-value">5,842</h3>
-                            <p class="stats-label">Người dùng mới</p>
+                            <h3 class="stats-value" id="totalUsers">5,842</h3>
+                            <p class="stats-label">Người dùng hệ thống</p>
                             <div class="stats-change positive">
                                 <i class="bi bi-arrow-up-right me-1"></i> 5.7% so với tháng trước
                             </div>
@@ -92,8 +92,8 @@
                             <div class="stats-icon danger">
                                 <i class="bi bi-bag"></i>
                             </div>
-                            <h3 class="stats-value">324</h3>
-                            <p class="stats-label">Sản phẩm mới</p>
+                            <h3 class="stats-value" id="totalProducts">324</h3>
+                            <p class="stats-label">Sản phẩm đang bán</p>
                             <div class="stats-change negative">
                                 <i class="bi bi-arrow-down-right me-1"></i> 2.1% so với tháng trước
                             </div>
@@ -117,8 +117,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="chart-placeholder">
-                            <i class="bi bi-bar-chart me-2"></i> Biểu đồ doanh thu
+                        <div class="card-body">
+                            <canvas id="revenueChart" height="150"></canvas>
                         </div>
                     </div>
                 </div>
@@ -129,55 +129,11 @@
                         <div class="table-header">
                             <h4 class="table-title">Hoạt động gần đây</h4>
                             <div class="table-actions">
-                                <button class="btn btn-outline-primary btn-sm">Xem tất cả</button>
+                                <button class="btn btn-outline-primary btn-sm">Tải lại</button>
                             </div>
                         </div>
                         <div class="activity-list">
-                            <div class="activity-item">
-                                <div class="activity-icon primary">
-                                    <i class="bi bi-cart-check"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Đơn hàng mới #ORD-1256</div>
-                                    <div class="activity-time">10 phút trước</div>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon success">
-                                    <i class="bi bi-person-plus"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Người dùng mới đăng ký</div>
-                                    <div class="activity-time">25 phút trước</div>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon warning">
-                                    <i class="bi bi-bag-check"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Sản phẩm mới được thêm</div>
-                                    <div class="activity-time">1 giờ trước</div>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon danger">
-                                    <i class="bi bi-currency-dollar"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Hoàn tiền đơn hàng #ORD-1198</div>
-                                    <div class="activity-time">2 giờ trước</div>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon primary">
-                                    <i class="bi bi-star"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Đánh giá 5 sao cho sản phẩm</div>
-                                    <div class="activity-time">3 giờ trước</div>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -203,7 +159,7 @@
                                         <th scope="col" class="text-end">Doanh thu</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="topProductsTable">
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
@@ -218,54 +174,66 @@
                                         <td class="text-center">245</td>
                                         <td class="text-end">61.250.000₫</td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <img src="https://picsum.photos/id/24/60/60" class="rounded me-3"
-                                                    alt="Product" style="width: 40px; height: 40px; object-fit: cover;">
-                                                <div>
-                                                    <div class="fw-semibold">Laptop Gaming XYZ 2025</div>
-                                                    <small class="text-muted">Điện tử</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">128</td>
-                                        <td class="text-end">3.648.000.000₫</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <img src="https://picsum.photos/id/180/60/60" class="rounded me-3"
-                                                    alt="Product" style="width: 40px; height: 40px; object-fit: cover;">
-                                                <div>
-                                                    <div class="fw-semibold">Giày thể thao Runner Pro</div>
-                                                    <small class="text-muted">Thời trang nữ</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">187</td>
-                                        <td class="text-end">224.400.000₫</td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- Traffic Sources -->
+                <!-- Tạo Voucher -->
                 <div class="col-xl-6">
-                    <div class="chart-container">
-                        <div class="chart-header">
-                            <h4 class="chart-title">Nguồn truy cập</h4>
-                            <div class="chart-actions">
-                                <button class="btn btn-outline-primary btn-sm">Chi tiết</button>
-                            </div>
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center bg-info">
+                            <h4 class="card-title mb-0">Tạo Voucher</h4>
+                            <button class="btn btn-primary btn-sm">Danh sách</button>
                         </div>
-                        <div class="chart-placeholder">
-                            <i class="bi bi-pie-chart me-2"></i> Biểu đồ nguồn truy cập
+                        <div class="card-body">
+                            <form id="createVoucherForm">
+                                <div class="mb-3">
+                                    <label for="voucherCode" class="form-label">Mã Voucher</label>
+                                    <input type="text" class="form-control" id="voucherCode" placeholder="VD: SALE10"
+                                        required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="discountType" class="form-label">Loại giảm</label>
+                                    <select class="form-select" id="discountType" required>
+                                        <option value="Percent">Phần trăm (%)</option>
+                                        <option value="Fixed">Số tiền cố định (VNĐ)</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="discountVal" class="form-label">Giảm giá</label>
+                                    <input type="number" class="form-control" id="discountVal"
+                                        placeholder="VD: 10 hoặc 40000" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="minOrderAmt" class="form-label">Giá trị đơn tối thiểu</label>
+                                    <input type="number" class="form-control" id="minOrderAmt" placeholder="VD: 200000"
+                                        required>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="validFrom" class="form-label">Ngày có hiệu lực</label>
+                                        <input type="date" class="form-control" id="validFrom" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="validTo" class="form-label">Ngày kết thúc</label>
+                                        <input type="date" class="form-control" id="validTo" required>
+                                    </div>
+                                </div>
+
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary">Tạo Voucher</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </main>
@@ -274,50 +242,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Loading sidebar
-        document.addEventListener("DOMContentLoaded", function () {
-            fetch("./navAdminPage.html")
-                .then(res => res.text())
-                .then(data => {
-                    document.getElementById("sidebar").innerHTML = data;
-                    // Hiển thị tên tài khoản
-                    const account = JSON.parse(localStorage.getItem("account"));
-                    if (account) {
-                        const nameElement = document.querySelector("#sidebar #username");
-                        if (nameElement) {
-                            nameElement.innerText = account.Username;
-                        }
-                        console.log("Tài khoản hiện tại:", account);
-                    } else {
-                        window.location.href = "../../template/pages/signIn_page.html";
-                    }
-                    // Xử lý nút Đăng xuất
-                    const logoutBtn = document.querySelector("#sidebar .btn-signout");
-                    if (logoutBtn) {
-                        logoutBtn.addEventListener("click", () => {
-                            if (confirm("Bạn có chắc muốn đăng xuất không?")) {
-                                localStorage.removeItem("account");
-                                window.location.href = "../../template/pages/signIn_page.html";
-                            }
-                        });
-                    }
-
-                    // Đánh dấu link đang active
-                    const currentPage = window.location.pathname.split("/").pop();
-                    const links = document.querySelectorAll("#sidebar .nav-link");
-
-                    links.forEach(link => {
-                        const linkPage = link.getAttribute("href");
-                        if (linkPage === currentPage) {
-                            link.classList.add("active", "bg-primary", "text-white", "fw-bold");
-                        } else {
-                            link.classList.remove("active", "bg-primary", "text-white", "fw-bold");
-                        }
-                    });
-                })
-                .catch(err => console.error("Lỗi khi tải sidebar:", err));
-        });
-
         // Add hover effects to stats cards
         const statsCards = document.querySelectorAll('.stats-card');
         statsCards.forEach(card => {
@@ -332,8 +256,11 @@
             });
         });
     </script>
-     <!-- Link JS sidebar Admin -->
+    <!-- Link JS sidebar Admin -->
     <script src="../../public/JS/sidebarAdmin.js"></script>
+    <!-- Link JS chính -->
+    <script src="../../sql-backend/controller/admin/c_dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 
 </html>
