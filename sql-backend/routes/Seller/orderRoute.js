@@ -1,16 +1,14 @@
-// File: orderRoute.js 
 const express = require("express");
 const router = express.Router();
 
 const orderController = require("../../controller/seller/c_sellerOrder");
 
-// Endpoint: GET /seller/orders/:sellerId?state=...
+// GET /seller/orders/:sellerId?state=...
 router.get("/orders/:sellerId", async (req, res) => {
     const sellerId = parseInt(req.params.sellerId);
     const state = req.query.state || 'All';
 
     try {
-        // Kiểm tra isNaN ngay đây
         if (isNaN(sellerId)) {
             return res.status(400).json({ success: false, message: "Seller ID không hợp lệ." });
         }
@@ -22,14 +20,13 @@ router.get("/orders/:sellerId", async (req, res) => {
     }
 });
 
-// Endpoint: GET /seller/order/detail/:orderId/:sellerId
+// GET /seller/order/detail/:orderId/:sellerId
 router.get("/order/detail/:orderId/:sellerId", async (req, res) => {
     const orderId = parseInt(req.params.orderId);
     const sellerId = parseInt(req.params.sellerId);
 
     try {
         const orderDetail = await orderController.getOrderDetail(orderId, sellerId);
-        // Controller sẽ throw error nếu không tìm thấy, nên ta bắt lỗi đó
         res.json({ success: true, data: orderDetail });
     } catch (err) {
         console.error("[ROUTE ERROR] /order/detail :", err);
@@ -37,7 +34,7 @@ router.get("/order/detail/:orderId/:sellerId", async (req, res) => {
     }
 });
 
-// Endpoint: PUT /seller/orders/:orderId/status
+// PUT /seller/orders/:orderId/status
 router.put("/orders/:orderId/status", async (req, res) => {
     const orderId = parseInt(req.params.orderId);
     const { newState } = req.body;
@@ -55,7 +52,7 @@ router.put("/orders/:orderId/status", async (req, res) => {
     }
 });
 
-// Endpoint: PUT /seller/orders/:orderId/cancel
+// PUT /seller/orders/:orderId/cancel
 router.put("/orders/:orderId/cancel", async (req, res) => {
     const orderId = parseInt(req.params.orderId);
     const { cancelReason } = req.body;
