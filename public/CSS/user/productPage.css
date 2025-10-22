@@ -154,6 +154,11 @@ a {
   max-width: 1100px;
   margin: 0 auto;
 }
+
+#grid.grid.row.g-4 {
+  margin-left: auto;
+  margin-right: auto;
+}
 .product-card {
   background: #111;
   border: 1px solid var(--border);
@@ -175,6 +180,7 @@ a {
 .product-title {
   font-weight: 600;
   margin: 6px 0 2px;
+  color: #fff;
 }
 .price {
   color: var(--gold);
