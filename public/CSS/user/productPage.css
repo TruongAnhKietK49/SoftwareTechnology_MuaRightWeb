@@ -180,6 +180,7 @@ a {
 .product-title {
   font-weight: 600;
   margin: 6px 0 2px;
+  color: #fff;
 }
 .price {
   color: var(--gold);

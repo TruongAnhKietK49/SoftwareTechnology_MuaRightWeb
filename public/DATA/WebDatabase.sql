@@ -78,6 +78,7 @@ CREATE TABLE Product (
     Warranty     NVARCHAR(200) NULL,
     ImageUrl     NVARCHAR(1000) NOT NULL,
     TagName      NVARCHAR(200) NOT NULL,
+    Brand        NVARCHAR(100) NOT NULL DEFAULT('Unknown'),
     CONSTRAINT FK_Product_Seller FOREIGN KEY (SellerId) 
         REFERENCES SellerProfile(SellerId)
 );

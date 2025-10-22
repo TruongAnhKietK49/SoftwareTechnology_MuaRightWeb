@@ -1,4 +1,4 @@
-const { sql, getPool, closePool } = require("./server");
+const { sql, getPool, closePool } = require("../sql-backend/routes/config");
 
 // Insert dữ liệu mẫu vào bảng (chạy 1 lần)
 async function insertSampleData() {

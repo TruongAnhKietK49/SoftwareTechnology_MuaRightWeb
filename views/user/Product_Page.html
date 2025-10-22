@@ -88,10 +88,10 @@
           <div class="col-md-3">
             <select id="priceSelect" class="form-select">
               <option value="">Khoảng giá</option>
-              <option value="0-149">$0 – $149</option>
-              <option value="150-199">$150 – $199</option>
-              <option value="200-249">$200 – $249</option>
-              <option value="250-999">$250 trở lên</option>
+              <option value="0-1000000">0 – 1 Triệu</option>
+              <option value="1000000-2000000">2 – 3 Triệu</option>
+              <option value="3000000-5000000">3 – 5 Triệu</option>
+              <option value="5000000-9999999">5 Triệu trở lên</option>
             </select>
           </div>
         </div>
@@ -334,7 +334,6 @@
         }
 
         const json = await res.json();
-
         PRODUCTS = json.data;
         render();
         console.log("Danh sách sản phẩm:", PRODUCTS);
@@ -485,11 +484,12 @@
         if (st.brand) list = list.filter((p) => p.Brand === st.brand);
         if (st.gender) list = list.filter((p) => p.Category === st.gender);
         if (st.price) {
-          const [min, max] = st.price.split("-").map(Number);
-          list = list.filter(
-            (p) => p.price >= min && p.price <= (max || 999999)
-          );
+          const [minStr, maxStr] = st.price.split("-");
+          const min = Number(minStr) || 0;
+          const max = Number(maxStr) || 9999999;
+          list = list.filter((p) => p.Price >= min && p.Price <= max);
         }
+        console.log("Lọc xong, còn", list.length, "sản phẩm");
         return list;
       }
 
@@ -726,14 +726,12 @@
           const d = document.createElement("div");
           d.className = "review-item";
           d.innerHTML = `
-      <div class="d-flex align-items-center justify-content-between">
-        <div class="fw-semibold">${(r.name || "Khách").replace(/</g,"&lt;")}</div>
-        <div class="stars">${starIcons(r.rating)}</div>
-      </div>
-      <div class="small text-secondary">${new Date(
-        r.time
-      ).toLocaleString()}</div>
-      <div class="mt-1">${(r.text || "").replace(/</g, "&lt;")}</div>`;
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="fw-semibold">${(r.name || "Khách").replace(/</g,"&lt;")}</div>
+            <div class="stars">${starIcons(r.rating)}</div>
+          </div>
+          <div class="small text-secondary">${new Date(r.time).toLocaleString()}</div>
+          <div class="mt-1">${(r.text || "").replace(/</g, "&lt;")}</div>`;
           pm_reviews.appendChild(d);
         }
 
@@ -814,7 +812,7 @@
                         <button class="btn btn-sm btn-outline-light" data-remove="${
                             it.ProductId
                         }" title="Xóa">
-                            <i class="bi bi-x-lg"></i>
+                          <i class="bi bi-x-lg"></i>
                         </button>
                         </div>
 
