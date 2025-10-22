@@ -1,4 +1,3 @@
-// File: c_sellerOrder.js 
 const orderModel = require("../../models/seller/m_order");
 
 const ALLOWED_UPDATE_STATES = ['Approved', 'Shipped', 'Delivered'];
@@ -10,12 +9,11 @@ async function getOrders(sellerId, state) {
     if (isNaN(sellerId)) {
         throw new Error("Seller ID không hợp lệ.");
     }
-    // Không cần map nữa, state từ frontend đã đúng chuẩn
     return await orderModel.getSellerOrders(sellerId, state);
 }
 
 /**
- * Lấy chi tiết đơn hàng (Dùng cho Modal)
+ * Lấy chi tiết đơn hàng 
  */
 async function getOrderDetail(orderId, sellerId) {
     if (isNaN(orderId) || isNaN(sellerId)) {
@@ -49,7 +47,7 @@ async function updateOrderState(orderId, newState) {
 }
 
 /**
- * Hủy đơn hàng (Chỉ từ Pending -> Cancelled)
+ * Hủy đơn hàng 
  */
 async function cancelOrder(orderId, cancelReason) {
     if (isNaN(orderId)) {
