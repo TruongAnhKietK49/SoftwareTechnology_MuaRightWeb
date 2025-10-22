@@ -31,120 +31,122 @@
             </button>
         </div>
 
-        <div class="stats-summary" id="productStats">
-            <div class="stat-box"><i class="fas fa-box-open"></i><h4 id="totalProducts">0</h4><p>Tổng sản phẩm</p></div>
-            <div class="stat-box"><i class="fas fa-check-circle"></i><h4 id="activeProducts">0</h4><p>Đang bán</p></div>
-            <div class="stat-box"><i class="fas fa-exclamation-triangle"></i><h4 id="outOfStock">0</h4><p>Hết hàng</p></div>
-            <div class="stat-box"><i class="fas fa-star"></i><h4 id="avgRating">0</h4><p>Đánh giá TB</p></div>
-        </div>
+        <div id="mainViewContainer">
+            <div class="stats-summary" id="productStats">
+                <div class="stat-box"><i class="fas fa-box-open"></i><h4 id="totalProducts">0</h4><p>Tổng sản phẩm</p></div>
+                <div class="stat-box"><i class="fas fa-check-circle"></i><h4 id="activeProducts">0</h4><p>Đang bán</p></div>
+                <div class="stat-box"><i class="fas fa-exclamation-triangle"></i><h4 id="outOfStock">0</h4><p>Hết hàng</p></div>
+                <div class="stat-box"><i class="fas fa-star"></i><h4 id="avgRating">0</h4><p>Đánh giá TB</p></div>
+            </div>
 
-        <div class="filter-bar d-flex gap-3 align-items-center" id="filterBar">
-            <div class="search-box flex-grow-1">
-                <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm sản phẩm theo tên...">
-                <i class="fas fa-search"></i>
+            <div class="filter-bar d-flex gap-3 align-items-center" id="filterBar">
+                <div class="search-box flex-grow-1">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm theo tên, tags (VD: Chanel, nam tính)...">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+
+            <div class="row g-4" id="productsContainer">
+                <!-- Sản phẩm sẽ được tải từ API-->
             </div>
         </div>
 
-        <div class="row g-4" id="productsContainer">
-            <!-- Sản phẩm sẽ được tải từ API và hiển thị ở đây -->
-        </div>
 
-            <!-- Add Product-->
-    <div id="addProductSection" class="card" style="display: none;">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-plus-circle"></i> Gửi yêu cầu thêm sản phẩm mới</h5>
-        </div>
-        <div class="card-body">
-            <!-- BẮT ĐẦU THAY THẾ TỪ ĐÂY -->
-        <form id="addProductForm">
-            <div class="row">
-                <!-- Tên sản phẩm -->
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Tên sản phẩm*</label>
-                    <input type="text" class="form-control" name="NameProduct" required>
-                </div>
-                <!-- Danh mục -->
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Danh mục*</label>
-                    <input list="categoryOptions" class="form-control" name="Category" placeholder="Chọn hoặc nhập danh mục" required>
-                    <datalist id="categoryOptions">
-                        <option value="Điện thoại">
-                        <option value="Laptop">
-                        <option value="Thời trang Nữ">
-                        <option value="Thiết bị gia dụng">
-                        <option value="Đồ thể thao">
-                    </datalist>
-                </div>
+        <!-- Thêm sản phẩm -->
+        <div id="addProductSection" class="card" style="display: none;">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-plus-circle"></i> Gửi yêu cầu thêm sản phẩm mới</h5>
             </div>
+            <div class="card-body">
+                <form id="addProductForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tên sản phẩm*</label>
+                            <input type="text" class="form-control" name="NameProduct" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Danh mục*</label>
+                            <input list="categoryOptions" class="form-control" name="Category" placeholder="Chọn hoặc nhập danh mục" required>
+                            <datalist id="categoryOptions">
+                                <option value="Nước hoa Nam">
+                                <option value="Nước hoa Nữ">
+                                <option value="Nước hoa Unisex">
+                                <option value="Nước hoa Mini">
+                                <option value="Body Mist">
+                            </datalist>
+                        </div>
+                    </div>
 
-            <div class="row">
-                <!-- Giá bán -->
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Giá bán (VNĐ)*</label>
-                    <input type="number" class="form-control" name="Price" required>
-                </div>
-                <!-- Số lượng -->
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Số lượng tồn kho*</label>
-                    <input type="number" class="form-control" name="Quantity" required>
-                </div>
-            </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Giá bán (VNĐ)*</label>
+                            <input type="number" class="form-control" name="Price" min="0" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Số lượng tồn kho*</label>
+                            <input type="number" class="form-control" name="Quantity" min="0" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Link hình ảnh*</label>
+                        <input type="url" class="form-control" name="ImageUrl" placeholder="https://example.com/image.png" required>
+                    </div>
 
-            <div class="row">
-                <!-- Link hình ảnh -->
-                <div class="col-12 mb-3">
-                    <label class="form-label">Link hình ảnh*</label>
-                    <input type="url" class="form-control" name="ImageUrl" placeholder="https://example.com/image.png" required>
-                </div>
-            </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tags*</label>
+                        <input list="tagOptions" type="text" class="form-control" name="TagName" placeholder="Các từ khóa cách nhau bởi dấu phẩy, VD: Chanel, hương gỗ, nam tính" required>
+                        <datalist id="tagOptions">
+                            <option value="Chanel">
+                            <option value="Dior">
+                            <option value="Gucci">
+                            <option value="Hương hoa cỏ">
+                            <option value="Hương gỗ">
+                            <option value="Mùi hương ngọt ngào">
+                            <option value="Sang trọng">
+                            <option value="Nam tính">
+                        </datalist>
+                    </div>
 
-            <div class="row">
-                <!-- Tags  -->
-                <div class="col-12 mb-3">
-                    <label class="form-label">Tags*</label>
-                    <input list="tagOptions" type="text" class="form-control" name="TagName" placeholder="Các từ khóa cách nhau bởi dấu phẩy, VD: Apple, Smartphone" required>
-                    <datalist id="tagOptions">
-                        <option value="Apple">
-                        <option value="Samsung">
-                        <option value="Giá rẻ">
-                        <option value="Chống nước">
-                        <option value="Mới nhất">
-                    </datalist>
-                </div>
-            </div>
+                    <div class="mb-3">
+                        <label class="form-label">Bảo hành</label>
+                        <input list="warrantyOptions" class="form-control" name="Warranty" placeholder="Chọn hoặc nhập chính sách bảo hành">
+                        <datalist id="warrantyOptions">
+                            <option value="Bảo hành mùi hương trọn đời">
+                            <option value="Đổi trả trong 7 ngày nếu lỗi">
+                            <option value="Không bảo hành">
+                        </datalist>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Mô tả sản phẩm</label>
+                        <textarea class="form-control" name="Description" rows="4" placeholder="Mô tả chi tiết về các tầng hương, xuất xứ, dung tích..."></textarea>
+                    </div>
 
-            <div class="row">
-                <!-- Bảo hành -->
-                <div class="col-12 mb-3">
-                    <label class="form-label">Bảo hành</label>
-                    <input list="warrantyOptions" class="form-control" name="Warranty" placeholder="Chọn hoặc nhập chính sách bảo hành">
-                    <datalist id="warrantyOptions">
-                        <option value="12 tháng chính hãng">
-                        <option value="6 tháng tại cửa hàng">
-                        <option value="24 tháng (Bảo hành vàng)">
-                        <option value="Không bảo hành">
-                    </datalist>
-                </div>
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <button type="button" class="btn btn-outline-secondary" id="cancelAddProductBtn">Hủy</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Gửi đi duyệt</button>
+                    </div>
+                </form>
             </div>
-            
-            <div class="row">
-                <!-- Mô tả  -->
-                <div class="col-12 mb-3">
-                    <label class="form-label">Mô tả sản phẩm</label>
-                    <textarea class="form-control" name="Description" rows="4"></textarea>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-end gap-2 mt-3">
-                <button type="button" class="btn btn-outline-secondary" id="cancelAddProductBtn">Hủy</button>
-                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Gửi đi duyệt</button>
-            </div>
-        </form>
         </div>
     </div>
+
+    <div class="modal fade" id="productDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-info-circle"></i> Chi tiết sản phẩm</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="productDetailContent"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Edit Product Modal -->
     <div class="modal fade" id="editProductModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -179,45 +181,38 @@
     let sellerId = null;
     let allProducts = [];
     let account = null;
-    
-    function toggleAddProductView(mainViewBlocks, addProductSection, pageHeaderTitle, showAddProductFormBtn, addProductForm, showForm) {
+    let isAddingProduct = false;
+
+    function toggleAddProductView(showForm) {
+        const mainViewContainer = document.getElementById('mainViewContainer');
+        const addProductSection = document.getElementById('addProductSection');
+        const pageHeaderTitle = document.querySelector('.page-header h2');
+        const showAddProductFormBtn = document.getElementById('showAddProductFormBtn');
+        const addProductForm = document.getElementById('addProductForm');
+
+        isAddingProduct = showForm;
+
         if (showForm) {
-            mainViewBlocks.forEach(el => {
-                if (el) el.style.display = 'none';
-            });
+            mainViewContainer.style.display = 'none';
             addProductSection.style.display = 'block';
             pageHeaderTitle.innerHTML = `<i class="fas fa-plus-circle"></i> Thêm sản phẩm mới`;
             showAddProductFormBtn.innerHTML = `<i class="fas fa-list"></i> Quay lại danh sách`;
-            showAddProductFormBtn.classList.remove('btn-primary');
-            showAddProductFormBtn.classList.add('btn-secondary');
+            showAddProductFormBtn.classList.replace('btn-primary', 'btn-secondary');
         } else {
-            mainViewBlocks.forEach(el => {
-                if (el) el.style.display = ''; 
-            });
+            mainViewContainer.style.display = 'block';
             addProductSection.style.display = 'none';
             pageHeaderTitle.innerHTML = `<i class="fas fa-box"></i> Quản lý sản phẩm`;
             showAddProductFormBtn.innerHTML = `<i class="fas fa-plus"></i> Thêm sản phẩm mới`;
-            showAddProductFormBtn.classList.remove('btn-secondary');
-            showAddProductFormBtn.classList.add('btn-primary');
+            showAddProductFormBtn.classList.replace('btn-secondary', 'btn-primary');
             addProductForm.reset(); 
-
             fetchProducts();
         }
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        const productsContainer = document.getElementById('productsContainer');
-        const addProductSection = document.getElementById('addProductSection');
         const showAddProductFormBtn = document.getElementById('showAddProductFormBtn');
         const addProductForm = document.getElementById('addProductForm');
-        const pageHeaderTitle = document.querySelector('.page-header h2');
         
-        const mainViewBlocks = [
-            document.getElementById('productStats'),
-            document.getElementById('filterBar'),
-            productsContainer
-        ];
-
         const accountString = localStorage.getItem("account");
         if (!accountString) {
             alert("Vui lòng đăng nhập để truy cập.");
@@ -242,15 +237,8 @@
             }
         });
 
-        let isAddingProduct = false;
-        showAddProductFormBtn.addEventListener('click', () => {
-            isAddingProduct = !isAddingProduct;
-            toggleAddProductView(mainViewBlocks, addProductSection, pageHeaderTitle, showAddProductFormBtn, addProductForm, isAddingProduct);
-        });
-        document.getElementById('cancelAddProductBtn').addEventListener('click', () => {
-            isAddingProduct = false;
-            toggleAddProductView(mainViewBlocks, addProductSection, pageHeaderTitle, showAddProductFormBtn, addProductForm, false);
-        });
+        showAddProductFormBtn.addEventListener('click', () => toggleAddProductView(!isAddingProduct));
+        document.getElementById('cancelAddProductBtn').addEventListener('click', () => toggleAddProductView(false));
         addProductForm.addEventListener('submit', handleAddProductSubmit);
     });
 
@@ -278,7 +266,7 @@
             container.innerHTML = `<p class="text-center text-muted mt-5 w-100">Bạn chưa có sản phẩm nào được duyệt hoặc đang bán.</p>`;
             return;
         }
-        products.forEach(p => container.innerHTML += createProductCard(p));
+        products.forEach(p => container.insertAdjacentHTML('beforeend', createProductCard(p)));
     }
 
     function createProductCard(p) {
@@ -292,7 +280,7 @@
                         <span class="product-status ${statusClass}">${statusText}</span>
                     </div>
                     <div class="product-info">
-                        <div class="product-name" title="${p.NameProduct}">${p.NameProduct}</div>
+                        <div class="product-name product-name-clickable" title="${p.NameProduct}" onclick='openDetailModal(${JSON.stringify(p)})'>${p.NameProduct}</div>
                         <div class="product-price">${formatPrice(p.Price)}</div>
                         <div class="product-meta">
                             <span><i class="fas fa-box"></i> Tồn: ${p.Quantity}</span>
@@ -303,72 +291,84 @@
                             <button class="btn-action btn-delete" onclick="deleteProduct(${p.ProductId})"><i class="fas fa-trash"></i> Xóa</button>
                         </div>
                     </div>
-                </div>`;
+                </div>
+            </div>`;
     }
     
     function updateStats(products) {
         document.getElementById('totalProducts').textContent = products.length;
         document.getElementById('activeProducts').textContent = products.filter(p => p.Quantity > 0).length;
         document.getElementById('outOfStock').textContent = products.filter(p => p.Quantity === 0).length;
-        const avgRating = products.length > 0 ? (products.reduce((sum, p) => sum + parseFloat(p.AverageRating), 0) / products.length).toFixed(1) : '0.0';
+        const totalReviews = products.reduce((sum, p) => sum + p.ReviewCount, 0);
+        const weightedSum = products.reduce((sum, p) => sum + (parseFloat(p.AverageRating) * p.ReviewCount), 0);
+        const avgRating = totalReviews > 0 ? (weightedSum / totalReviews).toFixed(1) : '0.0';
         document.getElementById('avgRating').textContent = avgRating;
     }
 
     function applyFilters() {
         const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = allProducts.filter(p => p.NameProduct.toLowerCase().includes(searchTerm));
+        const filtered = allProducts.filter(p => 
+            p.NameProduct.toLowerCase().includes(searchTerm) ||
+            p.TagName.toLowerCase().includes(searchTerm)
+        );
         displayProducts(filtered);
     }
 
     async function handleAddProductSubmit(event) {
-        event.preventDefault(); 
-        const form = document.getElementById('addProductForm');
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
-        }
-        const formData = new FormData(form);
-        const productData = Object.fromEntries(formData.entries());
-        
-        productData.SellerId = sellerId;
-
-
+        event.preventDefault(); 
+        const form = event.target;
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+        const formData = new FormData(form);
+        const productData = Object.fromEntries(formData.entries());
+        productData.SellerId = sellerId;
         productData.Price = parseFloat(productData.Price);
         productData.Quantity = parseInt(productData.Quantity);
-        // {NameProduct, Category, Price, Quantity, ImageUrl, TagName, Warranty, Description, SellerId}
 
-        try {
-            const response = await fetch(`${API_URL}/seller/products/submit`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(productData),
-            });
-            const result = await response.json();
-            alert(result.message);
-            
-            if (result.success) {
-                form.reset(); 
-
-                const pageHeaderTitle = document.querySelector('.page-header h2');
-                const showAddProductFormBtn = document.getElementById('showAddProductFormBtn');
-                const productsContainer = document.getElementById('productsContainer');
-                const addProductSection = document.getElementById('addProductSection');
-                
-                const mainViewBlocks = [
-                    document.getElementById('productStats'),
-                    document.getElementById('filterBar'),
-                    productsContainer
-                ];
-                
-                isAddingProduct = false; 
-                toggleAddProductView(mainViewBlocks, addProductSection, pageHeaderTitle, showAddProductFormBtn, form, false); 
-            }
-        } catch (error) {
-            console.error("Lỗi addProduct:", error);
-            alert('Đã xảy ra lỗi khi gửi sản phẩm.');
-        }
-}
+        try {
+            const response = await fetch(`${API_URL}/seller/products/submit`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(productData),
+            });
+            const result = await response.json();
+            alert(result.message);
+            if (result.success) {
+                toggleAddProductView(false);
+            }
+        } catch (error) {
+            console.error("Lỗi addProduct:", error);
+            alert('Đã xảy ra lỗi khi gửi sản phẩm.');
+        }
+    }
     
+    function openDetailModal(product) {
+        const modalBody = document.getElementById('productDetailContent');
+        modalBody.innerHTML = `
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <img src="${product.ImageUrl}" class="img-fluid rounded mb-3" alt="${product.NameProduct}" onerror="this.onerror=null;this.src='../../public/images/default-product.png';">
+                </div>
+                <div class="col-md-8">
+                    <h4>${product.NameProduct}</h4>
+                    <p class="text-primary fs-5 fw-bold">${formatPrice(product.Price)}</p>
+                    <p><strong>Danh mục:</strong> ${product.Category}</p>
+                    <p><strong>Tồn kho:</strong> ${product.Quantity} sản phẩm</p>
+                    <p><strong>Đánh giá:</strong> <i class="fas fa-star text-warning"></i> ${parseFloat(product.AverageRating).toFixed(1)} (${product.ReviewCount} lượt)</p>
+                    <p><strong>Bảo hành:</strong> ${product.Warranty || 'Không có'}</p>
+                    <p><strong>Tags:</strong> <span class="badge bg-secondary">${product.TagName.split(',').join('</span> <span class="badge bg-secondary">')}</span></p>
+                </div>
+            </div>
+            <hr>
+            <h5>Mô tả chi tiết</h5>
+            <p>${product.Description || 'Chưa có mô tả cho sản phẩm này.'}</p>
+        `;
+        const detailModal = new bootstrap.Modal(document.getElementById('productDetailModal'));
+        detailModal.show();
+    }
+
     function openEditModal(product) {
         document.getElementById('editProductId').value = product.ProductId;
         document.getElementById('editName').value = product.NameProduct;
