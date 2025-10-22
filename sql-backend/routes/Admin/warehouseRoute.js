@@ -15,8 +15,11 @@ router.get("/products", async (req, res) => {
 router.delete("/products/:productId", async (req, res) => {
     try {
         const productId = req.params.productId;
+        console.log("🔃 Đang xoá sản phẩm: ", productId);
         await removeProduct(productId);
         res.json({ message: "Xóa sản phẩm thành công" });
+        console.log("✅ Xoá sản phẩm thành công!");
+        
     } catch (err) {
         console.error("Lỗi khi xóa sản phẩm:", err);
         res.status(500).json({ error: "Lỗi server khi xóa sản phẩm" });

@@ -131,7 +131,7 @@ async function removeSelectedProducts() {
   }
 
   if (!confirm(`Bạn có chắc muốn xóa ${checkboxes.length} sản phẩm đã chọn?`))
-    return;
+    return; 
 
   const selectedIds = Array.from(checkboxes).map((cb) => {
     const index = cb.dataset.index;

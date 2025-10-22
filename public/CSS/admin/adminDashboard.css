@@ -130,6 +130,7 @@ body {
   border-color: rgba(255, 255, 255, 0.5);
 }
 
+
 /* Main Content Styles */
 .main-content {
   flex-grow: 1;
@@ -157,78 +158,53 @@ body {
 }
 
 /* Stats Cards */
-.stats-card {
-  border: none;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+.stat-card {
+  border-radius: 1rem;
   transition: all 0.3s ease;
-  overflow: hidden;
-  margin-bottom: 1.5rem;
+  background: #fff;
 }
 
-.stats-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-.stats-card .card-body {
-  padding: 1.5rem;
-}
-
-.stats-icon {
+.icon-circle {
   width: 60px;
   height: 60px;
-  border-radius: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1.6rem;
+  color: #fff;
 }
 
-.stats-icon.primary {
-  background-color: rgba(67, 97, 238, 0.1);
-  color: var(--primary-color);
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #007bff, #00b4d8);
 }
 
-.stats-icon.success {
-  background-color: rgba(76, 201, 240, 0.1);
-  color: var(--success-color);
+.bg-gradient-success {
+  background: linear-gradient(135deg, #198754, #51cf66);
 }
 
-.stats-icon.warning {
-  background-color: rgba(248, 150, 30, 0.1);
-  color: var(--warning-color);
+.bg-gradient-warning {
+  background: linear-gradient(135deg, #ffc107, #ffcd39);
 }
 
-.stats-icon.danger {
-  background-color: rgba(247, 37, 133, 0.1);
-  color: var(--danger-color);
-}
-
-.stats-value {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin-bottom: 0.25rem;
-}
-
-.stats-label {
-  color: #6c757d;
-  font-size: 0.875rem;
-  margin-bottom: 0.5rem;
+.bg-gradient-danger {
+  background: linear-gradient(135deg, #dc3545, #f87171);
 }
 
 .stats-change {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 0.9rem;
 }
 
-.stats-change.positive {
-  color: #28a745;
+.fw-semibold {
+  font-weight: 600;
 }
 
-.stats-change.negative {
-  color: #dc3545;
+.text-muted {
+  opacity: 0.8;
 }
 
 /* Charts and Tables */
@@ -323,6 +299,34 @@ body {
 .activity-time {
   color: #6c757d;
   font-size: 0.875rem;
+}
+
+/* Bảng voucher */
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+.form-control:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #0d6efd, #00b4d8);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(90deg, #0b5ed7, #0096c7);
+}
+
+.card-header.bg-gradient {
+  background: linear-gradient(135deg, #0dcaf0, #0d6efd);
 }
 
 /* Mobile Toggle Button */

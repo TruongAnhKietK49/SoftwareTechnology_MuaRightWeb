@@ -43,64 +43,80 @@
             </div>
 
             <!-- Stats Cards -->
-            <div class="row">
+            <div class="row g-4 mt-2 mb-3">
+                <!-- 🛒 Tổng đơn hàng -->
                 <div class="col-xl-3 col-md-6">
-                    <div class="card stats-card">
-                        <div class="card-body">
-                            <div class="stats-icon primary">
+                    <div class="card stat-card border-0 shadow-sm">
+                        <div class="card-body d-flex align-items-center justify-content-between p-4">
+                            <div>
+                                <h6 class="text-uppercase fw-semibold text-muted mb-2">Tổng đơn hàng</h6>
+                                <h3 class="mb-0 fw-bold text-primary" id="totalOrders">1,248</h3>
+                                <small class="text-success fw-semibold">
+                                    <i class="bi bi-arrow-up-right me-1"></i>12.5% so với tháng trước
+                                </small>
+                            </div>
+                            <div class="icon-circle bg-gradient-primary shadow">
                                 <i class="bi bi-cart3"></i>
                             </div>
-                            <h3 class="stats-value" id="totalOrders">1,248</h3>
-                            <p class="stats-label">Tổng đơn hàng hệ thống</p>
-                            <div class="stats-change positive">
-                                <i class="bi bi-arrow-up-right me-1"></i> 12.5% so với tháng trước
-                            </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- 💰 Doanh thu -->
                 <div class="col-xl-3 col-md-6">
-                    <div class="card stats-card">
-                        <div class="card-body">
-                            <div class="stats-icon success">
+                    <div class="card stat-card border-0 shadow-sm">
+                        <div class="card-body d-flex align-items-center justify-content-between p-4">
+                            <div>
+                                <h6 class="text-uppercase fw-semibold text-muted mb-2">Doanh thu</h6>
+                                <h3 class="mb-0 fw-bold text-success" id="totalRevenue">328.5M</h3>
+                                <small class="text-success fw-semibold">
+                                    <i class="bi bi-arrow-up-right me-1"></i>8.3% so với tháng trước
+                                </small>
+                            </div>
+                            <div class="icon-circle bg-gradient-success shadow">
                                 <i class="bi bi-currency-dollar"></i>
                             </div>
-                            <h3 class="stats-value" id="totalRevenue">328.5M</h3>
-                            <p class="stats-label">Doanh thu</p>
-                            <div class="stats-change positive">
-                                <i class="bi bi-arrow-up-right me-1"></i> 8.3% so với tháng trước
-                            </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- 👥 Người dùng -->
                 <div class="col-xl-3 col-md-6">
-                    <div class="card stats-card">
-                        <div class="card-body">
-                            <div class="stats-icon warning">
+                    <div class="card stat-card border-0 shadow-sm">
+                        <div class="card-body d-flex align-items-center justify-content-between p-4">
+                            <div>
+                                <h6 class="text-uppercase fw-semibold text-muted mb-2">Người dùng hệ thống</h6>
+                                <h3 class="mb-0 fw-bold text-warning" id="totalUsers">5,842</h3>
+                                <small class="text-success fw-semibold">
+                                    <i class="bi bi-arrow-up-right me-1"></i>5.7% so với tháng trước
+                                </small>
+                            </div>
+                            <div class="icon-circle bg-gradient-warning shadow">
                                 <i class="bi bi-people"></i>
                             </div>
-                            <h3 class="stats-value" id="totalUsers">5,842</h3>
-                            <p class="stats-label">Người dùng hệ thống</p>
-                            <div class="stats-change positive">
-                                <i class="bi bi-arrow-up-right me-1"></i> 5.7% so với tháng trước
-                            </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- 📦 Sản phẩm -->
                 <div class="col-xl-3 col-md-6">
-                    <div class="card stats-card">
-                        <div class="card-body">
-                            <div class="stats-icon danger">
-                                <i class="bi bi-bag"></i>
+                    <div class="card stat-card border-0 shadow-sm">
+                        <div class="card-body d-flex align-items-center justify-content-between p-4">
+                            <div>
+                                <h6 class="text-uppercase fw-semibold text-muted mb-2">Sản phẩm đang bán</h6>
+                                <h3 class="mb-0 fw-bold text-danger" id="totalProducts">324</h3>
+                                <small class="text-danger fw-semibold">
+                                    <i class="bi bi-arrow-down-right me-1"></i>2.1% so với tháng trước
+                                </small>
                             </div>
-                            <h3 class="stats-value" id="totalProducts">324</h3>
-                            <p class="stats-label">Sản phẩm đang bán</p>
-                            <div class="stats-change negative">
-                                <i class="bi bi-arrow-down-right me-1"></i> 2.1% so với tháng trước
+                            <div class="icon-circle bg-gradient-danger shadow">
+                                <i class="bi bi-bag"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             <!-- Charts and Tables -->
             <div class="row">
@@ -181,53 +197,63 @@
                 </div>
 
                 <!-- Tạo Voucher -->
-                <div class="col-xl-6">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center bg-info">
-                            <h4 class="card-title mb-0">Tạo Voucher</h4>
-                            <button class="btn btn-primary btn-sm">Danh sách</button>
+                <div class="col-xl-6 mx-auto">
+                    <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                        <div
+                            class="card-header bg-gradient bg-info d-flex justify-content-between align-items-center py-3">
+                            <h4 class="card-title text-white mb-0">
+                                <i class="bi bi-ticket-detailed me-2"></i>Tạo Voucher
+                            </h4>
+                            <button class="btn btn-light btn-sm fw-semibold">
+                                <i class="bi bi-list-ul me-1"></i>Danh sách
+                            </button>
                         </div>
-                        <div class="card-body">
-                            <form id="createVoucherForm">
+
+                        <div class="card-body p-4 bg-light">
+                            <form id="createVoucherForm" class="needs-validation" novalidate>
                                 <div class="mb-3">
-                                    <label for="voucherCode" class="form-label">Mã Voucher</label>
-                                    <input type="text" class="form-control" id="voucherCode" placeholder="VD: SALE10"
-                                        required>
+                                    <label for="voucherCode" class="form-label fw-semibold">🎫 Mã Voucher</label>
+                                    <input type="text" class="form-control border-primary-subtle" id="voucherCode"
+                                        placeholder="VD: SALE10" required />
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="discountType" class="form-label">Loại giảm</label>
-                                    <select class="form-select" id="discountType" required>
+                                    <label for="discountType" class="form-label fw-semibold">💰 Loại giảm</label>
+                                    <select class="form-select border-primary-subtle" id="discountType" required>
                                         <option value="Percent">Phần trăm (%)</option>
                                         <option value="Fixed">Số tiền cố định (VNĐ)</option>
                                     </select>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="discountVal" class="form-label">Giảm giá</label>
-                                    <input type="number" class="form-control" id="discountVal"
-                                        placeholder="VD: 10 hoặc 40000" required>
+                                    <label for="discountVal" class="form-label fw-semibold">📉 Giá trị giảm</label>
+                                    <input type="number" class="form-control border-primary-subtle" id="discountVal"
+                                        placeholder="VD: 10 hoặc 40000" required />
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="minOrderAmt" class="form-label">Giá trị đơn tối thiểu</label>
-                                    <input type="number" class="form-control" id="minOrderAmt" placeholder="VD: 200000"
-                                        required>
+                                    <label for="minOrderAmt" class="form-label fw-semibold">🛒 Đơn tối thiểu</label>
+                                    <input type="number" class="form-control border-primary-subtle" id="minOrderAmt"
+                                        placeholder="VD: 200000" required />
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="validFrom" class="form-label">Ngày có hiệu lực</label>
-                                        <input type="date" class="form-control" id="validFrom" required>
+                                        <label for="validFrom" class="form-label fw-semibold">📅 Ngày hiệu lực</label>
+                                        <input type="date" class="form-control border-primary-subtle" id="validFrom"
+                                            required />
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label for="validTo" class="form-label">Ngày kết thúc</label>
-                                        <input type="date" class="form-control" id="validTo" required>
+                                        <label for="validTo" class="form-label fw-semibold">⏰ Ngày kết thúc</label>
+                                        <input type="date" class="form-control border-primary-subtle" id="validTo"
+                                            required />
                                     </div>
                                 </div>
 
-                                <div class="text-end">
-                                    <button type="submit" class="btn btn-primary">Tạo Voucher</button>
+                                <div class="text-end mt-4">
+                                    <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm">
+                                        <i class="bi bi-plus-circle me-1"></i> Tạo Voucher
+                                    </button>
                                 </div>
                             </form>
                         </div>
