@@ -1,12 +1,9 @@
-// File: productRoute.js
-
 const express = require("express");
 const router = express.Router();
 const productController = require("../../controller/seller/c_sellerProduct");
 const fs = require('fs');
 const path = require('path');
 
-// Định nghĩa đường dẫn tới pendingProducts.json
 const pendingPath = path.join(
   __dirname,
   "../../../public/DATA/pendingProducts.json"
@@ -30,7 +27,6 @@ router.get("/pendingProducts", (req, res) => {
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 });
-// -------------------------------------------------------------------------------- //
 
 // [GET] Lấy danh sách sản phẩm ĐÃ ĐƯỢC DUYỆT của một người bán
 // URL: GET /seller/products/:sellerId
@@ -53,18 +49,16 @@ router.post("/products/submit", async (req, res) => {
              return res.status(400).json({ success: false, message: "Thiếu dữ liệu sản phẩm quan trọng." });
         }
         
-        // 1. Đọc danh sách hiện tại từ file JSON
         let pendingList = [];
         if (fs.existsSync(pendingPath)) {
             const data = fs.readFileSync(pendingPath, "utf8");
-            // Kiểm tra nếu file rỗng
             if (data.trim() !== "") pendingList = JSON.parse(data); 
         }
 
-        // 2. Thêm sản phẩm mới vào danh sách
+        // Thêm sản phẩm mới vào danh sách
         pendingList.push(newProduct);
 
-        // 3. Ghi lại danh sách đã cập nhật vào file JSON
+        // Ghi lại danh sách đã cập nhật vào file JSON
         fs.writeFileSync(pendingPath, JSON.stringify(pendingList, null, 2), "utf8");
 
         res.status(201).json({ 

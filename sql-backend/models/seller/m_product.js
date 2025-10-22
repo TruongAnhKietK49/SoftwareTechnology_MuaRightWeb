@@ -2,7 +2,7 @@ const sql = require("mssql");
 const { getPool } = require("../../routes/config");
 
 /**
- * Lấy tất cả sản phẩm ĐÃ ĐƯỢC DUYỆT của một người bán
+ * Lấy tất cả sản phẩm ĐÃ ĐƯỢC DUYỆT 
  * @param {number} sellerId
  */
 async function getProductsBySeller(sellerId) {
@@ -25,7 +25,7 @@ async function getProductsBySeller(sellerId) {
 }
 
 /**
- * Thêm một sản phẩm mới trực tiếp vào bảng Product với tag chờ duyệt
+ * Thêm một sản phẩm mới
  * @param {object} productData
  */
 async function addProductForApproval(productData) {
@@ -49,7 +49,7 @@ async function addProductForApproval(productData) {
 }
 
 /**
- * Cập nhật thông tin một sản phẩm đã có (đã được duyệt)
+ * Cập nhật thông tin một sản phẩm đã có
  * @param {number} productId 
  * @param {object} productData 
  */
@@ -76,7 +76,7 @@ async function updateProductById(productId, productData) {
 }
 
 /**
- * Xóa một sản phẩm và tất cả các bản ghi liên quan
+ * Xóa một sản phẩm
  * @param {number} productId 
  */
 async function deleteProductById(productId) {
@@ -84,11 +84,11 @@ async function deleteProductById(productId) {
     const transaction = new sql.Transaction(pool);
     try {
         await transaction.begin();
-        // Xóa các bản ghi phụ thuộc trước
+
         await new sql.Request(transaction).input('ProductId', sql.Int, productId).query('DELETE FROM Review WHERE ProductId = @ProductId;');
         await new sql.Request(transaction).input('ProductId', sql.Int, productId).query('DELETE FROM Basket WHERE ProductId = @ProductId;');
         await new sql.Request(transaction).input('ProductId', sql.Int, productId).query('DELETE FROM OrderItem WHERE ProductId = @ProductId;');
-        // Cuối cùng là xóa sản phẩm
+
         const result = await new sql.Request(transaction).input('ProductId', sql.Int, productId).query('DELETE FROM Product WHERE ProductId = @ProductId;');
         
         await transaction.commit();
