@@ -210,6 +210,49 @@
       </div>
     </div>
   </div>
+                <h6 class="mb-2">Thêm đánh giá</h6>
+                <form id="pm-form" class="row g-2">
+                  <div class="col-md-3">
+                    <select id="rv-rating" class="form-select">
+                      <option value="5">5 sao</option>
+                      <option value="4">4 sao</option>
+                      <option value="3">3 sao</option>
+                      <option value="2">2 sao</option>
+                      <option value="1">1 sao</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
+                    <textarea
+                      id="rv-text"
+                      class="form-control"
+                      rows="2"
+                      placeholder="Cảm nhận của bạn…"
+                    ></textarea>
+                  </div>
+                  <div class="col-12">
+                    <button class="btn btn-outline-gold" type="submit">
+                      <i class="bi bi-send me-1"></i>Gửi đánh giá
+                    </button>
+                  </div>
+                </form>
+                <div
+                  id="pm-toast"
+                  class="small text-success mt-2"
+                  style="display: none"
+                >
+                  Đã gửi đánh giá! ✅
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <small class="text-secondary"
+              >MuaRight • Hương thơm chính hãng</small
+            >
+          </div>
+        </div>
+      </div>
+    </div>
 
   <!-- Footer placeholder (kept external) -->
   <div id="footer-container"></div>
@@ -258,7 +301,6 @@
         }
 
         const json = await res.json();
-        console.log(json.data);
         return json.data;
         } catch (e) {
           return [];
@@ -328,9 +370,24 @@
         }
       }
       function addUserReview(id, review) {
-        const arr = getUserReviews(id);
-        arr.push(review);
-        localStorage.setItem(_key(id), JSON.stringify(arr));
+        // const arr = getUserReviews(id);
+        // arr.push(review);
+        // localStorage.setItem(_key(id), JSON.stringify(arr));
+        const res = fetch("http://localhost:3000/products/addReview", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ProductId: id,
+            CustomerId: account.AccountId,
+            Rating: review.rating,
+            Comment: review.text,
+            CreatedAt: new Date().toISOString(),
+          }),
+        }).then((res) => {
+          if (!res.ok) {
+            throw new Error("Lỗi khi thêm đánh giá!");
+          }
+        });
       }
       function averageWithUser(p) {
         const user = getUserReviews(p.ProductId);
@@ -341,18 +398,17 @@
         return { avg, count, desc: "", user };
       }
 
-    /* ===== Populate brand filter ===== */
-    function fillBrands() {
-      const brands = [...new Set(PRODUCTS.map((p) => p.Brand))].sort();
-      console.log("Thương hiệu tìm được:", brands);
-      const brandSelect = $("#brandSelect");
-      brands.forEach((b) => {
-        const opt = document.createElement("option");
-        opt.value = b;
-        opt.textContent = b;
-        brandSelect.appendChild(opt);
-      });
-    };
+      /* ===== Populate brand filter ===== */
+      function fillBrands() {
+        const brands = [...new Set(PRODUCTS.map((p) => p.Brand))].sort();
+        const brandSelect = $("#brandSelect");
+        brands.forEach((b) => {
+          const opt = document.createElement("option");
+          opt.value = b;
+          opt.textContent = b;
+          brandSelect.appendChild(opt);
+        });
+      };
 
     /* ===== State from URL ===== */
     function stateFromURL() {
@@ -377,24 +433,23 @@
       history.replaceState(null, "", "?" + sp.toString());
     }
 
-    /* ===== Filtering ===== */
-    function applyFilters(st) {
-      let list = PRODUCTS.slice();
-      if (st.q) {
-        const q = st.q.trim().toLowerCase();
-        list = list.filter((p) => p.NameProduct.toLowerCase().includes(q));
+      /* ===== Filtering ===== */
+      function applyFilters(st) {
+        let list = PRODUCTS.slice();
+        if (st.q) {
+          const q = st.q.trim().toLowerCase();
+          list = list.filter((p) => p.NameProduct.toLowerCase().includes(q));
+        }
+        if (st.brand) list = list.filter((p) => p.Brand === st.brand);
+        if (st.gender) list = list.filter((p) => p.Category === st.gender);
+        if (st.price) {
+          const [minStr, maxStr] = st.price.split("-");
+          const min = Number(minStr) || 0;
+          const max = Number(maxStr) || 9999999;
+          list = list.filter((p) => p.Price >= min && p.Price <= max);
+        }
+        return list;
       }
-      if (st.brand) list = list.filter((p) => p.Brand === st.brand);
-      if (st.gender) list = list.filter((p) => p.Category === st.gender);
-      if (st.price) {
-        const [minStr, maxStr] = st.price.split("-");
-        const min = Number(minStr) || 0;
-        const max = Number(maxStr) || 9999999;
-        list = list.filter((p) => p.Price >= min && p.Price <= max);
-      }
-      console.log("Lọc xong, còn", list.length, "sản phẩm");
-      return list;
-    }
 
     /* ===== Render grid ===== */
     function render() {
@@ -575,17 +630,15 @@
       }
     });
 
-    /* ===== Modal logic ===== */
-    const bsModal = new bootstrap.Modal(
-      document.getElementById("productModal")
-    );
-
-    function openProductModal(id) {
-      console.log(id);
-      const p = PRODUCTS.find((x) => x.ProductId == id);
-      console.log(p);
-      if (!p) return;
-      const { avg, count, user } = averageWithUser(p);
+      /* ===== Modal logic ===== */
+      const bsModal = new bootstrap.Modal(
+        document.getElementById("productModal")
+      );
+      
+      function openProductModal(id) {
+        const p = PRODUCTS.find((x) => x.ProductId == id);
+        if (!p) return;
+        const { avg, count, user } = averageWithUser(p);
 
       // fill header/info
       pm_title.textContent = p.NameProduct;
@@ -626,13 +679,13 @@
         d.className = "review-item";
         d.innerHTML = `
           <div class="d-flex align-items-center justify-content-between">
-            <div class="fw-semibold">${(r.name || "Khách").replace(/</g, "&lt;")}</div>
-            <div class="stars">${starIcons(r.rating)}</div>
+            <div class="fw-semibold">${(r.Name || "Khách").replace(/</g,"&lt;")}</div>
+            <div class="stars">${starIcons(r.Rating)}</div>
           </div>
-          <div class="small text-secondary">${new Date(r.time).toLocaleString()}</div>
-          <div class="mt-1">${(r.text || "").replace(/</g, "&lt;")}</div>`;
-        pm_reviews.appendChild(d);
-      }
+          <div class="small text-secondary">${new Date(r.CreatedAt).toLocaleString()}</div>
+          <div class="mt-1">${(r.Comment || "").replace(/</g, "&lt;")}</div>`;
+          pm_reviews.appendChild(d);
+        }
 
       bsModal.show();
     }
@@ -654,20 +707,20 @@
       }
     });
 
-    pm_form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const id = pm_id.textContent;
-      addUserReview(id, {
-        name: (rv_name.value || "").trim() || "Khách",
-        rating: parseInt(rv_rating.value, 10),
-        text: (rv_text.value || "").trim(),
-        time: Date.now(),
+      pm_form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const id = pm_id.textContent;
+        addUserReview(id, {
+          rating: parseInt(rv_rating.value, 10),
+          text: (rv_text.value || "").trim(),
+          time: Date.now(),
+        });
+        rv_text.value = "";
+        pm_toast.style.display = "block";
+        setTimeout(() => (pm_toast.style.display = "none"), 1500);
+        await init();
+        openProductModal(id);
       });
-      rv_text.value = "";
-      pm_toast.style.display = "block";
-      setTimeout(() => (pm_toast.style.display = "none"), 1500);
-      openProductModal(id);
-    });
 
       /* ===== MINI CART RENDER ===== */
       async function renderCartUI() {
