@@ -33,7 +33,15 @@ router.get("/getProductReview", async (req, res) => {
     const pool = await getPool();
     const request = pool.request();
     const result = await request.query(`
-      SELECT * FROM Review;
+      SELECT 
+      r.ReviewId,
+      r.ProductId,
+      r.CustomerId,
+      r.Rating,
+      r.Comment,
+      r.CreatedAt,
+      c.Username AS Name
+      FROM Review r LEFT JOIN Account c on r.CustomerId = c.AccountId;
     `);
     if (result) {
       res.json({
@@ -50,6 +58,26 @@ router.get("/getProductReview", async (req, res) => {
     console.error("Error fetching product reviews:", err);
     res.status(500).json({ success: false, message: "Lỗi server." });
   }
+});
+
+router.post("/addReview", async (req, res) => {
+  try {
+    const { ProductId, CustomerId, Rating, Comment, CreatedAt } = req.body;
+    const pool = await getPool();
+    const result = await pool
+      .request()
+      .input("ProductId", ProductId)
+      .input("CustomerId", CustomerId)
+      .input("Rating", Rating)
+      .input("Comment", Comment)
+      .input("CreatedAt", CreatedAt)
+      .query(`INSERT INTO Review (ProductId, CustomerId, Rating, Comment, CreatedAt) 
+              VALUES (@ProductId, @CustomerId, @Rating, @Comment, @CreatedAt);`);
+    res.json({ success: true, message: "Thêm đánh giá thành công!" });
+  } catch (err) {
+    console.error("Error adding product review:", err);
+    res.status(500).json({ success: false, message: "Lỗi server." });
+  } 
 });
 
 module.exports = router;
