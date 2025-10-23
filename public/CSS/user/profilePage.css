@@ -1,0 +1,152 @@
+:root {
+  --primary-color: #0d0d0d;
+  --secondary-color: #1a1a1a;
+  --accent-color: #ffc107;
+  --light-accent: #2a2a2a;
+  --text-color: #f0f0f0;
+  --light-color: #b5b5b5;
+  --success-color: #28a745;
+}
+
+/* Toàn trang */
+body {
+  background: linear-gradient(180deg, #0b0b0b 0%, #626842 100%);
+  color: var(--text-color);
+  font-family: "Inter", sans-serif;
+}
+
+.profile-page {
+  max-width: 900px;
+}
+
+/* Thẻ chính */
+.profile-card {
+  background: linear-gradient(
+    145deg,
+    var(--secondary-color),
+    var(--primary-color)
+  );
+  border: 1px solid var(--light-accent);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(127, 241, 20, 0.801),
+    0 10px 30px rgba(38, 167, 167, 0.8) !important;
+}
+
+.profile-card:hover {
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.1);
+  transform: translateY(-3px);
+}
+
+/* Avatar */
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--light-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  color: var(--accent-color);
+  transition: all 0.3s ease;
+}
+.profile-avatar:hover {
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
+}
+
+/* Nhãn và hộp thông tin */
+.form-label {
+  font-weight: 600;
+  color: var(--light-color);
+  font-size: 0.9rem;
+}
+.info-box {
+  background-color: var(--light-accent);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--text-color);
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+.info-box:hover {
+  background-color: var(--secondary-color);
+}
+
+/* Số dư */
+.info-balance {
+  background-color: var(--light-accent);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--accent-color);
+  box-shadow: inset 0 0 10px rgba(255, 193, 7, 0.1);
+}
+
+/* Nút */
+.btn-warning {
+  border: none;
+  transition: all 0.3s ease;
+}
+.btn-warning:hover {
+  background-color: #ffcd39;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+}
+.btn-outline-light {
+  color: var(--light-color);
+  border-color: var(--light-color);
+}
+.btn-outline-light:hover {
+  color: var(--primary-color);
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+/* Text phụ */
+.text-light-color {
+  color: var(--light-color);
+}
+.text-accent {
+  color: var(--accent-color);
+}
+
+/* ----- Modal sửa thông tin ----- */
+.edit-modal {
+  background: linear-gradient(145deg, var(--secondary-color), var(--primary-color));
+  border: 1px solid var(--light-accent);
+  box-shadow: 0 0 25px rgba(255, 193, 7, 0.5);
+  border-radius: 15px;
+  color: var(--text-color);
+  z-index: 1055; /* đảm bảo nổi hơn backdrop */
+}
+
+/* Giữ modal content rõ ràng, không bị mờ */
+.modal-content {
+  background: linear-gradient(145deg, var(--secondary-color), var(--primary-color));
+  border: 1px solid var(--light-accent);
+  color: var(--text-color);
+}
+
+/* Modal overlay (nền tối sau modal) */
+.modal-backdrop.show {
+  opacity: 0.8 !important;
+  background-color: rgba(0, 0, 0, 0.85) !important;
+  z-index: 1050;
+}
+
+/* Input style */
+.form-dark {
+  background-color: var(--light-accent);
+  border: 1px solid #444;
+  color: var(--text-color);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.form-dark:focus {
+  background-color: #333;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.3);
+}
+

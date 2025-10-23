@@ -6,25 +6,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MuaRight – Shop</title>
 
-  <!-- Bootstrap & Icons & Fonts -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../../public/CSS/user/productPage.css" />
 
-  <!-- Link CSS -->
-  <link rel="stylesheet" href="../../public/CSS/user/productPage.css">
 </head>
 
 <body>
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="sidebar">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top mr-nav" id="sidebar">
   </nav>
 
   <main>
     <!-- Title -->
-    <div class="section-head container-max" style="padding-top:18px;">
+    <div class="section-head">
       <h4>✨ Danh mục sản phẩm</h4>
-      <div class="small text-muted-small">Trang shop • Tìm kiếm & lọc sản phẩm</div>
+      <div class="small muted">Trang shop • Tìm kiếm & lọc sản phẩm</div>
     </div>
 
     <!-- Filters -->
@@ -50,7 +50,7 @@
           <select id="priceSelect" class="form-select">
             <option value="">Khoảng giá</option>
             <option value="0-1000000">0 – 1 Triệu</option>
-            <option value="1000000-2000000">1 – 2 Triệu</option>
+            <option value="1000000-2000000">2 – 3 Triệu</option>
             <option value="3000000-5000000">3 – 5 Triệu</option>
             <option value="5000000-9999999">5 Triệu trở lên</option>
           </select>
@@ -59,7 +59,7 @@
     </div>
 
     <!-- Products grid -->
-    <div id="grid" class="grid row g-4 px-3 px-md-0"></div>
+    <div id="grid" class="grid row g-4"></div>
 
     <!-- Pagination -->
     <nav class="pager">
@@ -67,18 +67,18 @@
     </nav>
   </main>
 
-  <!-- FAB Cart -->
-  <div class="cart-fab">
-    <button id="btnCartFab" type="button" class="btn position-relative" title="Giỏ hàng">
+  <!-- 🛍️ BIỂU TƯỢNG GIỎ HÀNG NỔI -->
+  <div class="cart-fab position-fixed">
+    <button id="btnCartFab" type="button" class="btn btn-gold position-relative rounded-circle shadow-lg">
       <i class="bi bi-bag fs-4"></i>
       <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-        style="display:none;">0</span>
+        style="display: none">0</span>
     </button>
   </div>
 
-  <!-- Offcanvas mini-cart -->
+  <!-- 🛒 MINI CART OFFCANVAS -->
   <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcart">
-    <div class="offcanvas-header">
+    <div class="offcanvas-header border-bottom">
       <h5 id="miniCartLabel" class="offcanvas-title">🛒 Giỏ hàng</h5>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
@@ -101,7 +101,7 @@
     </div>
   </div>
 
-  <!-- PRODUCT MODAL (upgraded, compatible with your script) -->
+  <!-- MODAL CHI TIẾT SẢN PHẨM -->
   <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
       <div class="modal-content">
@@ -109,79 +109,77 @@
           <h5 id="pm-title" class="modal-title"></h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-
         <div class="modal-body">
           <div class="row g-4">
             <div class="col-lg-5">
-              <!-- main image -->
-              <img id="pm-image" class="img-fluid mb-2 rounded-3" alt="Ảnh sản phẩm" src="">
-              <!-- thumbnails (script uses pm-thumb1 & pm-thumb2 - keep those IDs) -->
-              <div class="pm-thumbs">
-                <img id="pm-thumb1" src="" alt="thumb1">
-                <img id="pm-thumb2" src="" alt="thumb2">
+              <img id="pm-image" class="img-fluid rounded-3 border" style="border-color: var(--border)" alt="" />
+              <div class="d-flex gap-2 mt-3">
+                <img id="pm-thumb1" class="thumb" alt="" />
+                <img id="pm-thumb2" class="thumb" alt="" />
               </div>
             </div>
-
             <div class="col-lg-7">
               <div class="d-flex align-items-center gap-2 mb-1">
                 <span id="pm-brand" class="badge rounded-pill badge-tag"></span>
-                <span id="pm-gender" class="small text-muted-small"></span>
+                <span id="pm-gender" class="small text-secondary"></span>
               </div>
-
-              <div class="d-flex align-items-center gap-2 mb-2">
+              <div class="d-flex align-items-center gap-2">
                 <div id="pm-stars" class="stars"></div>
-                <div id="pm-score" class="small text-muted-small"></div>
+                <span id="pm-score" class="small text-secondary"></span>
               </div>
-
-              <p id="pm-desc" class="text-muted-small mb-2"></p>
+              <p id="pm-desc" class="mt-2 small text-secondary"></p>
 
               <div class="d-flex align-items-center justify-content-between my-2">
-                <div class="fs-4 fw-bold price" id="pm-price"></div>
-                <div class="small text-muted-small">Mã: <span id="pm-id"></span></div>
+                <div class="fs-4 fw-bold text-gold" id="pm-price"></div>
+                <div class="small text-secondary">
+                  Mã: <span id="pm-id"></span>
+                </div>
               </div>
 
-              <div class="row g-2 align-items-center mb-3">
+              <div class="row g-2 align-items-center">
                 <div class="col-sm-5">
-                  <label class="form-label small text-muted-small">Dung tích</label>
+                  <label class="form-label small">Dung tích</label>
                   <select id="pm-size" class="form-select">
                     <option value="100" selected>100ml</option>
                   </select>
                 </div>
                 <div class="col-sm-4">
-                  <label class="form-label small text-muted-small">Số lượng</label>
+                  <label class="form-label small">Số lượng</label>
                   <div class="input-group">
-                    <button class="btn btn-outline-gold" id="pm-minus" type="button">–</button>
+                    <button class="btn btn-outline-gold" id="pm-minus" type="button">
+                      –
+                    </button>
                     <input id="pm-qty" class="form-control text-center" value="1" />
-                    <button class="btn btn-gold" id="pm-plus" type="button">+</button>
+                    <button class="btn btn-gold" id="pm-plus" type="button">
+                      +
+                    </button>
                   </div>
                 </div>
                 <div class="col-sm-3 d-grid">
                   <label class="form-label invisible">.</label>
                   <button id="pm-addcart" class="btn btn-gold">
-                    <i class="bi bi-bag-plus me-1"></i> Thêm vào giỏ
+                    <i class="bi bi-bag-plus me-1"></i>Thêm vào giỏ
                   </button>
                 </div>
               </div>
 
-              <hr style="border-color: var(--border)">
+              <hr class="my-3" style="border-color: var(--border)" />
 
               <h6 class="mb-2">💎 Chi tiết sản phẩm</h6>
-              <ul id="pm-detail" class="pm-detail small"></ul>
+              <ul id="pm-detail" class="small text-secondary mb-3"></ul>
 
               <h6 class="mb-2">Reviews</h6>
               <div class="d-flex align-items-center gap-2 mb-2">
-                <div id="pm-stars-big" class="stars" style="font-size:1.15rem"></div>
+                <div id="pm-stars-big" class="stars" style="font-size: 1.25rem"></div>
                 <div id="pm-avg" class="fw-semibold"></div>
-                <div class="text-muted-small">(<span id="pm-count"></span> đánh giá)</div>
+                <div class="text-secondary small">
+                  (<span id="pm-count"></span> đánh giá)
+                </div>
               </div>
-
               <div id="pm-reviews" class="mb-3"></div>
 
               <h6 class="mb-2">Thêm đánh giá</h6>
               <form id="pm-form" class="row g-2">
-                <div class="col-md-6">
-                  <input id="rv-name" class="form-control" placeholder="Tên của bạn" />
-                </div>
                 <div class="col-md-3">
                   <select id="rv-rating" class="form-select">
                     <option value="5">5 sao</option>
@@ -195,790 +193,36 @@
                   <textarea id="rv-text" class="form-control" rows="2" placeholder="Cảm nhận của bạn…"></textarea>
                 </div>
                 <div class="col-12">
-                  <button class="btn btn-outline-gold" type="submit"><i class="bi bi-send me-1"></i> Gửi đánh
-                    giá</button>
+                  <button class="btn btn-outline-gold" type="submit">
+                    <i class="bi bi-send me-1"></i>Gửi đánh giá
+                  </button>
                 </div>
               </form>
-              <div id="pm-toast" class="small text-success mt-2" style="display:none">Đã gửi đánh giá! ✅</div>
+              <div id="pm-toast" class="small text-success mt-2" style="display: none">
+                Đã gửi đánh giá! ✅
+              </div>
             </div>
           </div>
         </div>
-
         <div class="modal-footer">
-          <small class="text-muted-small">MuaRight • Hương thơm chính hãng</small>
+          <small class="text-secondary">MuaRight • Hương thơm chính hãng</small>
         </div>
       </div>
     </div>
   </div>
-                <h6 class="mb-2">Thêm đánh giá</h6>
-                <form id="pm-form" class="row g-2">
-                  <div class="col-md-3">
-                    <select id="rv-rating" class="form-select">
-                      <option value="5">5 sao</option>
-                      <option value="4">4 sao</option>
-                      <option value="3">3 sao</option>
-                      <option value="2">2 sao</option>
-                      <option value="1">1 sao</option>
-                    </select>
-                  </div>
-                  <div class="col-12">
-                    <textarea
-                      id="rv-text"
-                      class="form-control"
-                      rows="2"
-                      placeholder="Cảm nhận của bạn…"
-                    ></textarea>
-                  </div>
-                  <div class="col-12">
-                    <button class="btn btn-outline-gold" type="submit">
-                      <i class="bi bi-send me-1"></i>Gửi đánh giá
-                    </button>
-                  </div>
-                </form>
-                <div
-                  id="pm-toast"
-                  class="small text-success mt-2"
-                  style="display: none"
-                >
-                  Đã gửi đánh giá! ✅
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <small class="text-secondary"
-              >MuaRight • Hương thơm chính hãng</small
-            >
-          </div>
-        </div>
-      </div>
-    </div>
 
-  <!-- Footer placeholder (kept external) -->
+  <!-- FOOTER-->
   <div id="footer-container"></div>
 
-  <!-- Bootstrap JS -->
+  <!-- Bootstrap JS (đặt trước script chính để dùng Offcanvas/Modal) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Optional: your site sidebar script (if used) -->
-  <script src="../../public/JS/sidebarCustomer.js"></script>
+
+  <!-- Link JS Sidebar & Footer -->
+   <script src="../../public/JS/sidebarCustomer.js"></script>
+
   <!-- Link JS chính -->
-  <!-- <script src="../../sql-backend/controller/user/productPage.js"></script> -->
-
-    <!-- JS -->
-    <script>
-      const account = JSON.parse(localStorage.getItem("account")) || {};
-      /* ================= DATA =================== */
-      let PRODUCTS = []; 
-      async function getProductList() {
-        const res = await fetch("http://localhost:3000/products/getProductList", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-
-        if (!res.ok) {
-          throw new Error("Lỗi khi lấy danh sách sản phẩm!");
-        }
-
-        const json = await res.json();
-        PRODUCTS = json.data;
-        render();
-        console.log("Danh sách sản phẩm:", PRODUCTS);
-      }
-
-      getProductList();
-      const PER_PAGE = 8;
-
-      /* ===== Cart helpers (localStorage) ===== */
-      async function getCart() {
-        try {
-          const res = await fetch("http://localhost:3000/cart/getAllItem", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-
-        if (!res.ok) {
-          throw new Error("Lỗi khi lấy danh sách sản phẩm!");
-        }
-
-        const json = await res.json();
-        return json.data;
-        } catch (e) {
-          return [];
-        }
-      }
-      function saveCart(cart) {
-        localStorage.setItem("cart", JSON.stringify(cart));
-        renderCartUI();
-      }
-      async function addToCart(p, qty) {
-        const cart = await getCart();
-        const found = cart.find((i) => i.ProductId == p.ProductId);
-        if (found) {
-          found.Quantity += qty;
-          await fetch(`http://localhost:3000/cart/update/${found.ProductId}`, {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ Quantity: found.Quantity, UnitPrice: found.Quantity*found.Price }),
-          });
-        } else {
-          await fetch("http://localhost:3000/cart/add", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              CustomerId: account.AccountId,
-              ProductId: p.ProductId,
-              NameProduct: p.NameProduct,
-              Quantity: qty,
-              UnitPrice: qty * p.Price,
-            }),
-          });
-
-        cart.push({
-          ProductId: p.ProductId,
-          NameProduct: p.NameProduct,
-          Price: p.Price,
-          ImageUrl: p.ImageUrl,
-          qty,
-        });
-      }
-      saveCart(cart);
-    }
-
-    /* ===== General helpers ===== */
-    const $ = (sel) => document.querySelector(sel);
-    function fmtPrice(n) {
-      return `$${n}`;
-    }
-
-      /* ===== Ratings (user-only, không dùng seed default) ===== */
-      function starIcons(score) {
-        const full = Math.floor(score);
-        const half = score - full >= 0.5 ? 1 : 0;
-        const empty = 5 - full - half;
-        return (
-          '<i class="bi bi-star-fill"></i>'.repeat(full) +
-          (half ? '<i class="bi bi-star-half"></i>' : "") +
-          '<i class="bi bi-star"></i>'.repeat(empty)
-        );
-      }
-      const _key = (id) => "reviews_" + id;
-      function getUserReviews(id) {
-        try {
-          return JSON.parse(localStorage.getItem(_key(id)) || "[]");
-        } catch (e) {
-          return [];
-        }
-      }
-      function addUserReview(id, review) {
-        // const arr = getUserReviews(id);
-        // arr.push(review);
-        // localStorage.setItem(_key(id), JSON.stringify(arr));
-        const res = fetch("http://localhost:3000/products/addReview", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ProductId: id,
-            CustomerId: account.AccountId,
-            Rating: review.rating,
-            Comment: review.text,
-            CreatedAt: new Date().toISOString(),
-          }),
-        }).then((res) => {
-          if (!res.ok) {
-            throw new Error("Lỗi khi thêm đánh giá!");
-          }
-        });
-      }
-      function averageWithUser(p) {
-        const user = getUserReviews(p.ProductId);
-        const count = user.length;
-        const avg = count
-          ? user.reduce((s, r) => s + Number(r.rating || 0), 0) / count
-          : 0;
-        return { avg, count, desc: "", user };
-      }
-
-      /* ===== Populate brand filter ===== */
-      function fillBrands() {
-        const brands = [...new Set(PRODUCTS.map((p) => p.Brand))].sort();
-        const brandSelect = $("#brandSelect");
-        brands.forEach((b) => {
-          const opt = document.createElement("option");
-          opt.value = b;
-          opt.textContent = b;
-          brandSelect.appendChild(opt);
-        });
-      };
-
-    /* ===== State from URL ===== */
-    function stateFromURL() {
-      const params = new URLSearchParams(location.search);
-      return {
-        q: params.get("q") || "",
-        brand: params.get("brand") || "",
-        gender: params.get("gender") || "",
-        price: params.get("price") || "",
-        page: parseInt(params.get("page") || "1", 10),
-        highlight: params.get("highlight") || "",
-      };
-    }
-    function pushState(st) {
-      const sp = new URLSearchParams();
-      if (st.q) sp.set("q", st.q);
-      if (st.brand) sp.set("brand", st.brand);
-      if (st.gender) sp.set("gender", st.gender);
-      if (st.price) sp.set("price", st.price);
-      if (st.page > 1) sp.set("page", String(st.page));
-      if (st.highlight) sp.set("highlight", st.highlight);
-      history.replaceState(null, "", "?" + sp.toString());
-    }
-
-      /* ===== Filtering ===== */
-      function applyFilters(st) {
-        let list = PRODUCTS.slice();
-        if (st.q) {
-          const q = st.q.trim().toLowerCase();
-          list = list.filter((p) => p.NameProduct.toLowerCase().includes(q));
-        }
-        if (st.brand) list = list.filter((p) => p.Brand === st.brand);
-        if (st.gender) list = list.filter((p) => p.Category === st.gender);
-        if (st.price) {
-          const [minStr, maxStr] = st.price.split("-");
-          const min = Number(minStr) || 0;
-          const max = Number(maxStr) || 9999999;
-          list = list.filter((p) => p.Price >= min && p.Price <= max);
-        }
-        return list;
-      }
-
-    /* ===== Render grid ===== */
-    function render() {
-      fillBrands();
-      const st = stateFromURL();
-      $("#searchInput").value = st.q;
-      $("#brandSelect").value = st.brand;
-      $("#genderSelect").value = st.gender;
-      $("#priceSelect").value = st.price;
-
-      const filtered = applyFilters(st);
-      const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
-      if (st.page > totalPages) st.page = totalPages;
-
-      const start = (st.page - 1) * PER_PAGE,
-        end = start + PER_PAGE;
-      const pageItems = filtered.slice(start, end);
-
-      // grid (có sao + overlay + nút thêm mini cart)
-      const grid = $("#grid");
-      grid.innerHTML = pageItems
-        .map((p) => {
-          const { avg, count } = averageWithUser(p);
-          return `
-                <div class="col-6 col-md-3">
-                    <div id="${p.ProductId}" class="product-card h-100">
-                    <img class="product-thumb" src="${p.ImageUrl}" alt="${p.NameProduct}">
-                    <div class="card-overlay">
-                        <button class="btn btn-sm btn-outline-light pill" data-view="${p.ProductId
-            }" data-bs-toggle="modal" data-bs-target="#productModal">
-                        Xem chi tiết sản phẩm <i class="bi bi-arrow-right"></i>
-                        </button>
-                    </div>
-                    <div class="p-3">
-                        <div class="d-flex justify-content-between small mb-1">
-                        <span class="badge rounded-pill badge-tag">${p.Brand
-            }</span>
-                        <span class="small-muted">${p.Category}</span>
-                        </div>
-                        <div class="product-title mb-1">${p.NameProduct}</div>
-                        <div class="d-flex align-items-center gap-1 mb-2">
-                        <span class="stars small">${starIcons(avg)}</span>
-                        <span class="small text-secondary">(${count})</span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                        <span class="price">${fmtPrice(p.Price)}</span>
-                        <button class="btn btn-sm btn-gold" data-cart="${p.ProductId
-            }" title="Thêm vào giỏ">
-                            <i class="bi bi-bag-plus"></i>
-                        </button>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                `;
-        })
-        .join("");
-
-      // pagination
-      const pg = $("#pagination");
-      let html = "";
-      const add = (p, txt, disabled = false, active = false) => {
-        html += `<li class="page-item ${disabled ? "disabled" : ""} ${active ? "active" : ""
-          }">
-               <a class="page-link" href="#" data-page="${p}">${txt}</a>
-             </li>`;
-      };
-      add(st.page - 1, "&laquo;", st.page === 1);
-      for (let i = 1; i <= totalPages; i++) add(i, i, false, i === st.page);
-      add(st.page + 1, "&raquo;", st.page === totalPages);
-      pg.innerHTML = html;
-
-      // highlight nếu có
-      if (st.highlight) {
-        const el = document.getElementById(st.highlight);
-        if (el) {
-          el.classList.add("highlight");
-          el.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-      }
-      pushState(st);
-    }
-
-    /* ===== Listeners filter & pagination ===== */
-    document.getElementById("searchInput").addEventListener("input", (e) => {
-      const st = stateFromURL();
-      st.q = e.target.value;
-      st.page = 1;
-      st.highlight = "";
-      pushState(st);
-      render();
-    });
-    document.getElementById("brandSelect").addEventListener("change", (e) => {
-      const st = stateFromURL();
-      st.brand = e.target.value;
-      st.page = 1;
-      st.highlight = "";
-      pushState(st);
-      render();
-    });
-    document
-      .getElementById("genderSelect")
-      .addEventListener("change", (e) => {
-        const st = stateFromURL();
-        st.gender = e.target.value;
-        st.page = 1;
-        st.highlight = "";
-        pushState(st);
-        render();
-      });
-    document.getElementById("priceSelect").addEventListener("change", (e) => {
-      const st = stateFromURL();
-      st.price = e.target.value;
-      st.page = 1;
-      st.highlight = "";
-      pushState(st);
-      render();
-    });
-    document.getElementById("pagination").addEventListener("click", (e) => {
-      const a = e.target.closest("a.page-link");
-      if (!a) return;
-      e.preventDefault();
-      const st = stateFromURL();
-      const p = parseInt(a.dataset.page, 10);
-      if (!isNaN(p)) {
-        st.page = p;
-        st.highlight = "";
-        pushState(st);
-        render();
-      }
-    });
-
-    /* ===== Modal cache ===== */
-    const pm_title = document.getElementById("pm-title");
-    const pm_image = document.getElementById("pm-image");
-    const pm_thumb1 = document.getElementById("pm-thumb1");
-    const pm_thumb2 = document.getElementById("pm-thumb2");
-    const pm_brand = document.getElementById("pm-brand");
-    const pm_gender = document.getElementById("pm-gender");
-    const pm_price = document.getElementById("pm-price");
-    const pm_id = document.getElementById("pm-id");
-    const pm_stars = document.getElementById("pm-stars");
-    const pm_stars_big = document.getElementById("pm-stars-big");
-    const pm_score = document.getElementById("pm-score");
-    const pm_avg = document.getElementById("pm-avg");
-    const pm_count = document.getElementById("pm-count");
-    const pm_desc = document.getElementById("pm-desc");
-    const pm_detail = document.getElementById("pm-detail");
-    const pm_reviews = document.getElementById("pm-reviews");
-    const pm_minus = document.getElementById("pm-minus");
-    const pm_plus = document.getElementById("pm-plus");
-    const pm_qty = document.getElementById("pm-qty");
-    const pm_form = document.getElementById("pm-form");
-    const rv_name = document.getElementById("rv-name");
-    const rv_rating = document.getElementById("rv-rating");
-    const rv_text = document.getElementById("rv-text");
-    const pm_toast = document.getElementById("pm-toast");
-
-    /* ===== Open modal from overlay ===== */
-    document.addEventListener("click", (e) => {
-      const btnView = e.target.closest("[data-view]");
-      if (btnView) {
-        e.preventDefault();
-        openProductModal(btnView.getAttribute("data-view"));
-      }
-    });
-
-    /* ===== Add to cart from card ===== */
-    document.addEventListener("click", (e) => {
-      const btnAdd = e.target.closest("[data-cart]");
-      if (btnAdd) {
-        e.preventDefault();
-        const id = btnAdd.getAttribute("data-cart");
-        const p = PRODUCTS.find((x) => x.ProductId === id);
-        if (p) {
-          addToCart(p, 1);
-        }
-      }
-    });
-
-      /* ===== Modal logic ===== */
-      const bsModal = new bootstrap.Modal(
-        document.getElementById("productModal")
-      );
-      
-      function openProductModal(id) {
-        const p = PRODUCTS.find((x) => x.ProductId == id);
-        if (!p) return;
-        const { avg, count, user } = averageWithUser(p);
-
-      // fill header/info
-      pm_title.textContent = p.NameProduct;
-      pm_image.src = p.ImageUrl;
-      pm_image.alt = p.NameProduct;
-      pm_thumb1.src = p.ImageUrl;
-      pm_thumb2.src = p.ImageUrl;
-      pm_price.textContent = fmtPrice(p.Price);
-      pm_id.textContent = p.ProductId;
-
-      // rating
-      pm_stars.innerHTML = starIcons(avg);
-      pm_stars_big.innerHTML = starIcons(avg);
-      pm_score.textContent = `${avg.toFixed(1)} / 5`;
-      pm_avg.textContent = `${avg.toFixed(1)} / 5`;
-      pm_count.textContent = count;
-
-      // desc + detail (demo)
-      pm_desc.textContent = "Hương thơm cân bằng, dễ dùng hằng ngày.";
-      pm_detail.innerHTML = "";
-      [
-        "Hương đầu: cam bergamot – trái cây tươi.",
-        "Hương giữa: hoa trắng/hồng – mịn và sâu.",
-        "Hương cuối: gỗ – hổ phách – vani ấm áp.",
-        "Độ lưu hương: 6–8 giờ • Độ toả: vừa – xa.",
-      ].forEach((li) => {
-        const el = document.createElement("li");
-        el.textContent = li;
-        pm_detail.appendChild(el);
-      });
-
-      // user reviews
-      pm_reviews.innerHTML = user.length
-        ? ""
-        : '<div class="text-secondary small">Chưa có đánh giá từ người dùng gần đây.</div>';
-      for (const r of user.slice().reverse()) {
-        const d = document.createElement("div");
-        d.className = "review-item";
-        d.innerHTML = `
-          <div class="d-flex align-items-center justify-content-between">
-            <div class="fw-semibold">${(r.Name || "Khách").replace(/</g,"&lt;")}</div>
-            <div class="stars">${starIcons(r.Rating)}</div>
-          </div>
-          <div class="small text-secondary">${new Date(r.CreatedAt).toLocaleString()}</div>
-          <div class="mt-1">${(r.Comment || "").replace(/</g, "&lt;")}</div>`;
-          pm_reviews.appendChild(d);
-        }
-
-      bsModal.show();
-    }
-
-    /* ===== Modal qty + submit review ===== */
-    pm_minus.addEventListener("click", () => {
-      pm_qty.value = Math.max(1, parseInt(pm_qty.value || "1", 10) - 1);
-    });
-    pm_plus.addEventListener("click", () => {
-      pm_qty.value = Math.min(99, parseInt(pm_qty.value || "1", 10) + 1);
-    });
-
-    document.getElementById("pm-addcart").addEventListener("click", () => {
-      const id = pm_id.textContent;
-      const p = PRODUCTS.find((x) => x.ProductId == id);
-      const qty = parseInt(pm_qty.value || "1", 10);
-      if (p && qty > 0) {
-        addToCart(p, qty);
-      }
-    });
-
-      pm_form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const id = pm_id.textContent;
-        addUserReview(id, {
-          rating: parseInt(rv_rating.value, 10),
-          text: (rv_text.value || "").trim(),
-          time: Date.now(),
-        });
-        rv_text.value = "";
-        pm_toast.style.display = "block";
-        setTimeout(() => (pm_toast.style.display = "none"), 1500);
-        await init();
-        openProductModal(id);
-      });
-
-      /* ===== MINI CART RENDER ===== */
-      async function renderCartUI() {
-        // badge
-        const cart = await getCart();
-        const totalQty = cart.reduce((s, i) => s + i.Quantity, 0);
-        const titleEl = document.getElementById("miniCartLabel");
-        if (titleEl) titleEl.textContent = `🛒 Giỏ hàng (${totalQty})`;
-        const totalMoney = cart.reduce((s, i) => s + i.Quantity * i.Price, 0);
-        const cartCount = document.getElementById("cartCount");
-        if (cartCount) {
-          cartCount.textContent = totalQty;
-          cartCount.style.display = totalQty ? "inline-block" : "none";
-        }
-
-      // list items
-      const box = document.getElementById("cartItems");
-      if (!box) return;
-      if (!cart.length) {
-        box.innerHTML = `<div class="text-secondary small">Giỏ hàng đang trống.</div>`;
-      } else {
-        box.innerHTML = cart
-          .map(
-            (it) => `
-                <div class="list-group-item py-3">
-                    <div class="d-flex align-items-center">
-                    <img src="${it.ImageUrl}" class="cart-thumb me-3" alt="${it.NameProduct}">
-                    <div class="flex-grow-1">
-                        <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <div class="fw-semibold">${it.NameProduct}</div>
-                            <div class="small text-secondary">Đơn giá: ${fmtPrice(
-              it.Price
-            )}</div>
-                            <div class="small mt-1">
-                            <span class="badge bg-light text-dark">SL: <span data-qty-text="${it.ProductId
-              }">${it.Quantity}</span></span>
-                            </div>
-                        </div>
-                        <button class="btn btn-sm btn-outline-light" data-remove="${it.ProductId
-              }" title="Xóa">
-                          <i class="bi bi-x-lg"></i>
-                        </button>
-                        </div>
-
-                        <div class="d-flex align-items-center gap-2 mt-2">
-                        <div class="input-group input-group-sm" style="width:140px">
-                            <button class="btn btn-outline-gold" data-dec="${it.ProductId
-              }" type="button">–</button>
-                            <input class="form-control text-center" value="${it.Quantity}" disabled>
-                            <button class="btn btn-gold" data-inc="${it.ProductId
-              }" type="button">+</button>
-                        </div>
-                        <div class="ms-auto fw-semibold">${fmtPrice(it.Quantity * it.Price)}</div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                `
-          )
-          .join("");
-      }
-
-      const totalEl = document.getElementById("cartTotal");
-      if (totalEl) totalEl.textContent = fmtPrice(totalMoney);
-    }
-
-      /* === Mini cart actions === */
-      document.getElementById("cartItems").addEventListener("click", async (e) => {
-        const cart = await getCart();
-        const idInc = e.target.closest("[data-inc]")?.getAttribute("data-inc");
-        const idDec = e.target.closest("[data-dec]")?.getAttribute("data-dec");
-        const idRem = e.target
-          .closest("[data-remove]")
-          ?.getAttribute("data-remove");
-
-      if (idInc) {
-        const it = cart.find((x) => x.ProductId == idInc);
-        if (it) {
-          it.Quantity++;
-          await fetch(`http://localhost:3000/cart/update/${idInc}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ Quantity: it.Quantity, UnitPrice: it.Quantity * it.Price }),
-          });
-          saveCart(cart);
-        }
-      }
-
-      if (idDec) {
-        const it = cart.find((x) => x.ProductId == idDec);
-        if (it) {
-          it.Quantity = Math.max(1, it.Quantity - 1);
-          await fetch(`http://localhost:3000/cart/update/${idDec}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ Quantity: it.Quantity, UnitPrice: it.Price }),
-          });
-          saveCart(cart);
-        }
-      }
-      if (idRem) {
-        const idx = cart.findIndex((x) => x.ProductId == idRem);
-        if (idx > -1) {
-          await fetch(`http://localhost:3000/cart/remove/${idRem}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-          });
-          saveCart(cart);
-        }
-      }
-    });
-
-    document.getElementById("btnClearCart").addEventListener("click", async () => {
-      localStorage.removeItem("cart");
-      await fetch("http://localhost:3000/cart/clear", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      });
-      renderCartUI();
-    });
-
-    // --- FAB: kéo không mở, chỉ nhấn mới mở; không dính chuột
-    (function () {
-      const fab = document.querySelector(".cart-fab");
-      const fabBtn = document.getElementById("btnCartFab");
-      const offEl = document.getElementById("offcart");
-      if (!fab || !fabBtn || !offEl) return;
-
-      let dragging = false;
-      let moved = false;
-      let startX = 0,
-        startY = 0;
-      let offsetX = 0,
-        offsetY = 0;
-      let pointerId = null;
-
-      fab.style.touchAction = "none";
-      fab.style.cursor = "grab";
-
-      function onMove(e) {
-        if (!dragging) return;
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) moved = true;
-        if (!moved) return;
-
-        const x = e.clientX - offsetX;
-        const y = e.clientY - offsetY;
-        fab.style.left = `${x}px`;
-        fab.style.top = `${y}px`;
-        fab.style.right = "auto";
-        fab.style.bottom = "auto";
-        fab.style.transform = "none";
-
-        e.preventDefault(); // ngăn click “lọt”
-      }
-
-      function openCart() {
-        const cart = bootstrap.Offcanvas.getOrCreateInstance(offEl);
-        cart.show();
-      }
-
-      function onUp(e) {
-        if (!dragging) return;
-        dragging = false;
-        fab.classList.remove("dragging");
-        try {
-          if (pointerId !== null) fabBtn.releasePointerCapture(pointerId);
-        } catch (_) { }
-        pointerId = null;
-
-        // bỏ lắng nghe toàn cục
-        document.removeEventListener("pointermove", onMove);
-        document.removeEventListener("pointerup", onUp);
-        document.removeEventListener("pointercancel", onUp);
-
-        // nếu KHÔNG kéo, coi như nhấn -> mở giỏ
-        if (!moved) openCart();
-
-        // reset cờ "vừa kéo" sau một tick để click tiếp theo không mở
-        setTimeout(() => {
-          moved = false;
-        }, 0);
-      }
-
-      fabBtn.addEventListener("pointerdown", (e) => {
-        dragging = true;
-        moved = false;
-        fab.classList.add("dragging");
-        pointerId = e.pointerId;
-        try {
-          fabBtn.setPointerCapture(pointerId);
-        } catch (_) { }
-
-        const rect = fab.getBoundingClientRect();
-        startX = e.clientX;
-        startY = e.clientY;
-        offsetX = startX - rect.left;
-        offsetY = startY - rect.top;
-
-        // lắng nghe trên document để luôn nhận được sự kiện nhả
-        document.addEventListener("pointermove", onMove, { passive: false });
-        document.addEventListener("pointerup", onUp, { passive: false });
-        document.addEventListener("pointercancel", onUp, { passive: false });
-      });
-
-      // chặn click sau khi vừa kéo
-      fabBtn.addEventListener("click", (e) => {
-        if (dragging || moved) {
-          e.preventDefault();
-          e.stopImmediatePropagation();
-        } else {
-          openCart();
-        }
-      });
-    })();
-
-    /* ===== Boot ===== */
-    function setNavH() {
-      const nav = document.querySelector(".navbar");
-      if (!nav) return;
-      const h = nav.offsetHeight || 72;
-      document.documentElement.style.setProperty("--nav-h", h + "px");
-    }
-    window.addEventListener("load", setNavH);
-    window.addEventListener("resize", setNavH);
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(setNavH);
-    }
-
-    render();
-    renderCartUI();
-
-  // <!-- small helper: enable clicking thumbnails to change main image (non-intrusive) -->
-    (function () {
-      const t1 = document.getElementById('pm-thumb1');
-      const t2 = document.getElementById('pm-thumb2');
-      const main = document.getElementById('pm-image');
-      if (t1 && t2 && main) {
-        [t1, t2].forEach(t => {
-          t.addEventListener('click', () => {
-            if (t.src) {
-              main.src = t.src;
-              // mark active
-              [t1, t2].forEach(x => x.classList.remove('active'));
-              t.classList.add('active');
-            }
-          });
-        });
-      }
-    })();
-  </script>
-
-
-
-
-
+  <script src="../../sql-backend/controller/user/productPage.js"></script>
+  
 </body>
 
 </html>
