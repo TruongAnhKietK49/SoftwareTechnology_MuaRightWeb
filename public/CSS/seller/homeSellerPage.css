@@ -520,3 +520,6 @@ body {
   cursor: not-allowed;
   opacity: 1;
 }
+.stats-card .trend.up { background-color: #e8f5e9; color: #4caf50; }
+.stats-card .trend.down { background-color: #f8d7da; color: #dc3545; }
+.stats-card .trend.neutral { background-color: #e9ecef; color: #6c757d; }

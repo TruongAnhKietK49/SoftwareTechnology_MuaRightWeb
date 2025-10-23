@@ -12,9 +12,7 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h4>
-                <div class="logo-icon">
-                    <i class="fas fa-gem"></i>
-                </div>
+                <div class="logo-icon"><i class="fas fa-gem"></i></div>
                 <span>MuaRight</span>
             </h4>
         </div>
@@ -41,7 +39,6 @@
                         <strong id="currentDate" style="color: var(--primary-dark);"></strong>
                     </div>
                 </div>
-                <!-- UPDATED: Added anchor tag for profile navigation -->
                 <a href="profileSeller_page.html" class="user-avatar-link">
                     <div class="user-avatar" id="userAvatar">NA</div>
                 </a>
@@ -51,50 +48,30 @@
         <div class="row">
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="stats-card revenue">
-                    <div class="icon-wrapper">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
-                    <h3 id="monthRevenue">0đ</h3>
-                    <p>Doanh thu tháng này</p>
-                    <span class="trend up" id="revenueTrend">
-                        <i class="fas fa-arrow-up"></i> +0%
-                    </span>
+                    <div class="icon-wrapper"><i class="fas fa-dollar-sign"></i></div>
+                    <h3 id="monthRevenue">0đ</h3><p>Doanh thu tháng này</p>
+                    <span class="trend" id="revenueTrend"><i class="fas fa-minus"></i> 0%</span>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="stats-card orders">
-                    <div class="icon-wrapper">
-                        <i class="fas fa-shopping-bag"></i>
-                    </div>
-                    <h3 id="monthOrders">0</h3>
-                    <p>Đơn hàng tháng này</p>
-                    <span class="trend up" id="ordersTrend">
-                        <i class="fas fa-arrow-up"></i> +0%
-                    </span>
+                    <div class="icon-wrapper"><i class="fas fa-shopping-bag"></i></div>
+                    <h3 id="monthOrders">0</h3><p>Đơn hàng tháng này</p>
+                    <span class="trend" id="ordersTrend"><i class="fas fa-minus"></i> 0%</span>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="stats-card products">
-                    <div class="icon-wrapper">
-                        <i class="fas fa-box-open"></i>
-                    </div>
-                    <h3 id="totalProducts">0</h3>
-                    <p>Sản phẩm đang bán</p>
-                    <span class="trend up" id="productsTrend">
-                        <i class="fas fa-plus"></i> +0 mới
-                    </span>
+                    <div class="icon-wrapper"><i class="fas fa-box-open"></i></div>
+                    <h3 id="totalProducts">0</h3><p>Sản phẩm đang bán</p>
+                    <span class="trend up" id="productsTrend"><i class="fas fa-plus"></i> +0 mới</span>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="stats-card pending">
-                    <div class="icon-wrapper">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <h3 id="pendingOrders">0</h3>
-                    <p>Đơn chờ xử lý</p>
-                    <span class="trend down" id="pendingTrend">
-                        <i class="fas fa-exclamation-triangle"></i> Cần xử lý
-                    </span>
+                    <div class="icon-wrapper"><i class="fas fa-clock"></i></div>
+                    <h3 id="pendingOrders">0</h3><p>Đơn chờ xử lý</p>
+                    <span class="trend down" id="pendingTrend"><i class="fas fa-exclamation-triangle"></i> Cần xử lý</span>
                 </div>
             </div>
         </div>
@@ -106,26 +83,10 @@
                         <span><i class="fas fa-list"></i> Đơn hàng gần đây</span>
                         <a href="orders_page.html" class="btn btn-sm btn-outline-primary">Xem tất cả</a>
                     </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Mã đơn</th>
-                                        <th>Sản phẩm</th>
-                                        <th>Khách hàng</th>
-                                        <th>Số lượng</th>
-                                        <th>Tổng tiền</th>
-                                        <th>Trạng thái</th>
-                                        <th>Thao tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="recentOrdersTable">
-                                    <!-- Orders will be loaded here -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <div class="card-body p-0"><div class="table-responsive"><table class="table mb-0">
+                        <thead><tr><th>Mã đơn</th><th>Sản phẩm</th><th>Khách hàng</th><th>Số lượng</th><th>Tổng tiền</th><th>Trạng thái</th></tr></thead>
+                        <tbody id="recentOrdersTable"></tbody>
+                    </table></div></div>
                 </div>
             </div>
         </div>
@@ -133,77 +94,46 @@
         <div class="row">
             <div class="col-lg-6 mb-4">
                 <div class="card">
-                    <div class="card-header">
-                        <span><i class="fas fa-trophy"></i> Top 5 sản phẩm bán chạy</span>
-                    </div>
-                    <div class="card-body" id="topProductsList">
-                        <!-- Top products will be loaded here -->
-                    </div>
+                    <div class="card-header"><span><i class="fas fa-trophy"></i> Top 5 sản phẩm bán chạy</span></div>
+                    <div class="card-body" id="topProductsList"></div>
                 </div>
             </div>
-            
             <div class="col-lg-6 mb-4">
                 <div class="card">
-                    <div class="card-header">
-                        <span><i class="fas fa-bell"></i> Thông báo mới nhất</span>
-                    </div>
-                    <div class="card-body" id="notificationsList">
-                        <!-- Notifications will be loaded here -->
-                    </div>
+                    <div class="card-header"><span><i class="fas fa-bell"></i> Thông báo mới nhất</span></div>
+                    <div class="card-body" id="notificationsList"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <button class="btn mobile-toggle" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-    const API_URL = "http://localhost:3000"; 
-
-    let account = null;
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const API_URL = "http://localhost:3000";
     let sellerId = null;
-    // NEW: Khởi tạo biến cho modal
-    let orderDetailModal = null; 
 
     document.addEventListener('DOMContentLoaded', function() {
         const accountString = localStorage.getItem("account");
         if (!accountString) {
-            alert("Vui lòng đăng nhập để truy cập trang này.");
-            window.location.href = "../../template/pages/signIn_page.html";
-            return;
+            window.location.href = "../../template/pages/signIn_page.html"; return;
         }
-        
         try {
-            account = JSON.parse(accountString);
+            const account = JSON.parse(accountString);
             if (account.Role !== 'Seller') {
-                alert("Bạn không có quyền truy cập trang này!");
-                window.location.href = "../../template/pages/signIn_page.html";
-                return;
+                window.location.href = "../../template/pages/signIn_page.html"; return;
             }
             sellerId = account.AccountId;
         } catch (e) {
-            console.error("Lỗi parse Account:", e);
-            alert("Lỗi dữ liệu tài khoản.");
-            window.location.href = "../../template/pages/signIn_page.html";
-            return;
+            window.location.href = "../../template/pages/signIn_page.html"; return;
         }
         
-        // NEW: Khởi tạo đối tượng Modal của Bootstrap
-        orderDetailModal = new bootstrap.Modal(document.getElementById('orderDetailModal'));
-        
-        const logoutButton = document.getElementById('logoutBtn');
-        if (logoutButton) {
-            logoutButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
-                    localStorage.removeItem('account');
-                    window.location.href = '../../template/pages/signIn_page.html';
-                }
-            });
-        }
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
+                localStorage.removeItem('account');
+                window.location.href = '../../template/pages/signIn_page.html';
+            }
+        });
         loadDashboard(sellerId);
         updateDateTime();
     });
@@ -211,70 +141,86 @@
     async function loadDashboard(sellerId) {
         try {
             const response = await fetch(`${API_URL}/seller/dashboard/${sellerId}`);
+            if (!response.ok) { 
+                const errorResult = await response.json();
+                throw new Error(errorResult.message || 'Server responded with an error');
+            }
             const result = await response.json();
-
             if (result.success) {
                 updateDashboard(result.data);
             } else {
-                console.error('Lỗi API Dashboard:', result.message);
                 alert('Không thể tải dữ liệu Dashboard: ' + result.message);
             }
-        } catch (error) {
-            console.error('Lỗi Network/Server:', error);
-            alert('Lỗi kết nối Server!');
+        } catch (error) { 
+            console.error('Fetch Error:', error);
+            alert('Lỗi kết nối hoặc xử lý từ Server: ' + error.message); 
         }
     }
 
-    function updateDashboard(dashboardData) {
-        document.getElementById('sellerName').textContent = dashboardData.seller.name;
-        const initials = dashboardData.seller.name ? dashboardData.seller.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'SL';
-        document.getElementById('userAvatar').textContent = initials;
+    function updateDashboard(data) {
+        document.getElementById('sellerName').textContent = data.seller.name;
+        document.getElementById('userAvatar').textContent = data.seller.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+        
+        document.getElementById('monthRevenue').textContent = formatPrice(data.stats.monthRevenue);
+        updateTrendElement(document.getElementById('revenueTrend'), data.stats.revenueTrend, '%');
 
-        document.getElementById('monthRevenue').textContent = formatPrice(dashboardData.stats.monthRevenue);
-        document.getElementById('revenueTrend').innerHTML = `<i class="fas fa-arrow-up"></i> +${dashboardData.stats.revenueTrend}%`;
-        document.getElementById('monthOrders').textContent = dashboardData.stats.monthOrders;
-        document.getElementById('ordersTrend').innerHTML = `<i class="fas fa-arrow-up"></i> +${dashboardData.stats.ordersTrend}%`;
-        document.getElementById('totalProducts').textContent = dashboardData.stats.totalProducts;
-        document.getElementById('productsTrend').innerHTML = `<i class="fas fa-plus"></i> +${dashboardData.stats.newProducts} mới`;
-        document.getElementById('pendingOrders').textContent = dashboardData.stats.pendingOrders;
+        document.getElementById('monthOrders').textContent = data.stats.monthOrders;
+        updateTrendElement(document.getElementById('ordersTrend'), data.stats.ordersTrend, '%');
+        
+        document.getElementById('totalProducts').textContent = data.stats.totalProducts;
+        document.getElementById('productsTrend').innerHTML = `<i class="fas fa-plus"></i> +${data.stats.newProducts} mới`;
+        
+        document.getElementById('pendingOrders').textContent = data.stats.pendingOrders;
 
-        loadRecentOrders(dashboardData.recentOrders);
-        loadTopProducts(dashboardData.topProducts);
-        loadNotifications(dashboardData.notifications);
+        loadRecentOrders(data.recentOrders);
+        loadTopProducts(data.topProducts);
+        loadNotifications(data.notifications);
+    }
+    
+    function updateTrendElement(element, value, unit) {
+        element.classList.remove('up', 'down', 'neutral');
+        let icon = '';
+        let text = '';
+
+        if (value > 0) {
+            element.classList.add('up');
+            icon = 'fa-arrow-up';
+            text = `+${value}${unit}`;
+        } else if (value < 0) {
+            element.classList.add('down');
+            icon = 'fa-arrow-down';
+            text = `${value}${unit}`;
+        } else {
+            element.classList.add('neutral');
+            icon = 'fa-minus';
+            text = `0${unit}`;
+        }
+        element.innerHTML = `<i class="fas ${icon}"></i> ${text}`;
     }
         
     function loadRecentOrders(recentOrders) {
         const tbody = document.getElementById('recentOrdersTable');
         tbody.innerHTML = '';
         const statusConfig = {
-            pending: { class: 'bg-warning', text: 'Chờ xác nhận' }, confirmed: { class: 'bg-info', text: 'Đã xác nhận' },
-            shipping: { class: 'bg-primary', text: 'Đang giao' }, delivered: { class: 'bg-success', text: 'Đã giao' },
+            pending: { class: 'bg-warning', text: 'Chờ xác nhận' }, approved: { class: 'bg-info', text: 'Đã xác nhận' },
+            shipped: { class: 'bg-primary', text: 'Đang giao' }, delivered: { class: 'bg-success', text: 'Đã giao' },
             cancelled: { class: 'bg-danger', text: 'Đã hủy' }
         };
         if (recentOrders.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">Không có đơn hàng gần đây.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">Không có đơn hàng gần đây.</td></tr>`;
             return;
         }
         recentOrders.forEach(order => {
-            const config = statusConfig[order.status] || { class: 'bg-secondary', text: 'Không rõ' };
-            const row = `
+            const config = statusConfig[order.status] || { class: 'bg-secondary', text: order.status };
+            tbody.innerHTML += `
                 <tr>
-                    <td><strong>#${order.id}</strong></td> <td>${order.product}</td> <td>${order.customer}</td>
+                    <td><strong>${order.displayId}</strong></td> <td>${order.product}</td> <td>${order.customer}</td>
                     <td>${order.qty}</td> <td><strong style="color: var(--primary-orange);">${formatPrice(order.total)}</strong></td>
                     <td><span class="badge ${config.class}">${config.text}</span></td>
-                    <td>
-                        ${order.status === 'pending' 
-                            ? `<button class="btn btn-sm btn-success" onclick="confirmOrder('${order.id}')">Xác nhận</button>`
-                            : `<button class="btn btn-sm btn-primary" onclick="viewOrder('${order.id}')">Chi tiết</button>`
-                        }
-                    </td>
-                </tr>
-            `;
-            tbody.innerHTML += row;
+                </tr>`;
         });
     }
 
-    // UPDATED: Bỏ thẻ <a>, chỉ hiển thị thông tin
     function loadTopProducts(topProducts) {
         const container = document.getElementById('topProductsList');
         container.innerHTML = '';
@@ -282,169 +228,33 @@
             container.innerHTML = `<p class="text-muted text-center">Chưa có sản phẩm nào được bán.</p>`;
             return;
         }
-        const badges = ['bg-warning', 'bg-info', 'bg-primary', 'bg-success', 'bg-secondary'];
+        const badges = ['bg-warning', 'bg-info', 'bg-primary'];
         topProducts.forEach((product, index) => {
-            const item = `
+            container.innerHTML += `
                 <div class="product-item">
                     <div>
                         <strong>${product.name}</strong><br>
                         <small class="text-muted">${product.sold} đơn bán ra</small>
                     </div>
                     <span class="badge ${badges[index] || 'bg-secondary'}">${product.badge}</span>
-                </div>
-            `;
-            container.innerHTML += item;
+                </div>`;
         });
     }
 
     function loadNotifications(notifications) {
         const container = document.getElementById('notificationsList');
         container.innerHTML = '';
-        if (notifications.length === 0) {
-            container.innerHTML = `<p class="text-muted text-center">Không có thông báo mới.</p>`; return;
-        }
+        if (notifications.length === 0) return;
         notifications.forEach(notif => {
-            let link = notif.type === 'warning' ? 'orders_page.html' : notif.type === 'info' ? 'products_page.html' : '#';
-            const item = `<a href="${link}" class="notification-item-link"><div class="notification-item"><div class="d-flex gap-3"><div class="notification-icon ${notif.type}"><i class="fas fa-${notif.icon}"></i></div><div class="flex-grow-1"><strong>${notif.title}</strong><br><small class="text-muted">${notif.message}</small><br><small class="text-muted"><i class="far fa-clock"></i> ${notif.time}</small></div></div></div></a>`;
-            container.innerHTML += item;
+            container.innerHTML += `<a href="${notif.link}" class="notification-item-link"><div class="notification-item"><div class="d-flex gap-3"><div class="notification-icon ${notif.type}"><i class="fas fa-${notif.icon}"></i></div><div class="flex-grow-1"><strong>${notif.title}</strong><br><small class="text-muted">${notif.message}</small><br><small class="text-muted"><i class="far fa-clock"></i> ${notif.time}</small></div></div></div></a>`;
         });
-    }
-
-    function formatPrice(price) {
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
     }
 
     function updateDateTime() {
-        const dateElement = document.getElementById('currentDate');
-        const today = new Date();
-        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-        dateElement.textContent = today.toLocaleDateString('vi-VN', options);
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
     }
     
-    async function confirmOrder(orderIdWithPrefix) {
-        if (!confirm('Xác nhận đơn hàng này?')) return;
-        const orderId = parseInt(orderIdWithPrefix.replace('DH', ''));
-        try {
-            const response = await fetch(`${API_URL}/seller/orders/${orderId}/confirm`, { method: 'PUT' });
-            const result = await response.json();
-            if (result.success) {
-                alert('Đã xác nhận đơn hàng thành công!');
-                loadDashboard(sellerId);
-            } else { alert('Lỗi xác nhận đơn hàng: ' + result.message); }
-        } catch (error) {
-            console.error('Lỗi Network/Server khi xác nhận đơn:', error);
-            alert('Lỗi kết nối Server khi xác nhận đơn hàng!');
-        }
-    }
-
-    // UPDATED: Hoàn toàn làm lại hàm viewOrder
-    async function viewOrder(orderIdWithPrefix) {
-        const orderId = parseInt(orderIdWithPrefix.replace('DH', ''));
-        try {
-            // Gọi API mới để lấy chi tiết đơn hàng, truyền sellerId để xác thực
-            const response = await fetch(`${API_URL}/seller/orders/${orderId}?sellerId=${sellerId}`);
-            const result = await response.json();
-
-            if (result.success) {
-                populateOrderModal(result.data);
-                orderDetailModal.show(); // Hiển thị modal
-            } else {
-                alert('Lỗi khi lấy chi tiết đơn hàng: ' + result.message);
-            }
-        } catch (error) {
-            console.error('Lỗi khi lấy chi tiết đơn hàng:', error);
-            alert('Lỗi kết nối Server!');
-        }
-    }
-
-    // NEW: Hàm trợ giúp để điền dữ liệu vào modal
-    function populateOrderModal(data) {
-        const details = data.details;
-        const products = data.products;
-
-        // Điền thông tin chung
-        document.getElementById('modalOrderId').textContent = '#DH' + String(details.OrderId).padStart(3, '0');
-        document.getElementById('modalCustomerName').textContent = details.CustomerName;
-        document.getElementById('modalCustomerPhone').textContent = details.CustomerPhone;
-        document.getElementById('modalCustomerEmail').textContent = details.CustomerEmail;
-        document.getElementById('modalOrderDate').textContent = new Date(details.OrderDate).toLocaleDateString('vi-VN');
-        document.getElementById('modalShippingAddress').textContent = details.ShippingAddress;
-        document.getElementById('modalOrderStatus').textContent = details.State;
-        document.getElementById('modalTotalAmount').textContent = formatPrice(details.SellerTotalAmount);
-
-        // Điền danh sách sản phẩm
-        const productsTableBody = document.getElementById('modalProductsTable');
-        productsTableBody.innerHTML = ''; // Xóa dữ liệu cũ
-        products.forEach(p => {
-            const row = `
-                <tr>
-                    <td>${p.NameProduct}</td>
-                    <td>${p.Quantity}</td>
-                    <td>${formatPrice(p.Price)}</td>
-                    <td>${formatPrice(p.LineTotal)}</td>
-                </tr>
-            `;
-            productsTableBody.innerHTML += row;
-        });
-    }
-
-    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('show'); }
-    document.addEventListener('click', function(event) {
-        const sidebar = document.getElementById('sidebar'); const toggle = document.querySelector('.mobile-toggle');
-        if (window.innerWidth <= 768) { if (!sidebar.contains(event.target) && !toggle.contains(event.target)) { sidebar.classList.remove('show'); } }
-    });
+    function formatPrice(price) { return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price); }
 </script>
-
-    <!-- Order Detail Modal -->
-<div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="orderDetailModalLabel">Chi tiết đơn hàng: <span id="modalOrderId"></span></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6>Thông tin khách hàng</h6>
-                        <p><strong>Tên:</strong> <span id="modalCustomerName"></span></p>
-                        <p><strong>Số điện thoại:</strong> <span id="modalCustomerPhone"></span></p>
-                        <p><strong>Email:</strong> <span id="modalCustomerEmail"></span></p>
-                    </div>
-                    <div class="col-md-6">
-                        <h6>Thông tin đơn hàng</h6>
-                        <p><strong>Ngày đặt:</strong> <span id="modalOrderDate"></span></p>
-                        <p><strong>Địa chỉ giao hàng:</strong> <span id="modalShippingAddress"></span></p>
-                        <p><strong>Trạng thái:</strong> <span id="modalOrderStatus"></span></p>
-                    </div>
-                </div>
-                <hr>
-                <h6>Sản phẩm trong đơn hàng</h6>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Sản phẩm</th>
-                                <th>Số lượng</th>
-                                <th>Đơn giá</th>
-                                <th>Thành tiền</th>
-                            </tr>
-                        </thead>
-                        <tbody id="modalProductsTable">
-                            <!-- Product rows will be injected here -->
-                        </tbody>
-                    </table>
-                </div>
-                <div class="text-end">
-                    <h5>Tổng cộng: <strong id="modalTotalAmount" style="color: var(--primary-orange);"></strong></h5>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 </body>
 </html>
