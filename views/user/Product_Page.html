@@ -221,33 +221,34 @@
   <!-- Link JS chính -->
   <!-- <script src="../../sql-backend/controller/user/productPage.js"></script> -->
 
-  <!-- ====== Your original script (unchanged) ====== -->
-  <script>
-    /* ================= DATA =================== */
-    let PRODUCTS = [];
-    async function getProductList() {
-      const res = await fetch("http://localhost:3000/products/getProductList", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
+    <!-- JS -->
+    <script>
+      const account = JSON.parse(localStorage.getItem("account")) || {};
+      /* ================= DATA =================== */
+      let PRODUCTS = []; 
+      async function getProductList() {
+        const res = await fetch("http://localhost:3000/products/getProductList", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
 
-      if (!res.ok) {
-        throw new Error("Lỗi khi lấy danh sách sản phẩm!");
+        if (!res.ok) {
+          throw new Error("Lỗi khi lấy danh sách sản phẩm!");
+        }
+
+        const json = await res.json();
+        PRODUCTS = json.data;
+        render();
+        console.log("Danh sách sản phẩm:", PRODUCTS);
       }
 
-      const json = await res.json();
-      PRODUCTS = json.data;
-      render();
-      console.log("Danh sách sản phẩm:", PRODUCTS);
-    }
+      getProductList();
+      const PER_PAGE = 8;
 
-    getProductList();
-    const PER_PAGE = 8;
-
-    /* ===== Cart helpers (localStorage) ===== */
-    async function getCart() {
-      try {
-        const res = await fetch("http://localhost:3000/cart/getAllItem", {
+      /* ===== Cart helpers (localStorage) ===== */
+      async function getCart() {
+        try {
+          const res = await fetch("http://localhost:3000/cart/getAllItem", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });
@@ -259,36 +260,36 @@
         const json = await res.json();
         console.log(json.data);
         return json.data;
-      } catch (e) {
-        return [];
+        } catch (e) {
+          return [];
+        }
       }
-    }
-    function saveCart(cart) {
-      localStorage.setItem("cart", JSON.stringify(cart));
-      renderCartUI();
-    }
-    async function addToCart(p, qty) {
-      const cart = await getCart();
-      const found = cart.find((i) => i.ProductId == p.ProductId);
-      if (found) {
-        found.Quantity += qty;
-        await fetch(`http://localhost:3000/cart/update/${found.ProductId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ Quantity: found.Quantity, UnitPrice: found.Quantity * found.Price }),
-        });
-      } else {
-        await fetch("http://localhost:3000/cart/add", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            CustomerId: account.AccountId,
-            ProductId: p.ProductId,
-            NameProduct: p.NameProduct,
-            Quantity: qty,
-            UnitPrice: qty * p.Price,
-          }),
-        });
+      function saveCart(cart) {
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCartUI();
+      }
+      async function addToCart(p, qty) {
+        const cart = await getCart();
+        const found = cart.find((i) => i.ProductId == p.ProductId);
+        if (found) {
+          found.Quantity += qty;
+          await fetch(`http://localhost:3000/cart/update/${found.ProductId}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ Quantity: found.Quantity, UnitPrice: found.Quantity*found.Price }),
+          });
+        } else {
+          await fetch("http://localhost:3000/cart/add", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              CustomerId: account.AccountId,
+              ProductId: p.ProductId,
+              NameProduct: p.NameProduct,
+              Quantity: qty,
+              UnitPrice: qty * p.Price,
+            }),
+          });
 
         cart.push({
           ProductId: p.ProductId,
@@ -307,38 +308,38 @@
       return `$${n}`;
     }
 
-    /* ===== Ratings (user-only, không dùng seed default) ===== */
-    function starIcons(score) {
-      const full = Math.floor(score);
-      const half = score - full >= 0.5 ? 1 : 0;
-      const empty = 5 - full - half;
-      return (
-        '<i class="bi bi-star-fill"></i>'.repeat(full) +
-        (half ? '<i class="bi bi-star-half"></i>' : "") +
-        '<i class="bi bi-star"></i>'.repeat(empty)
-      );
-    }
-    const _key = (id) => "reviews_" + id;
-    function getUserReviews(id) {
-      try {
-        return JSON.parse(localStorage.getItem(_key(id)) || "[]");
-      } catch (e) {
-        return [];
+      /* ===== Ratings (user-only, không dùng seed default) ===== */
+      function starIcons(score) {
+        const full = Math.floor(score);
+        const half = score - full >= 0.5 ? 1 : 0;
+        const empty = 5 - full - half;
+        return (
+          '<i class="bi bi-star-fill"></i>'.repeat(full) +
+          (half ? '<i class="bi bi-star-half"></i>' : "") +
+          '<i class="bi bi-star"></i>'.repeat(empty)
+        );
       }
-    }
-    function addUserReview(id, review) {
-      const arr = getUserReviews(id);
-      arr.push(review);
-      localStorage.setItem(_key(id), JSON.stringify(arr));
-    }
-    function averageWithUser(p) {
-      const user = getUserReviews(p.ProductId);
-      const count = user.length;
-      const avg = count
-        ? user.reduce((s, r) => s + Number(r.rating || 0), 0) / count
-        : 0;
-      return { avg, count, desc: "", user };
-    }
+      const _key = (id) => "reviews_" + id;
+      function getUserReviews(id) {
+        try {
+          return JSON.parse(localStorage.getItem(_key(id)) || "[]");
+        } catch (e) {
+          return [];
+        }
+      }
+      function addUserReview(id, review) {
+        const arr = getUserReviews(id);
+        arr.push(review);
+        localStorage.setItem(_key(id), JSON.stringify(arr));
+      }
+      function averageWithUser(p) {
+        const user = getUserReviews(p.ProductId);
+        const count = user.length;
+        const avg = count
+          ? user.reduce((s, r) => s + Number(r.rating || 0), 0) / count
+          : 0;
+        return { avg, count, desc: "", user };
+      }
 
     /* ===== Populate brand filter ===== */
     function fillBrands() {
@@ -668,19 +669,19 @@
       openProductModal(id);
     });
 
-    /* ===== MINI CART RENDER ===== */
-    async function renderCartUI() {
-      // badge
-      const cart = await getCart();
-      const totalQty = cart.reduce((s, i) => s + i.Quantity, 0);
-      const titleEl = document.getElementById("miniCartLabel");
-      if (titleEl) titleEl.textContent = `🛒 Giỏ hàng (${totalQty})`;
-      const totalMoney = cart.reduce((s, i) => s + i.Quantity * i.Price, 0);
-      const cartCount = document.getElementById("cartCount");
-      if (cartCount) {
-        cartCount.textContent = totalQty;
-        cartCount.style.display = totalQty ? "inline-block" : "none";
-      }
+      /* ===== MINI CART RENDER ===== */
+      async function renderCartUI() {
+        // badge
+        const cart = await getCart();
+        const totalQty = cart.reduce((s, i) => s + i.Quantity, 0);
+        const titleEl = document.getElementById("miniCartLabel");
+        if (titleEl) titleEl.textContent = `🛒 Giỏ hàng (${totalQty})`;
+        const totalMoney = cart.reduce((s, i) => s + i.Quantity * i.Price, 0);
+        const cartCount = document.getElementById("cartCount");
+        if (cartCount) {
+          cartCount.textContent = totalQty;
+          cartCount.style.display = totalQty ? "inline-block" : "none";
+        }
 
       // list items
       const box = document.getElementById("cartItems");
@@ -734,14 +735,14 @@
       if (totalEl) totalEl.textContent = fmtPrice(totalMoney);
     }
 
-    /* === Mini cart actions === */
-    document.getElementById("cartItems").addEventListener("click", async (e) => {
-      const cart = await getCart();
-      const idInc = e.target.closest("[data-inc]")?.getAttribute("data-inc");
-      const idDec = e.target.closest("[data-dec]")?.getAttribute("data-dec");
-      const idRem = e.target
-        .closest("[data-remove]")
-        ?.getAttribute("data-remove");
+      /* === Mini cart actions === */
+      document.getElementById("cartItems").addEventListener("click", async (e) => {
+        const cart = await getCart();
+        const idInc = e.target.closest("[data-inc]")?.getAttribute("data-inc");
+        const idDec = e.target.closest("[data-dec]")?.getAttribute("data-dec");
+        const idRem = e.target
+          .closest("[data-remove]")
+          ?.getAttribute("data-remove");
 
       if (idInc) {
         const it = cart.find((x) => x.ProductId == idInc);

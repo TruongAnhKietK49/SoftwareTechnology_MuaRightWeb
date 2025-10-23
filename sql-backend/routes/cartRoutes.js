@@ -3,10 +3,13 @@ const { getPool } = require("./config");
 
 const router = express.Router();
 
-router.get("/getAllItem", async (req, res) => {
+router.get("/getAllItem/:CustomerId", async (req, res) => {
   try {
     const pool = await getPool();
-    const result = await pool.request().query(`SELECT 
+    const { CustomerId } = req.params;
+    const result = await pool.request()
+    .input("CustomerId", CustomerId)
+    .query(`SELECT 
       Basket.BasketId,
       Basket.ProductId,
       Basket.Quantity,
@@ -15,6 +18,7 @@ router.get("/getAllItem", async (req, res) => {
       Product.ImageUrl,
       Product.Brand
       FROM Basket JOIN Product ON Basket.ProductId = Product.ProductId
+      WHERE Basket.CustomerId = @CustomerId
     `);
     res.json({ success: true, data: result.recordset });
   } catch (err) {
