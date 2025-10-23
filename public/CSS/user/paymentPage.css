@@ -14,6 +14,11 @@ body {
   background: linear-gradient(180deg, #0b0b0b 0%, #626842 100%);
 }
 
+main {
+  margin: 0 auto;
+  padding: 6rem 1rem 4rem;
+}
+
 a {
   color: var(--accent-color);
   text-decoration: none;
@@ -23,48 +28,11 @@ a:hover {
   color: #ffd54f;
 }
 
-label, span {
-    color: var(--text-color);
+label,
+span {
+  color: var(--text-color);
 }
 
-
-button {
-  background-color: var(--accent-color);
-  color: #0d0d0d;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background 0.3s, transform 0.2s;
-}
-
-button:hover {
-  background-color: #ffd54f;
-  transform: translateY(-2px);
-}
-
-.navbar {
-  background: linear-gradient(
-    135deg,
-    var(--primary-color) 0%,
-    var(--secondary-color) 100%
-  );
-}
-
-.navbar-brand {
-  font-weight: 700;
-  color: var(--accent-color) !important;
-}
-
-.nav-link {
-  color: var(--text-color) !important;
-}
-
-.nav-link:hover,
-.nav-link.active {
-  color: var(--accent-color) !important;
-}
 
 .checkout-container {
   background-color: var(--secondary-color);
@@ -251,9 +219,7 @@ button:hover {
 
 .hero-section {
   background: linear-gradient(
-    135deg,
-    var(--primary-color) 0%,
-    var(--secondary-color) 100%
+    135deg, rgb(31, 24, 24) 0%, rgb(66, 70, 48) 100%
   );
   color: var(--text-color);
   padding: 30px;
