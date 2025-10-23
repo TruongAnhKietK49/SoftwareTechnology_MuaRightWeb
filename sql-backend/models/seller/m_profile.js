@@ -1,11 +1,6 @@
 const sql = require("mssql");
 const { getPool } = require("../../routes/config");
 
-/**
- * Lấy thông tin chi tiết Seller Profile và Account
- * @param {number} sellerId ID của người bán
- * @returns {Promise<object>} Thông tin Seller
- */
 async function getSellerProfile(sellerId) {
     try {
         const pool = await getPool();
@@ -16,7 +11,7 @@ async function getSellerProfile(sellerId) {
                     A.Username, A.Email, A.Phone, A.ImageUrl, A.State,
                     S.FullName, S.Address, S.Birthday, S.Gender, S.StoreName, S.StoreAddress, S.Balance
                 FROM Account A
-                JOIN SellerProfile S ON A.AccountId = S.SellerId
+                LEFT JOIN SellerProfile S ON A.AccountId = S.SellerId
                 WHERE A.AccountId = @sellerId;
             `);
         
@@ -27,12 +22,6 @@ async function getSellerProfile(sellerId) {
     }
 }
 
-/**
- * Cập nhật thông tin Seller Profile và Account trong một transaction
- * @param {number} sellerId ID của người bán
- * @param {object} data Dữ liệu cập nhật
- * @returns {Promise<boolean>} Kết quả cập nhật
- */
 async function updateSellerProfile(sellerId, data) {
     const { 
         FullName, Address, Birthday, Gender, 
@@ -56,7 +45,6 @@ async function updateSellerProfile(sellerId, data) {
                 WHERE AccountId = @sellerId;
             `);
 
-
         const profileRequest = new sql.Request(transaction);
         await profileRequest
             .input('sellerId', sql.Int, sellerId)
@@ -67,10 +55,20 @@ async function updateSellerProfile(sellerId, data) {
             .input('StoreName', sql.NVarChar(200), StoreName)
             .input('StoreAddress', sql.NVarChar(500), StoreAddress)
             .query(`
-                UPDATE SellerProfile
-                SET FullName = @FullName, Address = @Address, Birthday = @Birthday, 
-                    Gender = @Gender, StoreName = @StoreName, StoreAddress = @StoreAddress
-                WHERE SellerId = @sellerId;
+                MERGE SellerProfile AS target
+                USING (SELECT @sellerId AS SellerId) AS source
+                ON (target.SellerId = source.SellerId)
+                WHEN MATCHED THEN
+                    UPDATE SET 
+                        FullName = @FullName, 
+                        Address = @Address, 
+                        Birthday = @Birthday, 
+                        Gender = @Gender, 
+                        StoreName = @StoreName, 
+                        StoreAddress = @StoreAddress
+                WHEN NOT MATCHED THEN
+                    INSERT (SellerId, FullName, Address, Birthday, Gender, StoreName, StoreAddress)
+                    VALUES (@sellerId, @FullName, @Address, @Birthday, @Gender, @StoreName, @StoreAddress);
             `);
 
         await transaction.commit();

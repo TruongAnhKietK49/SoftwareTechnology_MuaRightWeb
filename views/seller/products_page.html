@@ -327,6 +327,21 @@
         productData.Price = parseFloat(productData.Price);
         productData.Quantity = parseInt(productData.Quantity);
 
+        const price = parseFloat(productData.Price);
+        const quantity = parseInt(productData.Quantity);
+
+        if (productData.Price < 0) {
+            alert("Giá bán không được âm. Vui lòng nhập lại!");
+            document.querySelector('input[name="Price"]').value = '';
+            return;
+        }
+        if (productData.Quantity < 0) {
+            alert("Số lượng tồn không được âm. Vui lòng nhập lại!");
+            document.querySelector('input[name="Quantity"]').value = '';
+            return;
+        }
+
+
         try {
             const response = await fetch(`${API_URL}/seller/products/submit`, {
                 method: 'POST',
@@ -389,6 +404,21 @@
         }
         const productData = Object.fromEntries(new FormData(form).entries());
         const productId = productData.ProductId;
+
+        const price = parseFloat(productData.Price);
+        const quantity = parseInt(productData.Quantity);
+
+        if (price < 0) {
+            alert("Giá bán không được âm. Vui lòng nhập lại!");
+            document.querySelector('input[name="Price"]').value = '';
+            return;
+        }
+        if (quantity < 0) {
+            alert("Số lượng tồn không được âm. Vui lòng nhập lại!");
+            document.querySelector('input[name="Quantity"]').value = '';
+            return;
+        }
+
         try {
             const response = await fetch(`${API_URL}/seller/products/${productId}`, {
                 method: 'PUT',
