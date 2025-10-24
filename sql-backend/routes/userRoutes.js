@@ -19,6 +19,7 @@ router.get("/profile/:CustomerId", async (req, res) => {
           a.Phone,
           a.Role,
           a.ImageUrl,
+          a.CreatedAt AS JoinDate,
           c.FullName,
           c.Address,
           c.Birthday,
@@ -60,18 +61,10 @@ router.put("/profile/:CustomerId", async (req, res) => {
   reqAcc.input("AccountId", accountId);
   reqAcc.input("Email", Email);
   reqAcc.input("Phone", Phone);
-  reqAcc.input("ImageUrl", ImageUrl);
-  if (PasswordHash && PasswordHash.trim() !== "")
-    reqAcc.input("PasswordHash", PasswordHash);
 
   await reqAcc.query(`
     UPDATE Account
-    SET Email=@Email, Phone=@Phone, ImageUrl=@ImageUrl
-        ${
-          PasswordHash && PasswordHash.trim() !== ""
-            ? ", PasswordHash=@PasswordHash"
-            : ""
-        }
+    SET Email=@Email, Phone=@Phone
     WHERE AccountId=@AccountId
   `);
 
