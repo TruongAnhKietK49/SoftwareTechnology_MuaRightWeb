@@ -201,6 +201,8 @@ async function insertVoucher() {
     }
   } catch (error) {
     console.log("Lỗi khi insert-voucher: ", error);
+  } finally {
+    await closePool();
   }
 }
 

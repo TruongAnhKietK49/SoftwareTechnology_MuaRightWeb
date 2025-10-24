@@ -3,7 +3,6 @@ const { getPool } = require("../../routes/config");
 
 /**
  * Lấy tất cả sản phẩm ĐÃ ĐƯỢC DUYỆT 
- * @param {number} sellerId
  */
 async function getProductsBySeller(sellerId) {
     const pool = await getPool();
@@ -26,7 +25,6 @@ async function getProductsBySeller(sellerId) {
 
 /**
  * Thêm một sản phẩm mới
- * @param {object} productData
  */
 async function addProductForApproval(productData) {
     const finalTagName = [productData.TagName, '_PENDING_APPROVAL_'].filter(Boolean).join(',');
@@ -50,8 +48,6 @@ async function addProductForApproval(productData) {
 
 /**
  * Cập nhật thông tin một sản phẩm đã có
- * @param {number} productId 
- * @param {object} productData 
  */
 async function updateProductById(productId, productData) {
     const { NameProduct, Category, Quantity, Price, Description, Warranty, TagName } = productData;
@@ -77,7 +73,6 @@ async function updateProductById(productId, productData) {
 
 /**
  * Xóa một sản phẩm
- * @param {number} productId 
  */
 async function deleteProductById(productId) {
     const pool = await getPool();

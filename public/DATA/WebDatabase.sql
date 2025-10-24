@@ -1,6 +1,11 @@
 ﻿Create database WebDB
 Use WebDB
 
+-- Ngắt kết nối để drop database
+USE master;
+ALTER DATABASE WebDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+DROP DATABASE WebDB;
+
 CREATE TABLE Account (
 	AccountId		INT IDENTITY(1,1) PRIMARY KEY,
 	Username		NVARCHAR(100) NOT NULL UNIQUE,
@@ -84,8 +89,8 @@ CREATE TABLE Product (
     Brand NVARCHAR(100) NOT NULL DEFAULT('Unknown'),
     CreatedAt DATETIME2 DEFAULT SYSUTCDATETIME(),
     CONSTRAINT FK_Product_Seller FOREIGN KEY (SellerId) 
-        REFERENCES SellerProfile(SellerId)
-);
+        REFERENCES SellerProfile(SellerId) ON DELETE CASCADE
+)
 DROP Table Product
 
 CREATE TABLE Review (
@@ -95,8 +100,8 @@ CREATE TABLE Review (
     Rating       TINYINT CHECK (Rating BETWEEN 1 AND 5),
     Comment      NVARCHAR(MAX) NULL,
     CreatedAt    DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
-    CONSTRAINT FK_Review_Product FOREIGN KEY (ProductId) REFERENCES Product(ProductId),
-    CONSTRAINT FK_Review_Customer FOREIGN KEY (CustomerId) REFERENCES CustomerProfile(CustomerId)
+    CONSTRAINT FK_Review_Product FOREIGN KEY (ProductId) REFERENCES Product(ProductId) ON DELETE CASCADE,
+    CONSTRAINT FK_Review_Customer FOREIGN KEY (CustomerId) REFERENCES CustomerProfile(CustomerId) ON DELETE NO ACTION
 );
 DROP Table Review
 
@@ -107,8 +112,8 @@ CREATE TABLE Basket (
     Quantity     INT NOT NULL DEFAULT(1),
     UnitPrice    DECIMAL(18,2) NOT NULL,
     AddedAt      DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
-    CONSTRAINT FK_Basket_Customer FOREIGN KEY (CustomerId) REFERENCES CustomerProfile(CustomerId),
-    CONSTRAINT FK_Basket_Product FOREIGN KEY (ProductId) REFERENCES Product(ProductId)
+    CONSTRAINT FK_Basket_Customer FOREIGN KEY (CustomerId) REFERENCES CustomerProfile(CustomerId) ON DELETE CASCADE,
+    CONSTRAINT FK_Basket_Product FOREIGN KEY (ProductId) REFERENCES Product(ProductId) ON DELETE NO ACTION
 );
 DROP Table Basket
 
@@ -129,7 +134,7 @@ CREATE TABLE OrderProduct (
     ShippedAt    DATETIME2 NULL,
     DeliveredAt  DATETIME2 NULL,
     UpdatedAt    DATETIME2 NULL,
-    CONSTRAINT FK_Order_Customer FOREIGN KEY (CustomerId) REFERENCES CustomerProfile(CustomerId),
+    CONSTRAINT FK_Order_Customer FOREIGN KEY (CustomerId) REFERENCES CustomerProfile(CustomerId) ON DELETE CASCADE,
     CONSTRAINT FK_Order_Shipper FOREIGN KEY (ShipperId) REFERENCES ShipperProfile(ShipperId),
     CONSTRAINT CHK_Order_State CHECK (State IN ('Pending','Approved','Shipped','Delivered','Cancelled'))
 );
@@ -161,8 +166,8 @@ CREATE TABLE Voucher (
     ValidFrom    DATETIME2 NULL,                  -- Ngày bắt đầu có hiệu lực
     ValidTo      DATETIME2 NULL,                  -- Ngày hết hạn
     IsActive     BIT NOT NULL DEFAULT(1),         -- Voucher còn hoạt động hay không
-	CONSTRAINT FK_Voucher_Seller FOREIGN KEY (CreatedBySeller) REFERENCES SellerProfile(SellerId),
-    CONSTRAINT FK_Voucher_Admin FOREIGN KEY (CreatedByAdmin) REFERENCES AdminProfile(AdminId),
+	CONSTRAINT FK_Voucher_Seller FOREIGN KEY (CreatedBySeller) REFERENCES SellerProfile(SellerId) ON DELETE CASCADE,
+    CONSTRAINT FK_Voucher_Admin FOREIGN KEY (CreatedByAdmin) REFERENCES AdminProfile(AdminId) ,
     CONSTRAINT FK_Voucher_Customer FOREIGN KEY (CustomerId) REFERENCES CustomerProfile(CustomerId)
 );
 Drop Table Voucher
@@ -176,8 +181,8 @@ CREATE TABLE VoucherUsage (
     OrderId     INT NULL,             -- đơn hàng mà voucher được áp dụng
     UsedDate    DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
 
-    CONSTRAINT FK_VoucherUsage_Voucher FOREIGN KEY (VoucherId) REFERENCES Voucher(VoucherId),
-    CONSTRAINT FK_VoucherUsage_Customer FOREIGN KEY (CustomerId) REFERENCES CustomerProfile(CustomerId),
+    CONSTRAINT FK_VoucherUsage_Voucher FOREIGN KEY (VoucherId) REFERENCES Voucher(VoucherId) ON DELETE CASCADE,
+    CONSTRAINT FK_VoucherUsage_Customer FOREIGN KEY (CustomerId) REFERENCES CustomerProfile(CustomerId) ON DELETE NO ACTION,
 
     -- 🔒 Mỗi khách hàng chỉ được dùng 1 lần / 1 voucher
     CONSTRAINT UQ_VoucherUsage UNIQUE (VoucherId, CustomerId)

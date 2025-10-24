@@ -6,284 +6,323 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MuaRight – Perfume Store</title>
 
-
+  <!-- Bootstrap & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./public/CSS/index.css">
 
+  <!-- AOS (Animate On Scroll) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+  <!-- Link CSS -->
+  <link href="./public/CSS/user/index.css" rel="stylesheet">
 </head>
 
 <body>
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-dark fixed-top border-bottom border-opacity-25 border-light">
-    <div class="container">
-      <a class="navbar-brand fw-semibold text-gold" href="./index.html">MuaRight</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div id="nav" class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link active" href="./index.html">Trang chủ</a></li>
-
-          <!-- 🔗 Sửa: trỏ đúng sang shop.html -->
-          <li class="nav-item"><a class="nav-link" href="./views/user/Product_Page.html">Shop</a></li>
-
-          <li class="nav-item"><a class="nav-link" href="./views/user/Blog_Page.html">Blog</a></li>
-          <li class="nav-item"><a class="nav-link" href="./template/pages/signIn_page.html"><i
-                class="bi bi-person"></i><span id="username"></span></a></li>
-          <li class="nav-item"><button onclick="logout()">Đăng xuất</button></li>
-        </ul>
-      </div>
-    </div>
+  <!-- NAVBAR (kept as-is; yours may already be present in project) -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="sidebar">
   </nav>
 
-  <main class="mt-5 pt-4">
+  <!-- MAIN -->
+  <main class="container-lg" style="padding-top:100px; padding-bottom:40px;">
     <!-- HERO -->
-    <section id="home" class="hero container py-5 scroll-anchor">
+    <section class="hero" data-aos="fade-up" data-aos-duration="800">
       <div class="row align-items-center g-4">
-        <div class="col-lg-6">
-          <h1 class="hero-title">
-            “Nâng tầm cảm xúc của bạn cùng<br>
-            hương thơm chiến thắng!”
-            <span class="hero-leaf">🌿</span>
-          </h1>
-          <p class="hero-sub">Mua sắm ngay hôm nay và tận hưởng hương vị ngọt ngào của chiến thắng cùng MuaRight.</p>
-          <a href="#bestsellers" class="btn btn-gold px-4 mt-3">Shop Now</a>
+        <div class="col-lg-6 hero-left" data-aos="fade-right" data-aos-duration="800">
+          <div class="hero-badge">NEW COLLECTION • Victory Scented</div>
+          <h1 class="hero-title">Nâng tầm cảm xúc của bạn — <span style="color:var(--accent-color)">Hương chiến
+              thắng</span></h1>
+          <p class="hero-sub">Bộ sưu tập tuyển chọn những nốt hương tinh tế, dành cho khoảnh khắc chiến thắng và tôn
+            vinh cá tính riêng của bạn.</p>
+          <div class="d-flex gap-3 hero-cta">
+            <a href="#bestsellers" class="btn btn-warning btn-lg">Mua ngay</a>
+            <a href="#blog" class="btn btn-outline-light btn-lg">Khám phá blog</a>
+          </div>
         </div>
-        <div class="col-lg-6 text-center">
-          <img class="img-fluid rounded-5 shadow-hero" alt="Hero bottle" src="hình ảnh/23.jpg" alt="Ảnh 23" />
+
+        <div class="col-lg-6" data-aos="fade-left" data-aos-duration="900">
+          <!-- use your real image path -->
+          <img class="hero-img"
+            src="https://img.freepik.com/premium-photo/purple-color-bottle-perfume-purple-background_145644-18479.jpg?w=2000"
+            alt="Hero perfume">
         </div>
-    </section>
-    <!-- WELCOME -->
-    <section class="welcome-banner text-center text-white py-5">
-      <div class="overlay"></div>
-      <div class="container position-relative">
-        <h2 class="fw-semibold text-gold mb-3">Chào mừng bạn đến với MuaRight!</h2>
-        <p class="mx-auto lead" style="max-width: 720px;">
-          Chào mừng bạn đến với MuaRight Perfumes, nơi tinh thần chiến thắng và khải hoàn
-          được thổi hồn qua từng nốt hương đầy cảm hứng. Bộ sưu tập <em>“Victory Scented”</em> là biểu tượng
-          tôn vinh thành công — bởi chúng tôi tin rằng mỗi chiến thắng đều xứng đáng có một mùi hương riêng.
-          Với những hương thơm được tuyển chọn tinh tế, Local Face mang đến trải nghiệm nâng tầm cảm xúc,
-          khơi dậy tự tin và truyền cảm hứng trên hành trình chinh phục của bạn. ✨
-        </p>
       </div>
     </section>
 
-    <!-- VALUE -->
-    <section id="value" class="scroll-anchor">
-      <div class="container">
-        <div class="row align-items-center g-4">
-          <!-- Ảnh bên trái -->
-          <div class="col-lg-6">
-            <img src="hình ảnh/15.jpg" alt="Value image" class="value-img">
+    <!-- BEST SELLERS (Carousel) -->
+    <section id="bestsellers" class="section" data-aos="fade-up" data-aos-duration="800">
+      <div class="d-flex justify-content-between align-items-end mb-3">
+        <div class="section-title"><i class="bi bi-star-fill"></i> BEST SELLERS</div>
+        <small class="text-muted">Được yêu thích nhất</small>
+      </div>
+
+      <div id="bestCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000" data-aos="fade-up">
+        <div class="carousel-inner">
+
+          <!-- Slide 1 (4 items) -->
+          <div class="carousel-item active">
+            <div class="row">
+              <div class="col-6 col-md-3">
+                <div class="product-card h-100">
+                  <img src="hình ảnh/17.jpg" alt="Luxurious Elixir">
+                  <div class="product-body">
+                    <div class="product-title">Luxurious Elixir</div>
+                    <div class="product-meta">100ml • Eau de Parfum</div>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                      <div class="product-price">$250</div>
+                      <a href="views/user/shop.html?highlight=elixir"
+                        class="btn btn-sm btn-outline-light rounded-pill">Mua</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6 col-md-3">
+                <div class="product-card h-100">
+                  <img src="hình ảnh/13.jpg" alt="The Golden Legacy">
+                  <div class="product-body">
+                    <div class="product-title">The Golden Legacy</div>
+                    <div class="product-meta">100ml • Eau de Parfum</div>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                      <div class="product-price">$160</div>
+                      <a href="views/user/shop.html?highlight=legacy"
+                        class="btn btn-sm btn-outline-light rounded-pill">Mua</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6 col-md-3">
+                <div class="product-card h-100">
+                  <img src="hình ảnh/10.jpg" alt="Luxurious Essence">
+                  <div class="product-body">
+                    <div class="product-title">Luxurious Essence</div>
+                    <div class="product-meta">100ml • Eau de Parfum</div>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                      <div class="product-price">$260</div>
+                      <a href="views/user/shop.html?highlight=essence"
+                        class="btn btn-sm btn-outline-light rounded-pill">Mua</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6 col-md-3">
+                <div class="product-card h-100">
+                  <img src="hình ảnh/5.jpg" alt="Luxurious Icon">
+                  <div class="product-body">
+                    <div class="product-title">Luxurious Icon</div>
+                    <div class="product-meta">100ml • Eau de Parfum</div>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                      <div class="product-price">$220</div>
+                      <a href="views/user/shop.html?highlight=icon"
+                        class="btn btn-sm btn-outline-light rounded-pill">Mua</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <!-- Nội dung bên phải -->
-          <div class="col-lg-6">
-            <h3 class="value-title">
-              Giá trị cốt lõi của chúng tôi <span class="leaf">🌿</span>
+          <!-- Slide 2 (repeat or other products) -->
+          <div class="carousel-item">
+            <div class="row">
+              <div class="col-6 col-md-3">
+                <div class="product-card h-100">
+                  <img src="hình ảnh/21.jpg" alt="Natural Heart">
+                  <div class="product-body">
+                    <div class="product-title">Natural Heart</div>
+                    <div class="product-meta">75ml • Eau de Toilette</div>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                      <div class="product-price">$120</div>
+                      <a href="#" class="btn btn-sm btn-outline-light rounded-pill">Mua</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6 col-md-3">
+                <div class="product-card h-100">
+                  <img src="hình ảnh/20.jpg" alt="Men's Guide">
+                  <div class="product-body">
+                    <div class="product-title">Signature for Him</div>
+                    <div class="product-meta">100ml • Eau de Parfum</div>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                      <div class="product-price">$140</div>
+                      <a href="#" class="btn btn-sm btn-outline-light rounded-pill">Mua</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6 col-md-3">
+                <div class="product-card h-100">
+                  <img src="hình ảnh/24.jpg" alt="Layering Tips">
+                  <div class="product-body">
+                    <div class="product-title">Layering Duo</div>
+                    <div class="product-meta">Set • Mix & Match</div>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                      <div class="product-price">$85</div>
+                      <a href="#" class="btn btn-sm btn-outline-light rounded-pill">Mua</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6 col-md-3">
+                <div class="product-card h-100">
+                  <img src="hình ảnh/25.jpg" alt="House Signature">
+                  <div class="product-body">
+                    <div class="product-title">House Signature</div>
+                    <div class="product-meta">50ml • Parfum</div>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                      <div class="product-price">$99</div>
+                      <a href="#" class="btn btn-sm btn-outline-light rounded-pill">Mua</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#bestCarousel" data-bs-slide="prev"
+          aria-label="Previous">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#bestCarousel" data-bs-slide="next"
+          aria-label="Next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- BLOG (magazine-like preview) -->
+    <section id="blog" class="section" data-aos="fade-up" data-aos-duration="800">
+      <div class="d-flex justify-content-between align-items-end mb-3">
+        <div class="section-title"><i class="bi bi-newspaper"></i> BLOG</div>
+        <small class="text-muted">Câu chuyện • Bí quyết • Lịch sử</small>
+      </div>
+
+      <div class="blog-grid">
+        <article class="blog-card" data-aos="fade-up" data-aos-delay="50">
+          <img class="blog-img" src="https://images.pexels.com/photos/1379636/pexels-photo-1379636.jpeg" alt="Lavender">
+          <div class="blog-body">
+            <div class="blog-title">💜 Bản hòa ca dịu êm của hương oải hương</div>
+            <p class="mb-3">Oải hương – biểu tượng thư giãn và thuần khiết; khám phá nguồn gốc, cách sử dụng và phối
+              hương.</p>
+            <a href="views/user/Blog.html" class="btn btn-outline-warning btn-sm rounded-pill px-3">Đọc tiếp</a>
+          </div>
+        </article>
+
+        <article class="blog-card" data-aos="fade-up" data-aos-delay="120">
+          <img class="blog-img"
+            src="https://tse4.mm.bing.net/th/id/OIP.01VSlXaIZpvCZnpi6gSnFgHaEV?cb=12&w=1366&h=800&rs=1&pid=ImgDetMain&o=7&rm=3"
+            alt="Art of Selection">
+          <div class="blog-body">
+            <div class="blog-title">🌸 Nghệ thuật tuyển chọn nước hoa cao cấp</div>
+            <p class="mb-3">Từ nguyên liệu đến chữ ký hương — tìm hiểu quá trình tạo nên một tuyệt tác mùi hương.</p>
+            <a href="views/user/Blog.html" class="btn btn-outline-warning btn-sm rounded-pill px-3">Đọc tiếp</a>
+          </div>
+        </article>
+
+        <article class="blog-card" data-aos="fade-up" data-aos-delay="180">
+          <img class="blog-img"
+            src="https://tse1.mm.bing.net/th/id/OIP.jDrDbYuliLcnYc3lugwbZwHaFX?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3"
+            alt="Rose Timeless">
+          <div class="blog-body">
+            <div class="blog-title">🥀 Vẻ đẹp vượt thời gian của nước hoa hồng</div>
+            <p class="mb-3">Hoa hồng – từ Grasse đến Thổ Nhĩ Kỳ — khám phá dải sắc thái và sự quý phái trong từng giọt
+              hương.</p>
+            <a href="views/user/Blog.html" class="btn btn-outline-warning btn-sm rounded-pill px-3">Đọc tiếp</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- VALUE / ABOUT -->
+    <section id="value" class="section" data-aos="fade-up" data-aos-duration="800">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-6" data-aos="fade-right">
+          <div class="value-panel">
+            <h3 style="color:var(--accent-color); font-weight:800; margin-bottom:.5rem;">Giá trị cốt lõi của MuaRight
             </h3>
+            <p class="mb-2" style="color:var(--subtext)">Chúng tôi tin rằng từng mùi hương kể một câu chuyện. Từ nguyên
+              liệu tuyển chọn đến nghệ nhân điều hương, mọi quyết định đều nhằm đem lại trải nghiệm thượng lưu, bền vững
+              và giàu cảm xúc.</p>
+            <ul style="color:var(--subtext); margin-top:.5rem">
+              <li>Nguyên liệu tinh tuyển từ các vùng trồng danh tiếng.</li>
+              <li>Sáng tạo tôn trọng thiên nhiên & bền vững.</li>
+              <li>Chăm sóc khách hàng chu đáo, tư vấn cá nhân hóa.</li>
+            </ul>
+          </div>
+        </div>
 
-            <div class="value-box">
-              <p class="mb-0">
-                Tại MuaRight, cửa hàng nước hoa của chúng tôi được xây dựng trên nền tảng đam mê
-                và sự chân thật, với niềm tin rằng mỗi khách hàng đều mang một cá tính và phong cách
-                riêng biệt. Chúng tôi mang đến bộ sưu tập hương thơm đa dạng để tôn vinh nét độc đáo ấy,
-                đồng thời tạo nên một không gian thân thiện, cởi mở và đầy cảm hứng, nơi mọi người có thể
-                kết nối và tìm thấy nguồn năng lượng sáng tạo mới. Hướng đến phát triển bền vững và học hỏi
-                không ngừng, MuaRight không chỉ là một điểm đến mua sắm, mà còn là một cộng đồng truyền cảm hứng
-                và trao quyền cho mỗi cá nhân trên hành trình khám phá hương thơm của riêng mình.
-              </p>
+        <div class="col-lg-6" data-aos="fade-left">
+          <img src="https://tse1.mm.bing.net/th/id/OIP.TFWvbnjTTOq7eC3dfaApAwHaEK?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3"
+            alt="Value image" class="value-img">
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS (small carousel) -->
+    <section class="section" data-aos="fade-up" data-aos-duration="700">
+      <div class="section-title mb-3"><i class="bi bi-people-fill"></i> KHÁCH HÀNG NÓI GÌ</div>
+
+      <div id="testiCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4200">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="testi-card">
+              <p>“MuaRight đã thay đổi cách mình chọn nước hoa — sản phẩm chất lượng, dịch vụ tận tâm.”</p>
+              <div class="text-muted small">— Lan, Hà Nội</div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="testi-card">
+              <p>“Hương thơm rất bền, giàu tầng mùi — mình được nhiều lời khen khi dùng.”</p>
+              <div class="text-muted small">— Minh, TP.HCM</div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- BEST SELLERS -->
-    <section id="bestsellers" class="container py-4 scroll-anchor">
-      <h4 class="section-title"><i class="bi bi-sun-fill"></i> Sản phẩm bán chạy nhất</h4>
-      <div class="row g-3">
-        <!-- Luxurious Elixir -->
-        <div class="col-6 col-md-3">
-          <a href="views/user/shop.html?highlight=elixir" class="text-decoration-none">
-            <div class="product-card h-100">
-              <img src="hình ảnh/17.jpg" alt="Luxurious Elixir">
-              <div class="p-3">
-                <div class="small text-gold">★★★★★</div>
-                <h6 class="mb-1">Luxurious Elixir</h6>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span class="price">$250</span><span class="muted">100ml</span>
-                </div>
-              </div>
-            </div>
-          </a>
-        </div>
-
-        <!-- The Golden Legacy -->
-        <div class="col-6 col-md-3">
-          <a href="views/user/shop.html?highlight=legacy" class="text-decoration-none">
-            <div class="product-card h-100">
-              <img src="hình ảnh/13.jpg" alt="The Golden Legacy">
-              <div class="p-3">
-                <div class="small text-gold">★★★★★</div>
-                <h6 class="mb-1">The Golden Legacy</h6>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span class="price">$160</span><span class="muted">100ml</span>
-                </div>
-              </div>
-            </div>
-          </a>
-        </div>
-
-        <!-- Luxurious Essence -->
-        <div class="col-6 col-md-3">
-          <a href="views/user/shop.html?highlight=essence" class="text-decoration-none">
-            <div class="product-card h-100">
-              <img src="hình ảnh/10.jpg" alt="Luxurious Essence">
-              <div class="p-3">
-                <div class="small text-gold">★★★★★</div>
-                <h6 class="mb-1">Luxurious Essence</h6>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span class="price">$260</span><span class="muted">100ml</span>
-                </div>
-              </div>
-            </div>
-          </a>
-        </div>
-
-        <!-- Luxurious Icon -->
-        <div class="col-6 col-md-3">
-          <a href="views/user/shop.html?highlight=icon" class="text-decoration-none">
-            <div class="product-card h-100">
-              <img src="hình ảnh/5.jpg" alt="Luxurious Icon">
-              <div class="p-3">
-                <div class="small text-gold">★★★★★</div>
-                <h6 class="mb-1">Luxurious Icon</h6>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span class="price">$220</span><span class="muted">100ml</span>
-                </div>
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <h3 class="blog-title mb-4">Bài viết mới nhất 📰</h3>
-
-      <div class="row g-4 justify-content-center">
-        <!-- Card 1 -->
-        <div class="col-md-4">
-          <div class="blog-card">
-            <img src="hình ảnh/5.jpg" alt="Lavender" class="blog-img">
-            <div class="blog-body">
-              <h5 class="blog-heading">
-                💜 Bản hòa ca dịu êm của hương oải hương
-              </h5>
-              <p class="blog-text">
-                Với mùi hương quyến rũ và lịch sử lâu đời, oải hương (lavender) từ lâu đã được xem như biểu tượng của sự
-                thư giãn và thuần khiết...
-              </p>
-              <a href="views/user/Blog.html" class="btn btn-outline-warning btn-sm rounded-pill px-3">Read More</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="col-md-4">
-          <div class="blog-card">
-            <img src="hình ảnh/1.jpg" alt="Amber" class="blog-img">
-            <div class="blog-body">
-              <h5 class="blog-heading">
-                🌸 Nghệ thuật tuyển chọn nước hoa cao cấp
-              </h5>
-              <p class="blog-text">
-                Mỗi mùi hương là một hành trình cảm xúc – kết tinh của nguyên liệu tinh tuyển và tay nghề bậc thầy trong
-                thế giới nước hoa cao cấp...
-              </p>
-              <a href="views/user/Blog.html" class="btn btn-outline-warning btn-sm rounded-pill px-3">Read More</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="col-md-4">
-          <div class="blog-card">
-            <img src="hình ảnh/11.jpg" alt="Rose" class="blog-img">
-            <div class="blog-body">
-              <h5 class="blog-heading">
-                🥀 Vẻ đẹp vượt thời gian của nước hoa hồng
-              </h5>
-              <p class="blog-text">
-                Hoa hồng – biểu tượng của sự thanh lịch và tinh tế – luôn là “nữ hoàng” trong thế giới hương thơm, mang
-                lại cảm giác tự tin và sang trọng...
-              </p>
-              <a href="views/user/Blog.html" class="btn btn-outline-warning btn-sm rounded-pill px-3">Read More</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      </div>
-    </section>
   </main>
 
-  <!-- FOOTER CONTAINER -->
-
+  <!-- FOOTER CONTAINER (kept external) -->
   <div id="footer-container"></div>
 
-  <!-- Script tự động tải footer -->
+  <!-- SCRIPTS: Bootstrap, AOS, small init -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+  <!-- Link JS sidebar -->
+  <script src="./public/JS/sidebarCustomer.js"></script>
+
   <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-      const box = document.getElementById("footer-container");
-      if (!box) return;
-
-      // Các đường dẫn khả dụng tùy vị trí trang
-      const paths = [
-        "../../template/includes/footer.html", // nếu trang nằm sâu 2 cấp (vd: views/user/shop.html)
-        "../template/includes/footer.html",    // nếu trang nằm sâu 1 cấp (vd: views/shop.html)
-        "template/includes/footer.html",       // nếu file ở root
-        "partials/footer.html",                // fallback
-        "footer.html"                          // fallback cuối
-      ];
-
-      for (const p of paths) {
-        try {
-          const res = await fetch(p, { cache: "no-cache" });
-          if (res.ok) {
-            const html = await res.text();
-            box.innerHTML = html;
-
-            // Gán năm hiện tại vào phần tử có id="mr-year"
-            const yearEl = box.querySelector("#mr-year");
-            if (yearEl) yearEl.textContent = new Date().getFullYear();
-            return; // Dừng lại khi đã tải thành công
-          }
-        } catch (e) {
-          // Thử đường dẫn kế tiếp
-        }
-      }
-
-      console.error("❌ Không tải được footer từ các đường dẫn:", paths);
+    // init AOS
+    AOS.init({
+      once: true,
+      duration: 700,
+      easing: 'ease-out-cubic',
+      offset: 120
     });
 
-    const account = JSON.parse(localStorage.getItem("account"));
-    if (account) {
-      document.getElementById("username").innerText = account.Username;
-      console.log("Tài khoản hiện tại:", account);
+    // Optional: make carousel show multiple cards responsively by cloning items if needed
+    // (Bootstrap 5 default shows one slide; our slides contain multiple columns so it's fine.)
+    // Ensure keyboard swipe works
+    const bestCarouselEl = document.getElementById('bestCarousel');
+    if (bestCarouselEl) {
+      bestCarouselEl.addEventListener('slide.bs.carousel', function (e) {
+        // placeholder for logic if want to lazy-load images or analytics
+      });
     }
-    
-    function logout() {
-      if (confirm("Bạn có chắc muốn đăng xuất không?")) {
-        localStorage.removeItem("account");
-        window.location.href = "./template/pages/signIn_page.html";
-      }
-    }
-
-
   </script>
 
+  <!-- Optional: your site sidebar script (if used) -->
+  <script src="./public/JS/sidebarCustomer.js"></script>
 </body>
 
 </html>

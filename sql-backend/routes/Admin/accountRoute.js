@@ -19,29 +19,177 @@ router.get("/accounts", async (req, res) => {
   }
 });
 
-// Xóa tài khoản theo Username
+// 🧩 Xóa tài khoản theo Username (xử lý toàn bộ khóa ngoại an toàn)
 router.delete("/accounts/:username", async (req, res) => {
   const username = req.params.username;
 
   try {
     const pool = await getPool();
-    const result = await pool
-      .request()
-      .query(`DELETE FROM Account WHERE Username = N'${username}'`);
 
-    if (result.rowsAffected[0] > 0) {
-      console.log(`✅ Đã xóa tài khoản: ${username}`);
-      res.json({ success: true, message: "Xóa tài khoản thành công!" });
-    } else {
-      res
-        .status(404)
-        .json({ success: false, message: "Không tìm thấy tài khoản!" });
+    // 🔍 1️⃣ Lấy thông tin tài khoản
+    const accResult = await pool
+      .request()
+      .query(
+        `SELECT AccountId, Role FROM Account WHERE Username = N'${username}'`
+      );
+
+    if (accResult.recordset.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy tài khoản!",
+      });
     }
+
+    const { AccountId, Role } = accResult.recordset[0];
+
+    console.log(`🧾 Bắt đầu xóa tài khoản ${username} (${Role})`);
+
+    // ============================
+    // 2️⃣ Xử lý từng Role riêng
+    // ============================
+
+    // --- CUSTOMER ---
+    if (Role === "Customer") {
+      await pool.request().query(`
+        -- Xóa các order items của đơn hàng của customer
+        DELETE FROM OrderItem
+        WHERE OrderId IN (SELECT OrderId FROM OrderProduct WHERE CustomerId = ${AccountId});
+
+        -- Xóa voucher usage
+        DELETE FROM VoucherUsage WHERE CustomerId = ${AccountId};
+
+        -- Xóa order
+        DELETE FROM OrderProduct WHERE CustomerId = ${AccountId};
+
+        -- Xóa basket
+        DELETE FROM Basket WHERE CustomerId = ${AccountId};
+
+        -- Xóa review
+        DELETE FROM Review WHERE CustomerId = ${AccountId};
+
+        -- Xóa profile
+        DELETE FROM CustomerProfile WHERE CustomerId = ${AccountId};
+      `);
+    }
+
+    // --- SELLER ---
+    else if (Role === "Seller") {
+      await pool.request().query(`
+    -- Xóa review của sản phẩm do seller tạo
+    DELETE FROM Review 
+    WHERE ProductId IN (SELECT ProductId FROM Product WHERE SellerId = ${AccountId});
+
+    -- Xóa order item chứa sản phẩm của seller
+    DELETE FROM OrderItem 
+    WHERE ProductId IN (SELECT ProductId FROM Product WHERE SellerId = ${AccountId});
+
+    -- ⚠️ Xóa order item có SellerId trỏ trực tiếp đến seller này
+    DELETE FROM OrderItem WHERE SellerId = ${AccountId};
+
+    -- Xóa voucher do seller tạo
+    DELETE FROM Voucher WHERE CreatedBySeller = ${AccountId};
+
+    -- ⚠️ Xóa các sản phẩm trong giỏ hàng trước khi xóa Product
+    DELETE FROM Basket 
+    WHERE ProductId IN (SELECT ProductId FROM Product WHERE SellerId = ${AccountId});
+
+    -- Xóa sản phẩm
+    DELETE FROM Product WHERE SellerId = ${AccountId};
+
+    -- Xóa profile
+    DELETE FROM SellerProfile WHERE SellerId = ${AccountId};
+  `);
+
+      // 🧩 4️⃣ Xóa sản phẩm chờ duyệt của Seller trong pendingProducts.json
+      const fs = require("fs");
+      const path = require("path");
+
+      const filePath = path.join(
+        __dirname,
+        "../../../public/DATA/pendingProducts.json"
+      );
+
+      try {
+        if (fs.existsSync(filePath)) {
+          const data = fs.readFileSync(filePath, "utf8");
+          let products = JSON.parse(data);
+
+          // ✅ Ép kiểu về number để so sánh chính xác
+          const sellerIdNum = Number(AccountId);
+
+          // ✅ Lọc ra sản phẩm của seller bị xóa (để đếm trước)
+          const deletedItems = products.filter(
+            (p) => Number(p.SellerId) === sellerIdNum
+          );
+
+          // ✅ Giữ lại sản phẩm của các seller khác
+          const newProducts = products.filter(
+            (p) => Number(p.SellerId) !== sellerIdNum
+          );
+
+          // ✅ Ghi lại file JSON
+          fs.writeFileSync(
+            filePath,
+            JSON.stringify(newProducts, null, 2),
+            "utf8"
+          );
+
+          console.log(
+            `🗑️ Đã xóa ${deletedItems.length} sản phẩm chờ duyệt của seller ${username} (ID: ${AccountId})`
+          );
+        } else {
+          console.warn(
+            "⚠️ File pendingProducts.json không tồn tại, bỏ qua bước xóa."
+          );
+        }
+      } catch (fileErr) {
+        console.error("❌ Lỗi khi cập nhật pendingProducts.json:", fileErr);
+      }
+    }
+
+    // --- SHIPPER ---
+    else if (Role === "Shipper") {
+      await pool.request().query(`
+        -- Hủy gán shipper trong các đơn hàng trước khi xóa
+        UPDATE OrderProduct SET ShipperId = NULL WHERE ShipperId = ${AccountId};
+
+        -- Xóa profile
+        DELETE FROM ShipperProfile WHERE ShipperId = ${AccountId};
+      `);
+    }
+
+    // --- ADMIN ---
+    else if (Role === "Admin") {
+      await pool.request().query(`
+        -- Xóa voucher admin tạo
+        DELETE FROM Voucher WHERE CreatedByAdmin = ${AccountId};
+
+        -- Xóa profile
+        DELETE FROM AdminProfile WHERE AdminId = ${AccountId};
+      `);
+    }
+
+    // ============================
+    // 3️⃣ Cuối cùng xóa Account
+    // ============================
+    await pool.request().query(`
+      DELETE FROM Account WHERE AccountId = ${AccountId};
+    `);
+
+    console.log(
+      `✅ Đã xóa tài khoản và dữ liệu liên quan của ${username} (${Role})`
+    );
+
+    res.json({
+      success: true,
+      message: `Đã xóa tài khoản ${username} (${Role}) và toàn bộ dữ liệu liên quan.`,
+    });
   } catch (err) {
     console.error("❌ Lỗi khi xóa tài khoản:", err);
-    res
-      .status(500)
-      .json({ success: false, message: "Lỗi server khi xóa tài khoản." });
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server khi xóa tài khoản.",
+    });
   }
 });
 
