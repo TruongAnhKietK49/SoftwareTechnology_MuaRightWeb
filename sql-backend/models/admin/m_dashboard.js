@@ -71,10 +71,47 @@ async function insertVoucher(data) {
   console.log(`✔ Insert Voucher: ${data.Code}`);
 }
 
+// Lấy doanh thu biểu đồ tròn
+async function getRevenuePieChart() {
+  const pool = await getPool();
+  const result = await pool.request().query(`
+    SELECT 
+        p.Brand,
+        SUM(oi.LineTotal) AS Revenue
+    FROM OrderItem oi
+    JOIN Product p ON oi.ProductId = p.ProductId
+    JOIN OrderProduct o ON oi.OrderId = o.OrderId
+    WHERE o.State = 'Delivered'
+    GROUP BY p.Brand
+    ORDER BY Revenue DESC
+  `);
+
+  // ✅ Luôn trả về mảng (rỗng nếu không có)
+  return result.recordset || [];
+}
+
+// =================== Thống kê người dùng đăng ký theo tháng ===================
+async function getUserRegistrationByMonth() {
+  const pool = await getPool();
+  const result = await pool.request().query(`
+        SELECT 
+          MONTH(CreatedAt) AS Month,
+          COUNT(*) AS TotalUsers
+        FROM Account
+        WHERE Role IN ('Customer', 'Seller', 'Shipper')
+          AND YEAR(CreatedAt) = YEAR(SYSUTCDATETIME())
+        GROUP BY MONTH(CreatedAt)
+        ORDER BY MONTH(CreatedAt)
+    `);
+  return result.recordset || [];
+}
+
 module.exports = {
   getOrderProduct,
   getRevenue,
   getAccounts,
   getProducts,
   insertVoucher,
+  getRevenuePieChart,
+  getUserRegistrationByMonth,
 };

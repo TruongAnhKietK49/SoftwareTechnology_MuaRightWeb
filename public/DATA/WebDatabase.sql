@@ -15,7 +15,7 @@ CREATE TABLE Account (
 	Role			NVARCHAR(20) NOT NULL,
     State           NVARCHAR(20) NOT NULL DEFAULT('Active'),
     ImageUrl        NVARCHAR(1000) NULL,
-    CreatedAt DATETIME2 DEFAULT SYSUTCDATETIME(),
+    CreatedAt       DATETIME2 DEFAULT SYSUTCDATETIME(),
 	CONSTRAINT CHK_Account_Role CHECK (Role IN ('Customer','Seller','Shipper','Admin'))
 )
 Drop Table Account

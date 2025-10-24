@@ -179,17 +179,23 @@ async function loadTopProducts() {
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>
-          <div class="d-flex align-items-center">
-            <img src="${item.ImageUrl}" class="rounded me-3"
-                alt="${item.NameProduct}" style="width: 40px; height: 40px; object-fit: cover;">
-            <div>
-              <div class="fw-semibold">${item.NameProduct}</div>
-              <small class="text-muted">${item.Category}</small>
-            </div>
+        <div class="d-flex align-items-center">
+          <img 
+            src="${item.ImageUrl}" 
+            alt="${item.NameProduct}" 
+            class="product-img rounded me-3"
+          >
+          <div>
+            <div class="fw-semibold">${item.NameProduct}</div>
+            <small >${item.Category}</small>
           </div>
-        </td>
-        <td class="text-center">${item.TotalSold}</td>
-        <td class="text-end">${item.Revenue.toLocaleString("vi-VN")}₫</td>
+        </div>
+      </td>
+      <td class="text-center fw-semibold">${item.TotalSold}</td>
+      <td class="text-end fw-semibold ">
+        ${item.Revenue.toLocaleString("vi-VN")}₫
+      </td>
+
       `;
       tbody.appendChild(tr);
     });
@@ -198,10 +204,167 @@ async function loadTopProducts() {
   }
 }
 
+// ===== Doanh thu theo Brand (Pie Chart) =====
+async function loadRevenueByBrand() {
+  try {
+    const response = await fetch(
+      "http://localhost:3000/admin/dashboard/revenue-pie-chart"
+    );
+    const data = await response.json();
+
+    // Kiểm tra dữ liệu
+    if (!data || data.length === 0) {
+      console.warn("⚠️ Không có dữ liệu doanh thu theo brand");
+      const ctx = document.getElementById("pieChart").getContext("2d");
+      ctx.font = "16px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText(
+        "Không có dữ liệu",
+        ctx.canvas.width / 2,
+        ctx.canvas.height / 2
+      );
+      return;
+    }
+
+    // Chuẩn bị dữ liệu
+    const brands = data.map((item) => item.Brand);
+    const revenues = data.map((item) => item.Revenue);
+
+    // Lấy phần tử canvas và đặt chiều cao đồng bộ
+    const canvas = document.getElementById("pieChart");
+    canvas.height = 300; // chiều cao cố định để khớp với lineChart
+    const ctx = canvas.getContext("2d");
+
+    // Hủy biểu đồ cũ nếu tồn tại (tránh bị trùng lặp)
+    if (window.pieChartInstance) {
+      window.pieChartInstance.destroy();
+    }
+
+    // Tạo biểu đồ tròn
+    window.pieChartInstance = new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels: brands,
+        datasets: [
+          {
+            label: "Doanh thu",
+            data: revenues,
+            backgroundColor: [
+              "#4e73df",
+              "#1cc88a",
+              "#36b9cc",
+              "#f6c23e",
+              "#e74a3b",
+              "#858796",
+              "#2e59d9",
+              "#17a673",
+              "#6610f2",
+              "#20c997",
+            ],
+            borderWidth: 1,
+            hoverOffset: 12,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false, // rất quan trọng để khớp chiều cao container
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: { font: { size: 14 } },
+          },
+          tooltip: {
+            callbacks: {
+              label: (context) =>
+                `${context.label}: ${context.formattedValue}₫`,
+            },
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.error("❌ Lỗi khi tải doanh thu theo brand:", error);
+  }
+}
+
+// ===== Biểu đồ line Chart =====
+let lineChartInstance; // 👈 để quản lý chart line
+
+async function loadUserRegistrationChart() {
+  try {
+    const res = await fetch(
+      "http://localhost:3000/admin/dashboard/user-registration-line"
+    );
+    const data = await res.json();
+    console.log(data);
+
+    if (!Array.isArray(data) || data.length === 0) {
+      console.warn("Không có dữ liệu người dùng đăng ký theo tháng.");
+      return;
+    }
+
+    // Chuẩn bị dữ liệu
+    const months = data.map((item) => `Tháng ${item.Month}`);
+    const totals = data.map((item) => item.TotalUsers);
+
+    const ctx = document.getElementById("lineChart");
+
+    // ✅ Hủy chart cũ nếu có
+    if (lineChartInstance) {
+      lineChartInstance.destroy();
+    }
+
+    // ✅ Tạo chart mới
+    lineChartInstance = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: months,
+        datasets: [
+          {
+            label: "Người dùng đăng ký",
+            data: totals,
+            borderWidth: 3,
+            fill: true,
+            tension: 0.3,
+            pointBackgroundColor: "#f72585",
+            borderColor: "#3a0ca3",
+            backgroundColor: "rgba(67,97,238,0.15)",
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false,
+          },
+          title: {
+            display: true,
+            text: "Thống kê người dùng đăng ký theo tháng",
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1,
+            },
+          },
+        },
+      },
+    });
+  } catch (err) {
+    console.error("Lỗi khi tải biểu đồ người dùng đăng ký:", err);
+  }
+}
+
 document.addEventListener(
   "DOMContentLoaded",
   () => loadingStatistics(),
   loadRevenueChart(),
   loadRecentActivities(),
-  loadTopProducts()
+  loadTopProducts(),
+  loadRevenueByBrand(),
+  loadUserRegistrationChart()
 );

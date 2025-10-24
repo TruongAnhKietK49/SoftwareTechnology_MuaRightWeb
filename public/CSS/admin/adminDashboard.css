@@ -1,135 +1,43 @@
+/* Bảng màu chung */
 :root {
-  --primary-color: #4361ee;
-  --secondary-color: #3f37c9;
-  --success-color: #4cc9f0;
-  --danger-color: #f72585;
-  --warning-color: #f8961e;
-  --info-color: #4895ef;
+  --primary-color: #ffd700;
+  --primary-glow: rgba(255, 215, 0, 0.3);
+  --secondary-color: #ffed4e;
+  --success-color: #00ff9d;
+  --danger-color: #ff3860;
+  --warning-color: #ffdd57;
+  --info-color: #00d1b2;
   --light-color: #f8f9fa;
-  --dark-color: #212529;
+  --dark-color: #121212;
   --sidebar-width: 280px;
   --sidebar-collapsed-width: 70px;
+  --card-bg: #1e1e1e;
+  --card-border: #333333;
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0b0;
+  --bg-gradient: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+  --sidebar-gradient: linear-gradient(180deg, #0c0c0c 0%, #1a1a1a 100%);
+  --neon-glow: 0 0 10px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.5),
+    0 0 30px rgba(255, 215, 0, 0.3);
 }
 
 body {
   display: flex;
   min-height: 100vh;
-  background-color: #f5f7fb;
+  background: var(--bg-gradient);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   overflow-x: hidden;
+  color: var(--text-primary);
 }
 
-/* Sidebar Styles */
-.sidebar {
-  width: var(--sidebar-width);
-  background: linear-gradient(
-    180deg,
-    var(--primary-color) 0%,
-    var(--secondary-color) 100%
-  );
-  padding: 1.5rem 0;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+/* Áp dụng cho tất cả input và textarea */
+input::placeholder,
+textarea::placeholder {
+  color: #10cbe4 !important;
+  /* 👈 đổi sang màu bạn muốn */
+  opacity: 1;
+  /* Giúp chữ rõ ràng, không mờ */
 }
-
-.sidebar.collapsed {
-  width: var(--sidebar-collapsed-width);
-}
-
-.sidebar.collapsed .sidebar-text {
-  display: none;
-}
-
-.sidebar-header {
-  padding: 0 1.5rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 1rem;
-}
-
-.sidebar .nav-link {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 1rem;
-  padding: 0.75rem 1.5rem;
-  margin: 0.25rem 0.75rem;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-}
-
-.sidebar .nav-link i {
-  margin-right: 0.75rem;
-  font-size: 1.2rem;
-  width: 24px;
-  text-align: center;
-}
-
-.sidebar .nav-link:hover {
-  color: #fff;
-  background-color: rgba(255, 255, 255, 0.1);
-  transform: translateX(5px);
-}
-
-.sidebar .nav-link.active {
-  color: #fff;
-  background-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.sidebar-footer {
-  margin-top: auto;
-  padding: 1rem 1.5rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.user-profile {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
-}
-
-.user-profile:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.user-profile img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-.user-info h6 {
-  margin-bottom: 0;
-  color: white;
-}
-
-.user-info small {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.btn-signout {
-  background-color: transparent;
-  color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  width: 100%;
-  margin-top: 1rem;
-  transition: all 0.2s ease;
-}
-
-.btn-signout:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.5);
-}
-
 
 /* Main Content Styles */
 .main-content {
@@ -139,34 +47,39 @@ body {
 }
 
 .page-header {
-  background: white;
+  background: var(--card-bg);
   border-radius: 0.75rem;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: between;
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
+  border: 1px solid var(--card-border);
 }
 
 .page-title {
-  color: var(--dark-color);
+  color: var(--primary-color);
   font-weight: 600;
   margin-bottom: 0;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
 /* Stats Cards */
 .stat-card {
   border-radius: 1rem;
   transition: all 0.3s ease;
-  background: #fff;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  overflow: hidden;
 }
 
 .stat-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), var(--neon-glow);
+  border-color: var(--primary-color);
 }
 
 .icon-circle {
@@ -176,23 +89,24 @@ body {
   display: grid;
   place-items: center;
   font-size: 1.6rem;
-  color: #fff;
+  color: #000;
+  box-shadow: var(--neon-glow);
 }
 
 .bg-gradient-primary {
-  background: linear-gradient(135deg, #007bff, #00b4d8);
+  background: linear-gradient(135deg, var(--primary-color), #ffed4e);
 }
 
 .bg-gradient-success {
-  background: linear-gradient(135deg, #198754, #51cf66);
+  background: linear-gradient(135deg, var(--success-color), #4cc9f0);
 }
 
 .bg-gradient-warning {
-  background: linear-gradient(135deg, #ffc107, #ffcd39);
+  background: linear-gradient(135deg, var(--warning-color), #ffcd39);
 }
 
 .bg-gradient-danger {
-  background: linear-gradient(135deg, #dc3545, #f87171);
+  background: linear-gradient(135deg, var(--danger-color), #f87171);
 }
 
 .stats-change {
@@ -205,16 +119,18 @@ body {
 
 .text-muted {
   opacity: 0.8;
+  color: var(--text-secondary) !important;
 }
 
 /* Charts and Tables */
 .chart-container,
 .table-container {
-  background: white;
+  background: var(--card-bg);
   border-radius: 0.75rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
+  border: 1px solid var(--card-border);
 }
 
 .chart-header,
@@ -228,8 +144,9 @@ body {
 .chart-title,
 .table-title {
   font-weight: 600;
-  color: var(--dark-color);
+  color: var(--primary-color);
   margin-bottom: 0;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
 }
 
 .chart-actions,
@@ -240,13 +157,14 @@ body {
 
 .chart-placeholder {
   height: 300px;
-  background: linear-gradient(135deg, #f5f7fb 0%, #e4e8f0 100%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6c757d;
+  color: var(--text-secondary);
   font-weight: 500;
+  border: 1px solid var(--card-border);
 }
 
 /* Recent Activity */
@@ -254,7 +172,7 @@ body {
   display: flex;
   align-items: flex-start;
   padding: 1rem 0;
-  border-bottom: 1px solid #f1f3f4;
+  border-bottom: 1px solid #333;
 }
 
 .activity-item:last-child {
@@ -270,6 +188,7 @@ body {
   justify-content: center;
   margin-right: 1rem;
   flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
 }
 
 .activity-icon.primary {
@@ -294,39 +213,219 @@ body {
 .activity-title {
   font-weight: 500;
   margin-bottom: 0.25rem;
+  color: var(--text-primary);
 }
 
 .activity-time {
-  color: #6c757d;
+  color: var(--text-secondary);
   font-size: 0.875rem;
 }
 
-/* Bảng voucher */
-.card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* Pie and Line Chart */
+.pie-chart,
+.line-chart {
+  height: 500px;
+  /* Chiều cao thống nhất cho 2 biểu đồ */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+.pie-chart canvas {
+  height: 400px !important;
+}
+
+.line-chart canvas {
+  height: 400px !important;
+}
+
+/* === Top Products Section === */
+.top-products-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(27, 95, 107, 0.986);
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+/* Tiêu đề */
+.text-glow {
+  color: var(--primary-color);
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+  letter-spacing: 0.5px;
+}
+
+/* Nút xem tất cả */
+.view-all-btn {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+.view-all-btn:hover {
+  background: var(--primary-color);
+  color: var(--dark-color);
+  box-shadow: var(--neon-glow);
+}
+
+/* === Table style === */
+.top-products-table thead {
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.top-products-table tbody tr {
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Ảnh sản phẩm */
+.product-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  transition: all 0.3s ease;
+}
+/* Cột chữ */
+.top-products-table td,
+.top-products-table th {
+  color: var(--primary-color);
+  vertical-align: middle;
+  background-color: var(--card-bg);
+}
+
+#topProductsTable tr:hover td{
+  background-color: #192e2b !important;
+  box-shadow: 1px 0 8px rgba(71, 233, 255, 0.863);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .top-products-card {
+    padding: 16px;
+  }
+
+  .product-img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .table-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* Popup voucher */
+.voucher-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 1500;
+}
+
+.voucher-popup.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.voucher-content {
+  background: var(--card-bg);
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 550px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), var(--neon-glow);
+  animation: slideUp 0.35s ease;
+  border: 1px solid var(--primary-color);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Form controls */
+.form-control,
+.form-select {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  color: var(--text-primary);
 }
 
 .form-control:focus,
 .form-select:focus {
-  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  background-color: #2a2a2a;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(255, 215, 0, 0.25);
+  color: var(--text-primary);
+}
+
+.form-label {
+  color: var(--text-primary);
+}
+
+.btn-outline-secondary {
+  color: var(--text-secondary);
+  border-color: #444;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary.active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #000;
+}
+
+.btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  color: #000;
 }
 
 .btn-primary {
-  background: linear-gradient(90deg, #0d6efd, #00b4d8);
-  border: none;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #000;
+  font-weight: 600;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(90deg, #0b5ed7, #0096c7);
+  background-color: #ffed4e;
+  border-color: #ffed4e;
+  color: #000;
+  box-shadow: var(--neon-glow);
 }
 
-.card-header.bg-gradient {
-  background: linear-gradient(135deg, #0dcaf0, #0d6efd);
+.btn-light {
+  background-color: #2a2a2a;
+  border-color: #444;
+  color: var(--text-primary);
+}
+
+.btn-light:hover {
+  background-color: #333;
+  border-color: #555;
+  color: var(--text-primary);
 }
 
 /* Mobile Toggle Button */
@@ -337,14 +436,27 @@ body {
   left: 1rem;
   z-index: 1100;
   background-color: var(--primary-color);
-  color: white;
+  color: #000;
   border: none;
   border-radius: 0.5rem;
   width: 40px;
   height: 40px;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), var(--neon-glow);
+}
+
+/* Nút tạo voucher */
+#openVoucherBtn {
+  background-color: var(--primary-color);
+  color: #000;
+  border: none;
+  box-shadow: var(--neon-glow);
+}
+
+#openVoucherBtn:hover {
+  background-color: #ffed4e;
+  transform: scale(1.1);
 }
 
 /* Responsive Styles */

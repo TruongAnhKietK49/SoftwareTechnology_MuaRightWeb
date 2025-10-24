@@ -8,6 +8,8 @@ const {
   getAccounts,
   getProducts,
   insertVoucher,
+  getRevenuePieChart,
+  getUserRegistrationByMonth
 } = require("../../models/admin/m_dashboard");
 
 router.get("/dashboard/statistics", async (req, res) => {
@@ -21,6 +23,31 @@ router.get("/dashboard/statistics", async (req, res) => {
   } catch (err) {
     console.error("Lỗi khi lấy dữ liệu dashboard:", err);
     res.status(500).json({ error: "Lỗi server khi lấy dữ liệu dashboard" });
+  }
+});
+
+// Lấy dữ liệu biểu đồ
+router.get("/dashboard/revenue-pie-chart", async (req, res) => {
+  try {
+    const data = await getRevenuePieChart();
+    // ✅ Đảm bảo trả về mảng, tránh lỗi .map
+    res.json(Array.isArray(data) ? data : []);
+  } catch (err) {
+    console.error("Lỗi khi lấy dữ liệu biểu đồ:", err);
+    res.status(500).json({ error: "Lỗi server khi lấy dữ liệu biểu đồ" });
+  }
+});
+
+// ✅ Route mới: lấy dữ liệu biểu đồ người dùng đăng ký theo tháng
+router.get("/dashboard/user-registration-line", async (req, res) => {
+  try {
+    const data = await getUserRegistrationByMonth();
+    res.json(data);
+  } catch (err) {
+    console.error("Lỗi khi lấy dữ liệu biểu đồ người dùng:", err);
+    res
+      .status(500)
+      .json({ error: "Lỗi server khi lấy dữ liệu biểu đồ người dùng" });
   }
 });
 

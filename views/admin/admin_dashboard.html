@@ -11,9 +11,11 @@
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="/public/CSS/admin/adminDashboard.css">
-
+    <!-- CSS -->
+     <link rel="stylesheet" href="../../public/CSS/admin/adminDashboard.css">
 </head>
+
+
 
 <body>
     <!-- Mobile Toggle Button -->
@@ -117,12 +119,11 @@
                 </div>
             </div>
 
-
             <!-- Charts and Tables -->
-            <div class="row">
+            <div class="row align-items-stretch g-4">
                 <!-- Revenue Chart -->
-                <div class="col-xl-8">
-                    <div class="chart-container">
+                <div class="col-xl-8 col-lg-12">
+                    <div class="chart-container revenue-chart h-100 d-flex flex-column">
                         <div class="chart-header">
                             <h4 class="chart-title">Doanh thu theo tháng</h4>
                             <div class="chart-actions">
@@ -133,41 +134,73 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <canvas id="revenueChart" height="150"></canvas>
+                        <div class="card-body flex-grow-1">
+                            <canvas id="revenueChart"></canvas>
                         </div>
                     </div>
                 </div>
 
                 <!-- Recent Activity -->
-                <div class="col-xl-4">
-                    <div class="table-container">
+                <div class="col-xl-4 col-lg-12">
+                    <div class="table-container h-100 d-flex flex-column">
                         <div class="table-header">
                             <h4 class="table-title">Hoạt động gần đây</h4>
                             <div class="table-actions">
                                 <button class="btn btn-outline-primary btn-sm">Tải lại</button>
                             </div>
                         </div>
-                        <div class="activity-list">
-
+                        <div class="activity-list flex-grow-1 overflow-auto">
+                            <!-- Activity items -->
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Additional Charts and Tables -->
-            <div class="row">
+            <!-- Additional Charts -->
+            <div class="row align-items-stretch g-4 mt-1">
+                <!-- Biểu đồ tròn -->
+                <div class="col-xl-6 col-lg-12">
+                    <div class="chart-container pie-chart h-100 d-flex flex-column">
+                        <div class="chart-header">
+                            <h4 class="chart-title">Tỷ lệ doanh thu theo danh mục</h4>
+                        </div>
+                        <div class="chart-body flex-grow-1">
+                            <canvas id="pieChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Biểu đồ đường -->
+                <div class="col-xl-6 col-lg-12">
+                    <div class="chart-container line-chart h-100 d-flex flex-column">
+                        <div class="chart-header">
+                            <h4 class="chart-title">Người dùng đăng ký theo tháng</h4>
+                        </div>
+                        <div class="chart-body flex-grow-1">
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Top Products and Voucher -->
+            <div class="row mt-4">
                 <!-- Top Products -->
-                <div class="col-xl-6">
-                    <div class="table-container">
-                        <div class="table-header">
-                            <h4 class="table-title">Sản phẩm bán chạy</h4>
+                <div class="col-xl-12">
+                    <div class="table-container top-products-card">
+                        <div class="table-header border-bottom border-secondary pb-2 mb-3">
+                            <h4 class="table-title text-glow mb-0">
+                                <i class="bi bi-stars me-2"></i> Sản phẩm bán chạy
+                            </h4>
                             <div class="table-actions">
-                                <button class="btn btn-outline-primary btn-sm">Xem tất cả</button>
+                                <button class="btn btn-outline-primary btn-sm view-all-btn">
+                                    <i class="bi bi-box-arrow-up-right me-1"></i> Xem tất cả
+                                </button>
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle">
+                            <table class="table align-middle top-products-table">
                                 <thead>
                                     <tr>
                                         <th scope="col">Sản phẩm</th>
@@ -176,90 +209,77 @@
                                     </tr>
                                 </thead>
                                 <tbody id="topProductsTable">
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <img src="https://picsum.photos/id/1025/60/60" class="rounded me-3"
-                                                    alt="Product" style="width: 40px; height: 40px; object-fit: cover;">
-                                                <div>
-                                                    <div class="fw-semibold">Áo thun Cotton cao cấp</div>
-                                                    <small class="text-muted">Thời trang nam</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">245</td>
-                                        <td class="text-end">61.250.000₫</td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- Tạo Voucher -->
-                <div class="col-xl-6 mx-auto">
-                    <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
-                        <div
-                            class="card-header bg-gradient bg-info d-flex justify-content-between align-items-center py-3">
-                            <h4 class="card-title text-white mb-0">
-                                <i class="bi bi-ticket-detailed me-2"></i>Tạo Voucher
+
+                <!-- Nút tròn tạo voucher -->
+                <button id="openVoucherBtn" class="btn btn-primary rounded-circle shadow-lg"
+                    style="position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; z-index: 2000;">
+                    <i class="bi bi-ticket-detailed fs-4"></i>
+                </button>
+
+                <!-- Popup Form Voucher -->
+                <div id="voucherPopup" class="voucher-popup">
+                    <div class="voucher-content">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="fw-bold text-primary mb-0">
+                                <i class="bi bi-ticket-perforated me-2"></i>Tạo Voucher mới
                             </h4>
-                            <button class="btn btn-light btn-sm fw-semibold">
-                                <i class="bi bi-list-ul me-1"></i>Danh sách
+                            <button id="closeVoucherBtn" class="btn btn-light border-0">
+                                <i class="bi bi-x-lg fs-5"></i>
                             </button>
                         </div>
 
-                        <div class="card-body p-4 bg-light">
-                            <form id="createVoucherForm" class="needs-validation" novalidate>
-                                <div class="mb-3">
-                                    <label for="voucherCode" class="form-label fw-semibold">🎫 Mã Voucher</label>
-                                    <input type="text" class="form-control border-primary-subtle" id="voucherCode"
-                                        placeholder="VD: SALE10" required />
-                                </div>
+                        <form id="createVoucherForm" class="needs-validation" novalidate>
+                            <div class="mb-3">
+                                <label for="voucherCode" class="form-label fw-semibold">🎫 Mã Voucher</label>
+                                <input type="text" class="form-control" id="voucherCode" placeholder="VD: SALE10"
+                                    required />
+                            </div>
 
-                                <div class="mb-3">
-                                    <label for="discountType" class="form-label fw-semibold">💰 Loại giảm</label>
-                                    <select class="form-select border-primary-subtle" id="discountType" required>
-                                        <option value="Percent">Phần trăm (%)</option>
-                                        <option value="Fixed">Số tiền cố định (VNĐ)</option>
-                                    </select>
-                                </div>
+                            <div class="mb-3">
+                                <label for="discountType" class="form-label fw-semibold">💰 Loại giảm</label>
+                                <select class="form-select" id="discountType" required>
+                                    <option value="Percent">Phần trăm (%)</option>
+                                    <option value="Fixed">Số tiền cố định (VNĐ)</option>
+                                </select>
+                            </div>
 
-                                <div class="mb-3">
-                                    <label for="discountVal" class="form-label fw-semibold">📉 Giá trị giảm</label>
-                                    <input type="number" class="form-control border-primary-subtle" id="discountVal"
-                                        placeholder="VD: 10 hoặc 40000" required />
-                                </div>
+                            <div class="mb-3">
+                                <label for="discountVal" class="form-label fw-semibold">📉 Giá trị giảm</label>
+                                <input type="number" class="form-control" id="discountVal"
+                                    placeholder="VD: 10 hoặc 40000" required />
+                            </div>
 
-                                <div class="mb-3">
-                                    <label for="minOrderAmt" class="form-label fw-semibold">🛒 Đơn tối thiểu</label>
-                                    <input type="number" class="form-control border-primary-subtle" id="minOrderAmt"
-                                        placeholder="VD: 200000" required />
-                                </div>
+                            <div class="mb-3">
+                                <label for="minOrderAmt" class="form-label fw-semibold">🛒 Đơn tối thiểu</label>
+                                <input type="number" class="form-control" id="minOrderAmt" placeholder="VD: 200000"
+                                    required />
+                            </div>
 
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="validFrom" class="form-label fw-semibold">📅 Ngày hiệu lực</label>
-                                        <input type="date" class="form-control border-primary-subtle" id="validFrom"
-                                            required />
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="validTo" class="form-label fw-semibold">⏰ Ngày kết thúc</label>
-                                        <input type="date" class="form-control border-primary-subtle" id="validTo"
-                                            required />
-                                    </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="validFrom" class="form-label fw-semibold">📅 Ngày hiệu lực</label>
+                                    <input type="date" class="form-control" id="validFrom" required />
                                 </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="validTo" class="form-label fw-semibold">⏰ Ngày kết thúc</label>
+                                    <input type="date" class="form-control" id="validTo" required />
+                                </div>
+                            </div>
 
-                                <div class="text-end mt-4">
-                                    <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm">
-                                        <i class="bi bi-plus-circle me-1"></i> Tạo Voucher
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                            <div class="text-end mt-3">
+                                <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold">
+                                    <i class="bi bi-plus-circle me-1"></i> Tạo Voucher
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-
             </div>
         </div>
     </main>
@@ -269,17 +289,37 @@
 
     <script>
         // Add hover effects to stats cards
-        const statsCards = document.querySelectorAll('.stats-card');
+        const statsCards = document.querySelectorAll('.stat-card');
         statsCards.forEach(card => {
             card.addEventListener('mouseenter', function () {
                 this.style.transform = 'translateY(-5px)';
-                this.style.boxShadow = '0 10px 15px rgba(0, 0, 0, 0.1)';
+                this.style.boxShadow = '0 10px 15px rgba(0, 0, 0, 0.3), var(--neon-glow)';
             });
 
             card.addEventListener('mouseleave', function () {
                 this.style.transform = 'translateY(0)';
-                this.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.05)';
+                this.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.3)';
             });
+        });
+
+        // Hiện popup
+        const openVoucherBtn = document.getElementById('openVoucherBtn');
+        const voucherPopup = document.getElementById('voucherPopup');
+        const closeVoucherBtn = document.getElementById('closeVoucherBtn');
+
+        openVoucherBtn.addEventListener('click', () => {
+            voucherPopup.classList.add('show');
+        });
+
+        closeVoucherBtn.addEventListener('click', () => {
+            voucherPopup.classList.remove('show');
+        });
+
+        // Đóng popup khi click nền tối
+        voucherPopup.addEventListener('click', (e) => {
+            if (e.target === voucherPopup) {
+                voucherPopup.classList.remove('show');
+            }
         });
     </script>
     <!-- Link JS sidebar Admin -->

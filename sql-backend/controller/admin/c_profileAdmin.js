@@ -162,6 +162,22 @@ function setupModalSafeguard() {
   });
 }
 
+// Toggle password visibility
+document
+  .getElementById("togglePassword")
+  .addEventListener("click", function () {
+    const passwordInput = document.getElementById("password");
+    const type =
+      passwordInput.getAttribute("type") === "password" ? "text" : "password";
+    passwordInput.setAttribute("type", type);
+
+    // Toggle eye icon
+    this.innerHTML =
+      type === "password"
+        ? '<i class="bi bi-eye"></i>'
+        : '<i class="bi bi-eye-slash"></i>';
+  });
+
 // ========================== INIT ==========================
 
 document.addEventListener("DOMContentLoaded", async () => {

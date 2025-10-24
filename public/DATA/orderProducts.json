@@ -16,7 +16,7 @@
   },
   {
     "CustomerId": 2,
-    "ShipperId": 17,
+    "ShipperId": null,
     "VoucherId": null,
     "ShipAddress": "56 Lê Duẩn, Hải Châu, Đà Nẵng",
     "ShipPhone": "0911222333",
@@ -31,7 +31,7 @@
   },
   {
     "CustomerId": 3,
-    "ShipperId": 18,
+    "ShipperId": null,
     "VoucherId": null,
     "ShipAddress": "45 Trần Hưng Đạo, Quận 1, TP. Hồ Chí Minh",
     "ShipPhone": "0903456789",
@@ -46,7 +46,7 @@
   },
   {
     "CustomerId": 4,
-    "ShipperId": 19,
+    "ShipperId": null,
     "VoucherId": null,
     "ShipAddress": "78 Lý Thường Kiệt, Quận Tân Bình, TP. Hồ Chí Minh",
     "ShipPhone": "0988776655",
@@ -76,7 +76,7 @@
   },
   {
     "CustomerId": 6,
-    "ShipperId": 16,
+    "ShipperId": null,
     "VoucherId": null,
     "ShipAddress": "89 Hoàng Hoa Thám, Ba Đình, Hà Nội",
     "ShipPhone": "0977008899",
@@ -106,7 +106,7 @@
   },
   {
     "CustomerId": 8,
-    "ShipperId": 18,
+    "ShipperId": null,
     "VoucherId": null,
     "ShipAddress": "33 Nguyễn Tri Phương, Quận 10, TP. Hồ Chí Minh",
     "ShipPhone": "0933221100",
@@ -121,7 +121,7 @@
   },
   {
     "CustomerId": 2,
-    "ShipperId": 19,
+    "ShipperId": null,
     "VoucherId": null,
     "ShipAddress": "64 Nguyễn Tất Thành, Thanh Khê, Đà Nẵng",
     "ShipPhone": "0909988776",
@@ -151,7 +151,7 @@
   },
   {
     "CustomerId": 3,
-    "ShipperId": 16,
+    "ShipperId": null,
     "VoucherId": null,
     "ShipAddress": "12 Điện Biên Phủ, Quận Bình Thạnh, TP. Hồ Chí Minh",
     "ShipPhone": "0904332211",
@@ -166,7 +166,7 @@
   },
   {
     "CustomerId": 5,
-    "ShipperId": 17,
+    "ShipperId": null,
     "VoucherId": null,
     "ShipAddress": "25 Hùng Vương, Ba Đình, Hà Nội",
     "ShipPhone": "0911888999",
@@ -181,7 +181,7 @@
   },
   {
     "CustomerId": 1,
-    "ShipperId": 16,
+    "ShipperId": null,
     "VoucherId": null,
     "ShipAddress": "45 Nguyễn Thị Minh Khai, Quận 1, TP. Hồ Chí Minh",
     "ShipPhone": "0909001001",
@@ -196,7 +196,7 @@
   },
   {
     "CustomerId": 2,
-    "ShipperId": 17,
+    "ShipperId": null,
     "VoucherId": null,
     "ShipAddress": "22 Trần Phú, Hải Châu, Đà Nẵng",
     "ShipPhone": "0902334455",
@@ -211,7 +211,7 @@
   },
   {
     "CustomerId": 3,
-    "ShipperId": 18,
+    "ShipperId": null,
     "VoucherId": null,
     "ShipAddress": "56 Lê Lợi, Quận 3, TP. Hồ Chí Minh",
     "ShipPhone": "0908777666",
@@ -226,7 +226,7 @@
   },
   {
     "CustomerId": 4,
-    "ShipperId": 19,
+    "ShipperId": null,
     "VoucherId": null,
     "ShipAddress": "89 Nguyễn Văn Cừ, Long Biên, Hà Nội",
     "ShipPhone": "0977998877",
@@ -241,7 +241,7 @@
   },
   {
     "CustomerId": 5,
-    "ShipperId": 20,
+    "ShipperId": null,
     "VoucherId": null,
     "ShipAddress": "12 Nguyễn Hữu Thọ, Quận 7, TP. Hồ Chí Minh",
     "ShipPhone": "0905443322",
@@ -287,7 +287,7 @@
   },
   {
     "CustomerId": 8,
-    "ShipperId": 18,
+    "ShipperId": null,
     "VoucherId": null,
     "ShipAddress": "45 Phan Chu Trinh, Quận Hải Châu, Đà Nẵng",
     "ShipPhone": "0908445566",
@@ -302,7 +302,7 @@
   },
   {
     "CustomerId": 1,
-    "ShipperId": 19,
+    "ShipperId": null,
     "VoucherId": null,
     "ShipAddress": "5 Lý Tự Trọng, Quận 1, TP. Hồ Chí Minh",
     "ShipPhone": "0909004567",
@@ -317,7 +317,7 @@
   },
   {
     "CustomerId": 2,
-    "ShipperId": 20,
+    "ShipperId": null,
     "VoucherId": null,
     "ShipAddress": "9 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh",
     "ShipPhone": "0902337788",
