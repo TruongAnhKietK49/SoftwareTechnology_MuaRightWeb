@@ -45,7 +45,7 @@
               <a class="nav-link" href="./Blog_Page.html">Blog</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="../../template/pages/signIn_page.html"
+              <a class="nav-link" id="editProfileBtn" href="#"
                 ><i class="bi bi-person"></i
               ></a>
             </li>
@@ -155,6 +155,95 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- MODAL CHỈNH SỬA HỒ SƠ NGƯỜI DÙNG -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header modal-header-custom">
+                    <h5 class="modal-title" id="editProfileModalLabel">Chỉnh sửa hồ sơ</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <!-- Avatar Upload -->
+                        <div class="avatar-upload">
+                            <div class="profile-avatar" id="avatarPreview">
+                                <img src="" alt="Avatar Preview">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="avatarUrl" class="form-label">URL ảnh đại diện</label>
+                                <input type="url" class="form-control" id="avatarUrl" value="">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="username" class="form-label">Tên đăng nhập</label>
+                                <input type="text" class="form-control" id="userName" value="" disabled>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" value="" disabled>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label">Số điện thoại</label>
+                                <input type="tel" class="form-control" id="phone" value="+84 912 345 678">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Mật khẩu</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password" value="">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            <div class="form-text">Để trống nếu không muốn thay đổi mật khẩu</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="fullName" class="form-label">Họ và tên</label>
+                                <input type="text" class="form-control" id="fullName" value="">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="birthDate" class="form-label">Ngày sinh</label>
+                                <input type="date" class="form-control" id="birthDate" value="">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="gender" class="form-label">Giới tính</label>
+                                <select class="form-select" id="gender">
+                                    <option value="Nam" selected>Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                    <option value="Khác">Khác</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6 mb-3">
+                                <label for="position" class="form-label">Địa chỉ</label>
+                                <input type="text" class="form-control" id="position">
+                          </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer modal-footer-custom">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" onclick="updateAdminProfile()">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- MODAL CHI TIẾT SẢN PHẨM -->
@@ -599,9 +688,7 @@
         pushState(st);
         render();
       });
-      document
-        .getElementById("genderSelect")
-        .addEventListener("change", (e) => {
+      document.getElementById("genderSelect").addEventListener("change", (e) => {
           const st = stateFromURL();
           st.gender = e.target.value;
           st.page = 1;
@@ -1048,6 +1135,131 @@
 
         console.error("❌ Không tải được footer từ các đường dẫn:", paths);
       });
+    </script>
+
+    <!-- Script Modal chỉnh sửa hồ sơ người dùng -->
+    <script>
+      // Hiển thị modal chỉnh sửa hồ sơ người dùng khi nhấn nút
+      document.getElementById("editProfileBtn").addEventListener("click", () => {
+        const editProfileModal = new bootstrap.Modal(
+          document.getElementById("editProfileModal")
+        );
+        fetchUserProfile().then((data) => {
+          populateEditForm(data);
+        });
+        editProfileModal.show();
+      });
+
+      async function fetchUserProfile() {
+        try {
+          const res = await fetch(`http://localhost:3000/user/profile/${account.AccountId}`);
+          const data = await res.json();
+
+          if (!res.ok) {
+            console.error("Không tìm thấy thông tin user:", data.message);
+            return null;
+          }
+          console.log("Thông tin user:", data);
+          return data;
+        } catch (err) {
+          console.error("Lỗi khi tải thông tin user:", err);
+          return null;
+        }
+      }
+
+      // Hiển thị thông tin admin
+      function displayUserProfile(data) {
+        if (!data) return;
+
+        const defaultAvatar = "https://i.pravatar.cc/150?u=admin";
+        const avatar = document.getElementById("admin-avatar");
+        const nameElement = document.getElementById("admin-name");
+
+        if (avatar) avatar.src = data.ImageUrl || defaultAvatar;
+        if (nameElement) nameElement.innerText = data.FullName;
+
+        document.getElementById("admin-imgUrl").innerText =
+          data.ImageUrl || defaultAvatar;
+        document.getElementById("admin-username").innerText = data.Username || "";
+        document.getElementById("admin-email").innerText = data.Email || "";
+        document.getElementById("admin-phone").innerText = data.Phone || "";
+        document.getElementById("admin-fullName").innerText = data.FullName || "";
+        document.getElementById("admin-birthday").innerText = data.Birthday
+          ? new Date(data.Birthday).toISOString().split("T")[0]
+          : "";
+        document.getElementById("admin-gender").innerText = data.Gender || "";
+        document.getElementById("admin-position").innerText = data.Address || "";
+      }
+
+
+      // Điền thông tin vào form chỉnh sửa
+      function populateEditForm(data) {
+        if (!data) return;
+        const defaultAvatar = "https://i.pravatar.cc/150?u=admin";
+
+        document.getElementById("avatarUrl").value = data.ImageUrl || defaultAvatar;
+        document.getElementById("avatarPreview").querySelector("img").src =
+          data.ImageUrl || defaultAvatar;
+        document.getElementById("userName").value = data.Username || "";
+        document.getElementById("email").value = data.Email || "";
+        document.getElementById("phone").value = data.Phone || "";
+        document.getElementById("password").value = data.PasswordHash || "";
+        document.getElementById("fullName").value = data.FullName || "";
+        document.getElementById("birthDate").value = data.Birthday
+          ? data.Birthday.split("T")[0]
+          : "";
+        document.getElementById("gender").value = data.Gender || "Khác";
+        document.getElementById("position").value = data.Address || "";
+      }
+
+
+      // Cập nhật hồ sơ admin
+      async function updateAdminProfile() {
+        const username = document.getElementById("userName").value.trim();
+        const updatedData = {
+          Email: document.getElementById("email").value.trim(),
+          Phone: document.getElementById("phone").value.trim(),
+          ImageUrl: document.getElementById("avatarUrl").value.trim(),
+          PasswordHash: document.getElementById("password").value.trim(),
+          FullName: document.getElementById("fullName").value.trim(),
+          Birthday: document.getElementById("birthDate").value,
+          Gender: document.getElementById("gender").value,
+          Address: document.getElementById("position").value.trim(),
+        };
+
+        try {
+          const res = await fetch(`http://localhost:3000/user/profile/${account.AccountId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedData),
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            alert("✅ Thông tin đã được cập nhật thành công!");
+
+            // Lấy lại thông tin admin mới nhất từ phản hồi server
+            const newAdminData = updatedData;
+            
+            // Ẩn modal
+            const modal = bootstrap.Modal.getInstance(
+              document.getElementById("editProfileModal")
+            );
+
+            if (modal) modal.hide();
+
+            // 🧩 Cập nhật lại localStorage (dữ liệu mới nhất)
+            const currentAccount = JSON.parse(localStorage.getItem("account")) || {};
+            const updatedAccount = { ...currentAccount, ...newAdminData };
+            localStorage.setItem("account", JSON.stringify(updatedAccount));
+          } else {
+            alert(`Lỗi khi cập nhật: ${data.message || data.error}`);
+          }
+        } catch (err) {
+          console.error("Lỗi khi gửi dữ liệu cập nhật:", err);
+        }
+      }
     </script>
   </body>
 </html>

@@ -37,6 +37,9 @@ app.use("/cart", cartRoutes);
 const productUserRoutes = require("./routes/productRoutes");
 app.use("/products", productUserRoutes);
 
+const userProfileRoutes = require("./routes/userRoutes");
+app.use("/user", userProfileRoutes);
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server đang chạy trên cổng ${PORT}`);
