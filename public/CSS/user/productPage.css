@@ -254,19 +254,33 @@ a {
   transition: all 0.3s ease;
 }
 
-.btn-gold:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-gold);
-  color: var(--primary-color) !important;
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  margin: 0 auto 1rem;
+  overflow: hidden;
+  background-color: white;
 }
 
-.btn-outline-gold {
-  background: transparent;
-  border: 1px solid var(--accent-color);
-  color: var(--accent-color);
-  font-weight: 600;
-  border-radius: var(--radius-md);
-  transition: all 0.3s ease;
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.section-head {
+  max-width: 1100px;
+  margin: 12px auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#searchInput {
+  color: #070707 !important;
+  font-weight: 500;
 }
 
 .btn-outline-gold:hover {
