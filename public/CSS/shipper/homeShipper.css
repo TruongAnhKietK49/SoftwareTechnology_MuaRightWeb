@@ -1,0 +1,58 @@
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+.navbar-custom {
+  background-color: #000 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.section-header {
+  color: #f7b32c;
+  font-weight: bold;
+}
+.text-brown-gold {
+  color: #f7b32c;
+}
+.icon-box {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+.footer-custom {
+  background-image: linear-gradient(to bottom, #303030, #1a1a1a);
+  color: #d1d1d1;
+  padding-top: 50px;
+}
+.footer-custom a {
+  color: #d1d1d1;
+  text-decoration: none;
+}
+.footer-custom a:hover {
+  color: #fff;
+}
+.share-on .btn {
+  background-color: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  margin: 0 5px;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+.share-on .btn:hover {
+  background-color: #fff;
+  color: #000;
+}
+.process-flow-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.process-icon {
+  width: 70px;
+  height: 70px;
+}
+.arrow-icon {
+  width: 100px;
+  height: auto;
+}

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MuaRight – Perfume Store</title>
+
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./public/CSS/index.css">
+
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top border-bottom border-opacity-25 border-light">
+    <div class="container">
+      <a class="navbar-brand fw-semibold text-gold" href="./index.html">MuaRight</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="./index.html">Trang chủ</a></li>
+
+          <!-- 🔗 Sửa: trỏ đúng sang shop.html -->
+          <li class="nav-item"><a class="nav-link" href="./views/user/Product_Page.html">Shop</a></li>
+
+          <li class="nav-item"><a class="nav-link" href="./views/user/Blog_Page.html">Blog</a></li>
+          <li class="nav-item"><a class="nav-link" href="./template/pages/signIn_page.html"><i
+                class="bi bi-person"></i><span id="username"></span></a></li>
+          <li class="nav-item"><button onclick="logout()">Đăng xuất</button></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="mt-5 pt-4">
+    <!-- HERO -->
+    <section id="home" class="hero container py-5 scroll-anchor">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-6">
+          <h1 class="hero-title">
+            “Nâng tầm cảm xúc của bạn cùng<br>
+            hương thơm chiến thắng!”
+            <span class="hero-leaf">🌿</span>
+          </h1>
+          <p class="hero-sub">Mua sắm ngay hôm nay và tận hưởng hương vị ngọt ngào của chiến thắng cùng MuaRight.</p>
+          <a href="#bestsellers" class="btn btn-gold px-4 mt-3">Shop Now</a>
+        </div>
+        <div class="col-lg-6 text-center">
+          <img class="img-fluid rounded-5 shadow-hero" alt="Hero bottle" src="hình ảnh/23.jpg" alt="Ảnh 23" />
+        </div>
+    </section>
+    <!-- WELCOME -->
+    <section class="welcome-banner text-center text-white py-5">
+      <div class="overlay"></div>
+      <div class="container position-relative">
+        <h2 class="fw-semibold text-gold mb-3">Chào mừng bạn đến với MuaRight!</h2>
+        <p class="mx-auto lead" style="max-width: 720px;">
+          Chào mừng bạn đến với MuaRight Perfumes, nơi tinh thần chiến thắng và khải hoàn
+          được thổi hồn qua từng nốt hương đầy cảm hứng. Bộ sưu tập <em>“Victory Scented”</em> là biểu tượng
+          tôn vinh thành công — bởi chúng tôi tin rằng mỗi chiến thắng đều xứng đáng có một mùi hương riêng.
+          Với những hương thơm được tuyển chọn tinh tế, Local Face mang đến trải nghiệm nâng tầm cảm xúc,
+          khơi dậy tự tin và truyền cảm hứng trên hành trình chinh phục của bạn. ✨
+        </p>
+      </div>
+    </section>
+
+    <!-- VALUE -->
+    <section id="value" class="scroll-anchor">
+      <div class="container">
+        <div class="row align-items-center g-4">
+          <!-- Ảnh bên trái -->
+          <div class="col-lg-6">
+            <img src="hình ảnh/15.jpg" alt="Value image" class="value-img">
+          </div>
+
+          <!-- Nội dung bên phải -->
+          <div class="col-lg-6">
+            <h3 class="value-title">
+              Giá trị cốt lõi của chúng tôi <span class="leaf">🌿</span>
+            </h3>
+
+            <div class="value-box">
+              <p class="mb-0">
+                Tại MuaRight, cửa hàng nước hoa của chúng tôi được xây dựng trên nền tảng đam mê
+                và sự chân thật, với niềm tin rằng mỗi khách hàng đều mang một cá tính và phong cách
+                riêng biệt. Chúng tôi mang đến bộ sưu tập hương thơm đa dạng để tôn vinh nét độc đáo ấy,
+                đồng thời tạo nên một không gian thân thiện, cởi mở và đầy cảm hứng, nơi mọi người có thể
+                kết nối và tìm thấy nguồn năng lượng sáng tạo mới. Hướng đến phát triển bền vững và học hỏi
+                không ngừng, MuaRight không chỉ là một điểm đến mua sắm, mà còn là một cộng đồng truyền cảm hứng
+                và trao quyền cho mỗi cá nhân trên hành trình khám phá hương thơm của riêng mình.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BEST SELLERS -->
+    <section id="bestsellers" class="container py-4 scroll-anchor">
+      <h4 class="section-title"><i class="bi bi-sun-fill"></i> Sản phẩm bán chạy nhất</h4>
+      <div class="row g-3">
+        <!-- Luxurious Elixir -->
+        <div class="col-6 col-md-3">
+          <a href="views/user/shop.html?highlight=elixir" class="text-decoration-none">
+            <div class="product-card h-100">
+              <img src="hình ảnh/17.jpg" alt="Luxurious Elixir">
+              <div class="p-3">
+                <div class="small text-gold">★★★★★</div>
+                <h6 class="mb-1">Luxurious Elixir</h6>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="price">$250</span><span class="muted">100ml</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- The Golden Legacy -->
+        <div class="col-6 col-md-3">
+          <a href="views/user/shop.html?highlight=legacy" class="text-decoration-none">
+            <div class="product-card h-100">
+              <img src="hình ảnh/13.jpg" alt="The Golden Legacy">
+              <div class="p-3">
+                <div class="small text-gold">★★★★★</div>
+                <h6 class="mb-1">The Golden Legacy</h6>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="price">$160</span><span class="muted">100ml</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Luxurious Essence -->
+        <div class="col-6 col-md-3">
+          <a href="views/user/shop.html?highlight=essence" class="text-decoration-none">
+            <div class="product-card h-100">
+              <img src="hình ảnh/10.jpg" alt="Luxurious Essence">
+              <div class="p-3">
+                <div class="small text-gold">★★★★★</div>
+                <h6 class="mb-1">Luxurious Essence</h6>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="price">$260</span><span class="muted">100ml</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Luxurious Icon -->
+        <div class="col-6 col-md-3">
+          <a href="views/user/shop.html?highlight=icon" class="text-decoration-none">
+            <div class="product-card h-100">
+              <img src="hình ảnh/5.jpg" alt="Luxurious Icon">
+              <div class="p-3">
+                <div class="small text-gold">★★★★★</div>
+                <h6 class="mb-1">Luxurious Icon</h6>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="price">$220</span><span class="muted">100ml</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <h3 class="blog-title mb-4">Bài viết mới nhất 📰</h3>
+
+      <div class="row g-4 justify-content-center">
+        <!-- Card 1 -->
+        <div class="col-md-4">
+          <div class="blog-card">
+            <img src="hình ảnh/5.jpg" alt="Lavender" class="blog-img">
+            <div class="blog-body">
+              <h5 class="blog-heading">
+                💜 Bản hòa ca dịu êm của hương oải hương
+              </h5>
+              <p class="blog-text">
+                Với mùi hương quyến rũ và lịch sử lâu đời, oải hương (lavender) từ lâu đã được xem như biểu tượng của sự
+                thư giãn và thuần khiết...
+              </p>
+              <a href="views/user/Blog.html" class="btn btn-outline-warning btn-sm rounded-pill px-3">Read More</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col-md-4">
+          <div class="blog-card">
+            <img src="hình ảnh/1.jpg" alt="Amber" class="blog-img">
+            <div class="blog-body">
+              <h5 class="blog-heading">
+                🌸 Nghệ thuật tuyển chọn nước hoa cao cấp
+              </h5>
+              <p class="blog-text">
+                Mỗi mùi hương là một hành trình cảm xúc – kết tinh của nguyên liệu tinh tuyển và tay nghề bậc thầy trong
+                thế giới nước hoa cao cấp...
+              </p>
+              <a href="views/user/Blog.html" class="btn btn-outline-warning btn-sm rounded-pill px-3">Read More</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="col-md-4">
+          <div class="blog-card">
+            <img src="hình ảnh/11.jpg" alt="Rose" class="blog-img">
+            <div class="blog-body">
+              <h5 class="blog-heading">
+                🥀 Vẻ đẹp vượt thời gian của nước hoa hồng
+              </h5>
+              <p class="blog-text">
+                Hoa hồng – biểu tượng của sự thanh lịch và tinh tế – luôn là “nữ hoàng” trong thế giới hương thơm, mang
+                lại cảm giác tự tin và sang trọng...
+              </p>
+              <a href="views/user/Blog.html" class="btn btn-outline-warning btn-sm rounded-pill px-3">Read More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER CONTAINER -->
+
+  <div id="footer-container"></div>
+
+  <!-- Script tự động tải footer -->
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const box = document.getElementById("footer-container");
+      if (!box) return;
+
+      // Các đường dẫn khả dụng tùy vị trí trang
+      const paths = [
+        "../../template/includes/footer.html", // nếu trang nằm sâu 2 cấp (vd: views/user/shop.html)
+        "../template/includes/footer.html",    // nếu trang nằm sâu 1 cấp (vd: views/shop.html)
+        "template/includes/footer.html",       // nếu file ở root
+        "partials/footer.html",                // fallback
+        "footer.html"                          // fallback cuối
+      ];
+
+      for (const p of paths) {
+        try {
+          const res = await fetch(p, { cache: "no-cache" });
+          if (res.ok) {
+            const html = await res.text();
+            box.innerHTML = html;
+
+            // Gán năm hiện tại vào phần tử có id="mr-year"
+            const yearEl = box.querySelector("#mr-year");
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+            return; // Dừng lại khi đã tải thành công
+          }
+        } catch (e) {
+          // Thử đường dẫn kế tiếp
+        }
+      }
+
+      console.error("❌ Không tải được footer từ các đường dẫn:", paths);
+    });
+
+    const account = JSON.parse(localStorage.getItem("account"));
+    if (account) {
+      document.getElementById("username").innerText = account.Username;
+      console.log("Tài khoản hiện tại:", account);
+    }
+    
+    function logout() {
+      if (confirm("Bạn có chắc muốn đăng xuất không?")) {
+        localStorage.removeItem("account");
+        window.location.href = "./template/pages/signIn_page.html";
+      }
+    }
+
+
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MuaRight - Hồ sơ Shipper</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- CSS Tùy chỉnh (Giả định file này nằm ở đây) -->
+    <link rel="stylesheet" href="../../public/CSS/shipper/profile.css">
+
+</head>
+
+<body>
+    <!-- Navigation Bar (Đã thêm Icon Phương tiện và Nút Đăng xuất) -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid mx-5">
+            <a class="navbar-brand fw-bold text-brown-gold" href="./homeShipper_page.html">MuaRight-shipper</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="./homeShipper_page.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./products_page.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="./profile_Page.html">Profile</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    
+                    <!-- VỊ TRÍ 1: ICON PHƯƠNG TIỆN (Load động) -->
+                    <div id="vehicle-icon-nav" class="me-3">
+                        <i class="bi bi-truck-front-fill text-info" style="font-size: 1.5rem;"></i>
+                    </div>
+
+                    <img src="../../img/image 11.png" alt="Avatar" width="30" height="30" class="me-2 rounded-circle" id="nav-shipper-avatar">
+                    <span class="navbar-text text-white me-3" id="nav-shipper-name">
+                        Hi, Tom
+                    </span>
+                    
+                    <!-- NÚT ĐĂNG XUẤT -->
+                    <button class="btn btn-sm btn-outline-danger" id="logout-btn">
+                        <i class="bi bi-box-arrow-right me-1"></i> Đăng xuất
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="main-content container mt-5">
+        <div class="container-fluid p-0">
+            
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-warning">
+                <h1 class="page-title text-white">Hồ sơ Shipper</h1>
+                <!-- Nút chỉnh sửa sẽ mở Modal -->
+                <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                    <i class="bi bi-pencil me-2"></i> Chỉnh sửa hồ sơ
+                </button>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="card profile-card bg-dark text-white shadow p-4">
+                
+                <div class="row">
+                    <!-- Cột Trái: Avatar & Thống kê -->
+                    <div class="col-lg-4 text-center border-end border-secondary pe-lg-4 mb-4 mb-lg-0">
+                        <div class="profile-header">
+                            <!-- Ảnh đại diện -->
+                            <div class="profile-avatar mb-3 mx-auto">
+                                <img src="../../img/image 11.png" alt="Avatar" id="shipper-avatar" class="rounded-circle border border-3 border-warning" style="width:120px; height: 120px; object-fit: cover;">
+                            </div>
+                            
+                            <!-- Tên Shipper -->
+                            <h2 class="profile-name mb-1" id="shipper-name-display">Đang tải tên...</h2>
+                            <div class="profile-role text-warning small mb-3">ID Shipper: #<span id="shipper-id-display">MV-2024</span></div>
+
+                            <!-- Thống kê -->
+                            <p class="text-secondary mb-1">Điểm Đánh Giá: <strong class="text-warning" id="shipper-rating">4.9/5.0</strong></p>
+                            <!-- ĐƠN HOÀN THÀNH (ĐÃ SỬA: Tổng đơn đã giao) -->
+                            <p class="text-secondary mb-1">Đơn Hoàn Thành: <strong class="text-info" id="shipper-delivered-count">0</strong> Đơn</p>
+                            <hr class="border-secondary my-3">
+
+                            <!-- Thông tin Phương tiện nổi bật -->
+                            <div class="text-start mx-auto" style="max-width: 200px;">
+                                <!-- ĐÃ SỬA: Thêm chữ "giao hàng" -->
+                                <h6 class="text-warning mb-2"><i class="bi bi-geo-alt-fill me-2"></i>Khu vực giao hàng</h6>
+                                <p class="small mb-2" id="shipper-region-display">Đang tải...</p>
+                                <h6 class="text-warning mb-2"><i class="bi bi-speedometer2 me-2"></i>Phương tiện</h6>
+                                <p class="small mb-0" id="shipper-vehicle-display">Đang tải...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cột Phải: Chi tiết thông tin -->
+                    <div class="col-lg-8 ps-lg-4">
+                        <div class="profile-body">
+                            
+                            <!-- Thông tin Tài khoản -->
+                            <div class="profile-section mb-4">
+                                <h3 class="section-title text-warning mb-3"><i class="bi bi-person-circle me-2"></i> Thông tin tài khoản</h3>
+
+                                <div class="row">
+                                    <div class="col-md-6 info-item mb-3">
+                                        <div class="info-label text-secondary">Tên đăng nhập</div>
+                                        <div class="info-value" id="shipper-username"></div>
+                                    </div>
+                                    <div class="col-md-6 info-item mb-3">
+                                        <div class="info-label text-secondary">Email</div>
+                                        <div class="info-value" id="shipper-email"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 info-item mb-3">
+                                        <div class="info-label text-secondary">Số điện thoại</div>
+                                        <div class="info-value" id="shipper-phone"></div>
+                                    </div>
+                                    <!-- ĐÃ SỬA: Thay thế Số dư bằng Địa chỉ -->
+                                    <div class="col-md-6 info-item mb-3">
+                                        <div class="info-label text-secondary">Địa chỉ</div>
+                                        <div class="info-value" id="shipper-address"></div> 
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 info-item mb-3">
+                                        <div class="info-label text-secondary">Mật khẩu</div>
+                                        <div class="info-value password-mask">••••••••</div>
+                                    </div>
+                                    <div class="col-md-6 info-item mb-3">
+                                        <div class="info-label text-secondary">Trạng thái</div>
+                                        <div class="info-value"><span class="badge bg-success" id="shipper-status">Đang hoạt động</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Thông tin Cá nhân -->
+                            <div class="profile-section mb-4">
+                                <!-- ĐÃ SỬA: BỎ CHỮ 'XE CỘ' -->
+                                <h3 class="section-title text-warning mb-3"><i class="bi bi-info-circle me-2"></i> Chi tiết cá nhân</h3>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 info-item mb-3">
+                                        <div class="info-label text-secondary">Họ và tên</div>
+                                        <div class="info-value fw-bold" id="shipper-fullName"></div>
+                                    </div>
+                                    <div class="col-md-6 info-item mb-3">
+                                        <div class="info-label text-secondary">Ngày sinh</div>
+                                        <div class="info-value" id="shipper-birthday"></div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 info-item mb-3">
+                                        <div class="info-label text-secondary">Giới tính</div>
+                                        <div class="info-value" id="shipper-gender"></div>
+                                    </div>
+                                    <!-- ĐÃ BỔ SUNG: BIỂN SỐ XE -->
+                                    <div class="col-md-6 info-item mb-3">
+                                        <div class="info-label text-secondary">Biển số xe</div>
+                                        <div class="info-value fw-bold" id="shipper-license-no-full"></div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <!-- ĐÃ BỔ SUNG: LOẠI PHƯƠNG TIỆN -->
+                                    <div class="col-md-6 info-item mb-3">
+                                        <div class="info-label text-secondary">Loại phương tiện</div>
+                                        <div class="info-value" id="shipper-vehicle-info-full"></div>
+                                    </div>
+                                    <div class="col-md-6 info-item mb-3">
+                                        <div class="info-label text-secondary">Ngày tham gia</div>
+                                        <div class="info-value" id="shipper-join-date">15/08/2022</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Profile Modal (Đã chỉnh sửa form để khớp) -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header modal-header-custom border-bottom border-warning">
+                    <h5 class="modal-title" id="editProfileModalLabel">Chỉnh sửa hồ sơ Shipper</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="shipperProfileForm">
+                        <!-- Avatar Upload -->
+                       <!-- Avatar by URL -->
+                        <div class="avatar-upload text-center mb-4">
+                        <div class="profile-avatar mb-3 mx-auto" id="avatarPreviewContainer">
+                            <img src="../../img/image 11.png" alt="Avatar Preview"
+                                id="modal-avatar-preview"
+                                class="rounded-circle border border-3 border-warning"
+                                style="width:100px; height: 100px; object-fit: cover;">
+                        </div>
+
+                        <div class="container" style="max-width:520px">
+                            <label for="modal-avatar-url" class="form-label text-secondary small">
+                            Đường dẫn ảnh (URL)
+                            </label>
+                            <input type="url"
+                                class="form-control bg-dark text-white border-secondary"
+                                id="modal-avatar-url"
+                                placeholder="https://.../avatar.png" />
+                            <div class="form-text text-warning">
+                            Dán URL ảnh hợp lệ (PNG/JPG/SVG…). Ảnh sẽ xem trước ngay bên trên.
+                            </div>
+                        </div>
+                        </div>
+
+                        
+                        <!-- Form fields -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="modal-fullName" class="form-label">Họ và tên</label>
+                                <input type="text" class="form-control bg-dark text-white border-secondary" id="modal-fullName" value="">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="modal-birthDate" class="form-label">Ngày sinh</label>
+                                <input type="date" class="form-control bg-dark text-white border-secondary" id="modal-birthDate" value="">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="modal-email" class="form-label">Email</label>
+                                <input type="email" class="form-control bg-dark text-white border-secondary" id="modal-email" value="" required disabled>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="modal-phone" class="form-label">Số điện thoại</label>
+                                <input type="tel" class="form-control bg-dark text-white border-secondary" id="modal-phone" value="">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <!-- ĐÃ BỔ SUNG: ĐỊA CHỈ TRONG MODAL -->
+                            <div class="col-md-12 mb-3">
+                                <label for="modal-address" class="form-label">Địa chỉ</label>
+                                <input type="text" class="form-control bg-dark text-white border-secondary" id="modal-address" value="">
+                            </div>
+                        </div>
+
+                        <!-- Thông tin Shipper đặc thù -->
+                        <h6 class="text-warning mt-3 mb-2">Chi tiết Vận hành</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="modal-region" class="form-label">Khu vực hoạt động</label>
+                                <input type="text" class="form-control bg-dark text-white border-secondary" id="modal-region" value="">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="modal-license-no" class="form-label">Biển số xe</label>
+                                <input type="text" class="form-control bg-dark text-white border-secondary" id="modal-license-no" value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="modal-vehicle-info" class="form-label">Loại phương tiện</label>
+                                <select class="form-select bg-dark text-white border-secondary" id="modal-vehicle-info">
+                                    <option value="Xe máy">Xe máy</option>
+                                    <option value="Xe ô tô">Xe ô tô</option>
+                                    <option value="Xe chở hàng">Xe chở hàng (Tải nhẹ)</option>
+                                </select>
+                            </div>
+                             <div class="col-md-6 mb-3">
+                                <label for="modal-gender" class="form-label">Giới tính</label>
+                                <select class="form-select bg-dark text-white border-secondary" id="modal-gender">
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                    <option value="Khác">Khác</option>
+                                </select>
+                            </div>
+                        </div>
+                      
+
+                    </form>
+                </div>
+                <div class="modal-footer modal-footer-custom border-top border-secondary">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-warning" id="saveProfileBtn">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Link JS chính (Đặt file này ở public/JS/shipper/profileShipper.js) -->
+    <script src="../../sql-backend/models/shipper/profileShipper.js"></script> 
+
+    <script>
+  const getAccount = () => {
+    const raw = localStorage.getItem('account');
+    if (!raw) return null;
+    try { return JSON.parse(raw); } catch { return null; }
+  };
+
+  const setText = (id, text) => {
+    const el = document.getElementById(id);
+    if (el && typeof text === 'string' && text.trim()) el.textContent = text;
+  };
+
+  const setImg = (id, src) => {
+    const el = document.getElementById(id);
+    if (el && typeof src === 'string' && src.trim()) el.src = src;
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const acc = getAccount();
+    if (!acc) return;
+
+    // username
+    const hiName = `Hi, ${acc.Username}`; // hoặc acc.FullName nếu bạn lưu
+    setText('shipper-name', hiName);
+    setText('nav-shipper-name', hiName);
+
+    // avatar
+    setImg('shipper-avatar', acc.ImageUrl);
+    setImg('nav-shipper-avatar', acc.ImageUrl);
+  });
+</script>
+
+</body>
+
+</html>

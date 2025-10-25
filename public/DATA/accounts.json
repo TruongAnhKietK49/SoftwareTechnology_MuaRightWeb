@@ -1,0 +1,23 @@
+USE [WebDB]
+GO
+
+INSERT INTO [dbo].[Account]
+           ([Username]
+           ,[Email]
+           ,[Phone]
+           ,[PasswordHash]
+           ,[Role]
+           ,[State]
+           ,[ImageUrl]
+           ,[CreatedAt])
+     VALUES
+           (<Username, nvarchar(100),>
+           ,<Email, nvarchar(100),>
+           ,<Phone, nvarchar(50),>
+           ,<PasswordHash, nvarchar(255),>
+           ,<Role, nvarchar(20),>
+           ,<State, nvarchar(20),>
+           ,<ImageUrl, nvarchar(1000),>
+           ,<CreatedAt, datetime2(7),>)
+GO
+
