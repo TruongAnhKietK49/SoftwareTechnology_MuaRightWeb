@@ -1,0 +1,122 @@
+:root{
+  --bg:#0b0c0f; --bg2:#12141b; --text:#eef2f8; --muted:#a9b0bf;
+  --accent:#d29b60; --accent-2:#f0b35a; --ring:0 14px 40px rgba(210,155,96,.18);
+  --border:rgba(255,255,255,.08); --border-2:rgba(255,255,255,.14);
+  --good:#22c55e; --warn:#f59e0b; --bad:#ef4444;
+}
+
+/* ====== Layout chung (dark) ====== */
+body{
+  background:
+    radial-gradient(1000px 600px at 15% -10%, #1a1b21 0%, transparent 60%),
+    radial-gradient(900px 600px at 85% -10%, #171820 0%, transparent 60%),
+    linear-gradient(#0b0c0f, #0b0c0f);
+  color:var(--text);
+}
+
+/* Navbar */
+.navbar-custom{
+  background:linear-gradient(90deg,#0c0e12,#10131a);
+  border-bottom:1px solid var(--border);
+}
+.text-brown-gold{ color:var(--accent)!important; }
+
+/* Page title line */
+.page-title{ font-weight:800; letter-spacing:.2px; }
+.border-warning{ border-color:var(--accent)!important; }
+
+/* Card profile */
+.profile-card{
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  border:1px solid var(--border);
+  border-radius:16px;
+  box-shadow:var(--ring);
+}
+
+/* Thông tin */
+.info-label{ font-size:.9rem; color:var(--muted); }
+.info-value{ font-size:1rem; font-weight:600; }
+.password-mask{ letter-spacing:.18em; }
+
+/* Badge trạng thái */
+.badge.bg-success{ background:rgba(34,197,94,.18)!important; color:var(--good); }
+.badge.bg-warning{ background:rgba(245,158,11,.2)!important; color:var(--warn); }
+
+/* Avatar + icon */
+.profile-avatar img{ box-shadow:0 8px 24px rgba(0,0,0,.35); }
+#vehicle-icon-nav i{ filter: drop-shadow(0 4px 10px rgba(0,0,0,.4)); }
+
+/* Buttons */
+.btn-outline-warning{
+  border-color:var(--accent); color:var(--accent);
+}
+.btn-outline-warning:hover{
+  background:linear-gradient(180deg,var(--accent),var(--accent-2));
+  color:#121216; border-color:transparent;
+}
+.btn-warning{
+  background:linear-gradient(180deg,var(--accent),var(--accent-2));
+  color:#121216; border:0;
+}
+
+/* Làm modal dễ nhìn hơn */
+.modal-content.bg-dark {
+  background: linear-gradient(180deg, rgba(30, 32, 40, .95), rgba(20, 22, 28, .98)) !important;
+  border: 1px solid var(--border-2);
+  box-shadow: 0 0 40px rgba(210,155,96,.25);
+  backdrop-filter: blur(10px);
+}
+
+/* Tăng độ tương phản chữ */
+.modal-content.bg-dark label,
+.modal-content.bg-dark .form-label {
+  color: var(--accent-2);
+  font-weight: 600;
+}
+
+.modal-content.bg-dark .form-control,
+.modal-content.bg-dark .form-select {
+  background: rgba(255,255,255,.08) !important;
+  border-color: rgba(255,255,255,.15) !important;
+}
+.form-select.bg-dark {
+  background-color: #1d1f25 !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border-2) !important;
+}
+
+.form-select.bg-dark option {
+  background-color: #252730 !important; /* nền menu */
+  color: #f5f6fa !important;            /* chữ sáng */
+}
+
+/* Khi hover hoặc chọn */
+.form-select.bg-dark option:hover,
+.form-select.bg-dark option:checked {
+  background-color: var(--accent) !important;
+  color: #121216 !important;
+}
+
+/* Inputs dark */
+.form-control.bg-dark, .form-select.bg-dark{
+  background:rgba(255,255,255,.04)!important;
+  color:var(--text)!important;
+  border-color:var(--border)!important;
+}
+.form-control.bg-dark:focus, .form-select.bg-dark:focus{
+  border-color:var(--border-2)!important;
+  box-shadow:0 0 0 .22rem rgba(210,155,96,.18)!important;
+}
+
+/* Toaster (nhỏ gọn) */
+.toast-ctr{
+  position:fixed; right:16px; bottom:16px; display:flex; flex-direction:column; gap:8px; z-index:9999;
+}
+.toast-item{
+  background:#e0e0e0; color:#111; padding:10px 14px; border-radius:12px;
+  box-shadow:0 10px 20px rgba(0,0,0,.25); transform:translateY(8px); opacity:0;
+  transition:all .2s ease;
+}
+.toast-item.show{ transform:translateY(0); opacity:1; }
+.toast-item.ok{ background:#c8f7d0; }
+.toast-item.err{ background:#ffd0d0; }

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MuaRight – Shipper Orders</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    :root {
+      --bg: #0b0c0f;
+      --bg-2: #0f1116;
+      --card: #12141b;
+      --muted: #a9b0bf;
+      --text: #eef2f8;
+      --accent: #d29b60;
+      --accent-2: #f0b35a;
+      --ring: 0 12px 38px rgba(210,155,96,.18);
+      --border: rgba(255,255,255,.08);
+      --border-2: rgba(255,255,255,.12);
+      --good: #22c55e;
+      --bad: #ef4444;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1100px 600px at 15% -10%, #1a1b21 0%, transparent 60%),
+        radial-gradient(1000px 600px at 85% -10%, #171820 0%, transparent 60%),
+        linear-gradient(#0b0c0f, #0b0c0f);
+      color: var(--text);
+    }
+
+    /* ===== NAV ===== */
+    .navbar{
+      position: sticky; top:0; z-index:50;
+      width:100%;
+      padding:14px 22px;
+      background:linear-gradient(90deg,#0c0e12,#10131a);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-inner{
+      max-width:1200px; margin: 0 auto;
+      display:grid; grid-template-columns: 1fr auto; align-items:center; gap:16px;
+    }
+    .nav-left{ display:flex; align-items:center; gap:18px; min-width:0; }
+    .nav-right{ display:flex; align-items:center; gap:12px; }
+    .navbar a{ color:#d7dde9; text-decoration:none; font-weight:600; opacity:.85; }
+    .navbar a:hover, .navbar .active{ color:var(--accent); opacity:1; }
+    .brand{ display:flex; align-items:center; gap:10px; text-decoration:none !important; color:var(--text) !important; }
+    .brand span{ font-weight:800; letter-spacing:.2px; }
+    .logo{ width:28px; height:28px; border-radius:8px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow:0 0 15px rgba(210,155,96,.35); }
+    .chip{ display:inline-flex; gap:10px; align-items:center; padding:6px 10px; border-radius:999px;
+           background:rgba(255,255,255,.06); border:1px solid var(--border); color:#e8edf6; font-weight:600; }
+    .avatar{ width:28px; height:28px; border-radius:999px; object-fit:cover; border:1px solid var(--border-2); }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 32px 20px 60px; }
+    h2.section-title { margin: 18px 0; letter-spacing: .2px; }
+    .subtle { color: var(--muted); font-size: 14px; }
+
+    /* GRID CARDS */
+    .grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      align-items: stretch;
+    }
+    .card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      background: linear-gradient(182deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: var(--ring);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .card:hover { transform: translateY(-2px); border-color: var(--border-2); box-shadow: 0 16px 42px rgba(210,155,96,.18); }
+    .product-thumb { width: 100%; max-height: 160px; object-fit: contain; filter: drop-shadow(0 10px 18px rgba(0,0,0,.4)); }
+    .text-accent { color: var(--accent); }
+    .list { list-style: none; padding-left: 0; margin: 10px 0 0; }
+    .list li { margin: 6px 0; font-size: 14px; }
+    .list strong { color: var(--accent); }
+    .btn { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; border: 0; font-weight: 800; letter-spacing: .2px; }
+    .btn:disabled { opacity: .65; cursor: not-allowed; }
+    .btn-accent {
+      background: linear-gradient(180deg, var(--accent), var(--accent-2)); color: #121216;
+      padding: 10px 16px; border-radius: 12px;
+      transition: transform .15s ease, filter .15s ease;
+    }
+    .btn-accent:hover { transform: translateY(-1px) scale(1.02); filter: brightness(1.05); }
+
+    .table-wrap { margin-top: 18px; background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)); border:1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; color: var(--text); }
+    thead th { text-align: left; padding: 14px 16px; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)); color: var(--accent); font-weight: 800; font-size: 13px; border-bottom: 1px solid var(--border); }
+    tbody td { padding: 14px 16px; border-top: 1px solid rgba(255,255,255,.04); font-size: 14px; }
+    tbody tr:hover { background: rgba(255,255,255,.03); }
+
+    .actions { display: flex; gap: 10px; align-items: center; justify-content: center; }
+    .order-action-btn { border-radius: 10px; font-weight: 800; padding: 8px 12px; }
+    .btn-ok { background: rgba(34,197,94,.12); color: var(--good); border: 1px solid rgba(34,197,94,.3); }
+    .btn-cancel { background: rgba(239,68,68,.12); color: var(--bad); border: 1px solid rgba(239,68,68,.3); }
+    .badge { display: inline-block; padding: 6px 10px; border-radius: 999px; background: rgba(255,255,255,.08); border: 1px solid var(--border-2); font-size: 12px; color: #eaeef6; }
+    .empty { color: var(--muted); background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); border: 1px dashed var(--border); padding: 14px; border-radius: 12px; text-align: center; }
+
+    /* PAGINATION */
+    .pager {
+      display:flex; align-items:center; gap:10px; justify-content:flex-end; margin-top:14px; flex-wrap:wrap;
+    }
+    .pager .btn-page {
+      background: rgba(255,255,255,.06); border:1px solid var(--border); color:#e8edf6;
+      padding:8px 12px; border-radius:10px; font-weight:700; cursor:pointer;
+    }
+    .btn-page[disabled]{ opacity:.5; cursor:not-allowed; }
+    .page-info{ color:var(--muted); font-size:13px; margin-right:auto; }
+    /* Tăng tương phản cho select page-size */
+select.page-size{
+  appearance: none; /* ẩn arrow mặc định để tự vẽ */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)),
+    #0f1116;                         /* nền tối rõ */
+  color: #eef2f8;                    /* chữ sáng */
+  border: 1px solid rgba(255,255,255,.22); /* border đậm hơn */
+  padding: 8px 34px 8px 10px;        /* chừa chỗ cho icon */
+  border-radius: 10px;
+  font-weight: 700;
+  outline: none;
+  box-shadow: 0 0 0 0 rgba(210,155,96,0);
+  transition: box-shadow .15s ease, border-color .15s ease, background .15s ease;
+  cursor: pointer;
+  color-scheme: dark;                /* hint cho browser dùng menu dark */
+}
+
+/* mũi tên trắng-vàng dễ nhìn */
+select.page-size{
+  background-image:
+    url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23f0b35a' d='M5 7l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 14px 14px;
+}
+
+select.page-size:hover{
+  border-color: rgba(240,179,90,.8);
+  background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)), #10131a;
+}
+
+select.page-size:focus{
+  border-color: rgba(240,179,90,1);
+  box-shadow: 0 0 0 3px rgba(240,179,90,.25);
+}
+
+/* Màu của menu item trong list (hỗ trợ tốt trên Chromium/Firefox) */
+select.page-size option{
+  background: #0f1116;  /* nền của từng option */
+  color: #eef2f8;       /* chữ sáng */
+}
+
+/* Windows/IE */
+select.page-size::-ms-expand{ display:none; }
+
+    .jump-input{
+      width:72px; padding:6px 8px; border-radius:8px; border:1px solid var(--border); background:rgba(255,255,255,.06); color:#e8edf6;
+    }
+
+    /* TOAST */
+    .toast-holder { position: fixed; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 10px; z-index: 9999; }
+    .toast { opacity: 0; transform: translateY(8px); transition: opacity .2s ease, transform .2s ease; border-radius: 12px; padding: 10px 14px; color:#0b0c0f; background: #e0e0e0; font-weight: 800; min-width: 240px; box-shadow: 0 8px 20px rgba(0,0,0,.25); }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.info{ background:#d1e7ff; }
+    .toast.success{ background:#c8f7d0; }
+    .toast.warn{ background:#ffe6b3; }
+    .toast.danger{ background:#ffd0d0; }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-inner">
+      <!-- TRÁI: MENU -->
+      <nav class="nav-left">
+        <a class="nav-link" href="./homeShipper_page.html">Home</a>
+        <a class="nav-link active" href="./products_page.html">Products</a>
+        <a class="nav-link" href="./profile_Page.html">Profile</a>
+      </nav>
+
+      <!-- PHẢI: USER CHIP -->
+      <div class="nav-right">
+        <a class="brand" href="./homeShipper_page.html" title="MuaRight">
+          <div class="logo"></div>
+          <span>MuaRight</span>
+        </a>
+        <div class="chip">
+          <img id="nav-shipper-avatar" class="avatar" src="" alt="avatar" />
+          <span id="nav-shipper-name">Shipper</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="row">
+      <h2 class="section-title">Đơn hàng mới chờ nhận</h2>
+      <span class="pill subtle"><i class="fa-regular fa-clock"></i>&nbsp;Tự động làm mới sau khi cập nhật</span>
+    </div>
+
+    <!-- PENDING ORDERS GRID -->
+    <div class="grid" id="pending-orders-container"></div>
+    <!-- PAGER: PENDING -->
+    <div class="pager" id="pending-pager">
+      <span class="page-info" id="pending-page-info"></span>
+      <label>Hiển thị
+        <select id="pending-page-size" class="page-size">
+          <option>8</option><option>12</option><option>16</option><option>24</option>
+        </select>
+      </label>
+      <button class="btn-page" id="pending-prev">&laquo; Prev</button>
+      <button class="btn-page" id="pending-next">Next &raquo;</button>
+      <input class="jump-input" id="pending-jump" type="number" min="1" placeholder="Trang" />
+      <button class="btn-page" id="pending-go">Go</button>
+    </div>
+
+    <div class="divider" style="margin:24px 0;"></div>
+
+    <div class="row">
+      <h2 class="section-title">Đơn hàng của tôi</h2>
+      <span class="subtle">Đơn đang giao hiển thị trên cùng</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>MÃ ĐƠN</th>
+            <th>ĐỊA CHỈ GIAO</th>
+            <th>TỔNG TIỀN</th>
+            <th class="text-center">TRẠNG THÁI &amp; HÀNH ĐỘNG</th>
+          </tr>
+        </thead>
+        <tbody id="my-orders-tbody"></tbody>
+      </table>
+    </div>
+    <!-- PAGER: MY ORDERS -->
+    <div class="pager" id="my-pager">
+      <span class="page-info" id="my-page-info"></span>
+      <label>Hiển thị
+        <select id="my-page-size" class="page-size">
+          <option>8</option><option>12</option><option>16</option><option>24</option>
+        </select>
+      </label>
+      <button class="btn-page" id="my-prev">&laquo; Prev</button>
+      <button class="btn-page" id="my-next">Next &raquo;</button>
+      <input class="jump-input" id="my-jump" type="number" min="1" placeholder="Trang" />
+      <button class="btn-page" id="my-go">Go</button>
+    </div>
+  </main>
+
+  <!-- TOAST HOLDER -->
+  <div class="toast-holder" id="toast-holder"></div>
+
+  <script>
+    // ===============================
+    // CONFIG
+    // ===============================
+    function getShipperId() {
+      const raw = localStorage.getItem('account');
+      if (!raw) return null;
+      try {
+        const acc = JSON.parse(raw);
+        const id = Number(acc?.AccountId ?? acc?.ShipperId);
+        return Number.isFinite(id) && id > 0 ? id : null;
+      } catch { return null; }
+    }
+
+    function getAccountProfile() {
+      const raw = localStorage.getItem('account');
+      if (!raw) return {};
+      try {
+        const acc = JSON.parse(raw);
+        return {
+          name: acc?.FullName || acc?.Name || acc?.Username || 'Shipper',
+          avatar: acc?.AvatarUrl || acc?.Avatar || acc?.ImageUrl || ''
+        };
+      } catch { return {}; }
+    }
+
+    const API_BASE = 'http://localhost:3000/api/shipper';
+    const shipperId = getShipperId();
+
+    // ===============================
+    // FETCH HELPERS
+    // ===============================
+    async function http(path, opts = {}) {
+      const res = await fetch(API_BASE + path, {
+        headers: { 'Content-Type': 'application/json' },
+        ...opts,
+      });
+      if (!res.ok) {
+        let msg;
+        try { const t = await res.text(); msg = t || res.statusText; } catch { msg = res.statusText; }
+        throw new Error('[' + res.status + '] ' + msg);
+      }
+      try { return await res.json(); } catch { return {}; }
+    }
+
+    // API calls (hiện tại lấy full để phân trang client-side)
+    async function getPendingOrders() {
+      const res = await http('/orders/pending');
+      return Array.isArray(res) ? res : (res?.orders || []);
+    }
+    async function getMyOrders() {
+      const res = await http('/orders/my-orders/' + shipperId);
+      return Array.isArray(res) ? res : (res?.orders || []);
+    }
+    async function acceptOrder(orderId) {
+      return http('/orders/accept', { method: 'POST', body: JSON.stringify({ orderId, shipperId }) });
+    }
+    async function updateOrderStatus(orderId, newState) {
+      return http('/orders/update-status', { method: 'POST', body: JSON.stringify({ orderId, shipperId, newState }) });
+    }
+
+    // ===============================
+    // UI HELPERS
+    // ===============================
+    const $pend = document.getElementById('pending-orders-container');
+    const $tbody = document.getElementById('my-orders-tbody');
+
+    const $pendingInfo = document.getElementById('pending-page-info');
+    const $pendingPrev = document.getElementById('pending-prev');
+    const $pendingNext = document.getElementById('pending-next');
+    const $pendingSize = document.getElementById('pending-page-size');
+    const $pendingJump = document.getElementById('pending-jump');
+    const $pendingGo = document.getElementById('pending-go');
+
+    const $myInfo = document.getElementById('my-page-info');
+    const $myPrev = document.getElementById('my-prev');
+    const $myNext = document.getElementById('my-next');
+    const $mySize = document.getElementById('my-page-size');
+    const $myJump = document.getElementById('my-jump');
+    const $myGo = document.getElementById('my-go');
+
+    function currency(v) {
+      if (typeof v === 'number') return v.toLocaleString('vi-VN');
+      const n = Number(v);
+      return Number.isFinite(n) ? n.toLocaleString('vi-VN') : (v || '');
+    }
+
+    function orderCard(order) {
+      const id = order.OrderId;
+      const img = (order.Details && order.Details[0] && order.Details[0].ImageUrl) || 'https://dummyimage.com/600x400/222/fff.png&text=Product';
+      const name = (order.Details && order.Details[0] && order.Details[0].NameProduct) || 'Sản phẩm';
+      const qty = (order.Details && order.Details[0] && order.Details[0].Quantity) || 1;
+      const seller = (order.Details && order.Details[0] && order.Details[0].SellerStore) || 'Kho';
+
+      const card = document.createElement('div');
+      card.innerHTML = `
+        <div class="card">
+          <img class="product-thumb" src="${img}" alt="product" />
+          <h3 style="margin:10px 0 4px;">#${id}</h3>
+          <div class="subtle" style="margin-bottom:8px;">${new Date(order.OrderDate || Date.now()).toLocaleString('vi-VN')}</div>
+          <div class="text-accent" style="font-weight:800;">${name} (x${qty})</div>
+          <ul class="list">
+            <li><strong>Lấy hàng:</strong> ${seller}</li>
+            <li><strong>Giao hàng:</strong> ${order.ShipAddress || '-'}</li>
+            <li><strong>Phí ship:</strong> ${currency(order.ShippingFee)}</li>
+            <li><strong>Tổng tiền:</strong> ${currency(order.TotalAmount)}</li>
+          </ul>
+          <button class="btn btn-accent order-accept-btn" data-id="${id}" style="margin-top:12px;">
+            <i class="fa-solid fa-truck-fast"></i> Chọn giao
+          </button>
+        </div>`;
+      return card.firstElementChild; // trả về .card
+    }
+
+    function myOrderRow(order) {
+      const id = order.OrderId;
+      const isDelivered = order.State === 'Delivered';
+      const cancelBtnHtml = isDelivered ? '' :
+        `<button class="order-action-btn btn-cancel cancel-btn" data-id="${id}" ${order.State==='Cancelled' ? 'disabled' : ''}>
+           <i class="fa-solid fa-ban"></i> Hủy giao
+         </button>`;
+
+      const tr = document.createElement('tr');
+      tr.dataset.orderId = id;
+      tr.innerHTML = `
+        <td class="fw-semibold">#${id}</td>
+        <td>${order.ShipAddress || '-'}</td>
+        <td class="text-accent fw-bold">${currency(order.TotalAmount)}</td>
+        <td>
+          <div class="actions">
+            <button class="order-action-btn btn-ok deliver-btn" data-id="${id}" ${isDelivered ? 'disabled' : ''}>
+              <i class="fa-solid fa-circle-check"></i> Đã giao
+            </button>
+            ${cancelBtnHtml}
+            <span class="badge">${order.State}</span>
+          </div>
+        </td>`;
+      return tr;
+    }
+
+    // ===============================
+    // PAGINATION LOGIC (client-side)
+    // ===============================
+    function slicePage(arr, page, size) {
+      const total = arr.length;
+      const totalPages = Math.max(1, Math.ceil(total / size));
+      const p = Math.min(Math.max(1, page), totalPages);
+      const start = (p - 1) * size;
+      return { page: p, total, totalPages, items: arr.slice(start, start + size) };
+    }
+
+    const state = {
+      pending: { raw: [], page: 1, size: 8 },
+      my: { raw: [], page: 1, size: 8 }
+    };
+
+    // ===============================
+    // RENDERERS
+    // ===============================
+    function renderPending() {
+      const { page, size, raw } = state.pending;
+      const { items, total, totalPages, page: fixedPage } = slicePage(raw, page, size);
+      state.pending.page = fixedPage;
+
+      $pend.innerHTML = '';
+      if (!items.length) {
+        const d = document.createElement('div');
+        d.className = 'empty';
+        d.textContent = 'Chưa có đơn chờ nhận';
+        $pend.appendChild(d);
+      } else {
+        const frag = document.createDocumentFragment();
+        items.forEach(o => frag.appendChild(orderCard(o)));
+        $pend.appendChild(frag);
+      }
+
+      $pendingInfo.textContent = `Trang ${fixedPage}/${totalPages} • Tổng ${total} đơn`;
+      $pendingPrev.disabled = fixedPage <= 1;
+      $pendingNext.disabled = fixedPage >= totalPages;
+      $pendingJump.value = '';
+    }
+
+    function renderMyOrders() {
+      const { page, size, raw } = state.my;
+      const { items, total, totalPages, page: fixedPage } = slicePage(raw, page, size);
+      state.my.page = fixedPage;
+
+      $tbody.innerHTML = '';
+      if (!items.length) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="4"><div class="empty">Bạn chưa nhận đơn nào</div></td>';
+        $tbody.appendChild(tr);
+      } else {
+        const frag = document.createDocumentFragment();
+        items.forEach(o => frag.appendChild(myOrderRow(o)));
+        $tbody.appendChild(frag);
+      }
+
+      $myInfo.textContent = `Trang ${fixedPage}/${totalPages} • Tổng ${total} đơn`;
+      $myPrev.disabled = fixedPage <= 1;
+      $myNext.disabled = fixedPage >= totalPages;
+      $myJump.value = '';
+    }
+
+    async function refreshPending() {
+      try {
+        state.pending.raw = await getPendingOrders();
+        // mặc định sort mới nhất trước (nếu cần)
+        state.pending.raw.sort((a,b)=> new Date(b.OrderDate||0)-new Date(a.OrderDate||0));
+        renderPending();
+      } catch (e) {
+        toast('Lỗi tải đơn chờ nhận: ' + e.message, 'danger');
+      }
+    }
+
+    async function refreshMyOrders() {
+      try {
+        state.my.raw = await getMyOrders();
+        // ưu tiên đơn đang giao
+        state.my.raw.sort((a,b)=>{
+          const prio = (s)=> s==='Shipping'?2 : s==='Pending'?1 : 0;
+          const p = prio(b.State) - prio(a.State);
+          if (p!==0) return p;
+          return new Date(b.OrderDate||0) - new Date(a.OrderDate||0);
+        });
+        renderMyOrders();
+      } catch (e) {
+        toast('Lỗi tải đơn của tôi: ' + e.message, 'danger');
+      }
+    }
+
+    // ===============================
+    // EVENTS
+    // ===============================
+    document.addEventListener('click', async (ev) => {
+      const acceptBtn = ev.target.closest('.order-accept-btn');
+      if (acceptBtn) {
+        const id = Number(acceptBtn.dataset.id);
+        acceptBtn.disabled = true;
+        try {
+          await acceptOrder(id);
+          toast('Đã nhận đơn #' + id, 'success');
+          await Promise.all([refreshPending(), refreshMyOrders()]);
+        } catch (e) {
+          toast('Nhận đơn thất bại: ' + e.message, 'danger');
+          acceptBtn.disabled = false;
+        }
+      }
+
+      const deliverBtn = ev.target.closest('.deliver-btn');
+      if (deliverBtn) {
+        const id = Number(deliverBtn.dataset.id);
+        deliverBtn.disabled = true;
+        try {
+          await updateOrderStatus(id, 'Delivered');
+          toast('Cập nhật #' + id + ' → Đã giao', 'success');
+          await refreshMyOrders();
+        } catch (e) {
+          toast('Cập nhật thất bại: ' + e.message, 'danger');
+          deliverBtn.disabled = false;
+        }
+      }
+
+      const cancelBtn = ev.target.closest('.cancel-btn');
+      if (cancelBtn) {
+        const id = Number(cancelBtn.dataset.id);
+        if (!confirm('Hủy giao đơn #' + id + '?')) return;
+        cancelBtn.disabled = true;
+        try {
+          await updateOrderStatus(id, 'Cancelled');
+          toast('Đơn #' + id + ' đã hủy giao', 'warn');
+          await Promise.all([refreshPending(), refreshMyOrders()]);
+        } catch (e) {
+          toast('Cập nhật thất bại: ' + e.message, 'danger');
+          cancelBtn.disabled = false;
+        }
+      }
+    });
+
+    // Pager actions
+    $pendingPrev.addEventListener('click', ()=>{ state.pending.page--; renderPending(); });
+    $pendingNext.addEventListener('click', ()=>{ state.pending.page++; renderPending(); });
+    $pendingSize.addEventListener('change', ()=>{ state.pending.size = Number($pendingSize.value)||8; state.pending.page = 1; renderPending(); });
+    $pendingGo.addEventListener('click', ()=>{
+      const t = Number($pendingJump.value||1);
+      state.pending.page = t;
+      renderPending();
+    });
+
+    $myPrev.addEventListener('click', ()=>{ state.my.page--; renderMyOrders(); });
+    $myNext.addEventListener('click', ()=>{ state.my.page++; renderMyOrders(); });
+    $mySize.addEventListener('change', ()=>{ state.my.size = Number($mySize.value)||8; state.my.page = 1; renderMyOrders(); });
+    $myGo.addEventListener('click', ()=>{
+      const t = Number($myJump.value||1);
+      state.my.page = t;
+      renderMyOrders();
+    });
+
+    // ===============================
+    // TOAST
+    // ===============================
+    function toast(message, level = 'info') {
+      const holder = document.getElementById('toast-holder');
+      const el = document.createElement('div');
+      el.className = 'toast ' + (level || 'info');
+      el.textContent = message;
+      holder.appendChild(el);
+      setTimeout(() => el.classList.add('show'));
+      setTimeout(() => {
+        el.classList.remove('show');
+        setTimeout(() => el.remove(), 250);
+      }, 2600);
+    }
+
+    // ===============================
+    // HEADER: load tên & avatar từ localStorage
+    // ===============================
+    function loadHeaderProfile() {
+      const { name, avatar } = getAccountProfile();
+      const nameEl = document.getElementById('nav-shipper-name');
+      const avatarEl = document.getElementById('nav-shipper-avatar');
+      if (nameEl) nameEl.textContent = name || 'Shipper';
+      if (avatarEl) {
+        if (avatar) {
+          avatarEl.src = avatar;
+          avatarEl.alt = name || 'avatar';
+        } else {
+          // avatar rỗng -> dùng placeholder chữ cái
+          const canvas = document.createElement('canvas');
+          canvas.width = canvas.height = 64;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#2a2f3a'; ctx.fillRect(0,0,64,64);
+          ctx.fillStyle = '#e8edf6';
+          ctx.font = 'bold 28px Inter, Arial';
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          const ch = (name||'S')[0]?.toUpperCase() || 'S';
+          ctx.fillText(ch, 32, 36);
+          avatarEl.src = canvas.toDataURL('image/png');
+        }
+      }
+    }
+
+    // ===============================
+    // INIT
+    // ===============================
+    (async function init() {
+      loadHeaderProfile();
+      // đặt default page size
+      $pendingSize.value = String(state.pending.size);
+      $mySize.value = String(state.my.size);
+      await Promise.all([refreshPending(), refreshMyOrders()]);
+    })();
+  </script>
+</body>
+</html>

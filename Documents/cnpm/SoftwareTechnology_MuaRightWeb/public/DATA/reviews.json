@@ -1,0 +1,86 @@
+[
+  {
+    "ProductId": 1,
+    "CustomerId": 1,
+    "Rating": 5,
+    "Comment": "Mùi hương Dior Sauvage thật sự đẳng cấp, giữ mùi lâu và cực kỳ nam tính."
+  },
+  {
+    "ProductId": 2,
+    "CustomerId": 2,
+    "Rating": 4,
+    "Comment": "Bleu de Chanel rất thơm, hương sang trọng nhưng hơi nhẹ sau 5 tiếng."
+  },
+  {
+    "ProductId": 3,
+    "CustomerId": 3,
+    "Rating": 5,
+    "Comment": "Versace Eros đúng là mùi hương quyến rũ nhất tôi từng dùng, rất đáng tiền."
+  },
+  {
+    "ProductId": 4,
+    "CustomerId": 4,
+    "Rating": 4,
+    "Comment": "Gucci Bloom nhẹ nhàng và nữ tính, mùi hoa trắng rất dễ chịu."
+  },
+  {
+    "ProductId": 5,
+    "CustomerId": 5,
+    "Rating": 5,
+    "Comment": "Lancôme La Vie Est Belle có hương vani ngọt ngào, cực kỳ sang trọng."
+  },
+  {
+    "ProductId": 6,
+    "CustomerId": 1,
+    "Rating": 5,
+    "Comment": "Chanel No.5 là huyền thoại, mùi cổ điển và quý phái không bao giờ lỗi thời."
+  },
+  {
+    "ProductId": 7,
+    "CustomerId": 2,
+    "Rating": 4,
+    "Comment": "Calvin Klein One rất dễ dùng, hương tươi mát, phù hợp cho cả nam và nữ."
+  },
+  {
+    "ProductId": 8,
+    "CustomerId": 3,
+    "Rating": 5,
+    "Comment": "Burberry Her mang lại cảm giác ngọt ngào và hiện đại, hương dâu rất nổi bật."
+  },
+  {
+    "ProductId": 9,
+    "CustomerId": 4,
+    "Rating": 4,
+    "Comment": "Acqua di Gio mùi biển nhẹ và tươi mát, cực hợp dùng mùa hè."
+  },
+  {
+    "ProductId": 10,
+    "CustomerId": 5,
+    "Rating": 5,
+    "Comment": "Jo Malone English Pear & Freesia rất thanh lịch, mùi lê tự nhiên và dễ chịu."
+  },
+  {
+    "ProductId": 11,
+    "CustomerId": 4,
+    "Rating": 4,
+    "Comment": "Tom Ford Black Orchid mùi hương trầm ấm, quyến rũ, bí ản, dùng cho cả nam và nữ."
+  },
+  {
+    "ProductId": 13,
+    "CustomerId": 4,
+    "Rating": 5,
+    "Comment": "YSL Libre rất thanh lịch, hương oải hương, quyến rũ, dùng cho cả nam và nữ."
+  },
+  {
+    "ProductId": 3,
+    "CustomerId": 4,
+    "Rating": 4,
+    "Comment": "Versace Eros đúng là mùi hương quyến rũ nhất tôi từng dùng, rất đáng tiền."
+  },
+  {
+    "ProductId": 4,
+    "CustomerId": 5,
+    "Rating": 3,
+    "Comment": "Gucci Bloom mùi khá ổn, nên mua theo cảm nhận!"
+  }
+]
