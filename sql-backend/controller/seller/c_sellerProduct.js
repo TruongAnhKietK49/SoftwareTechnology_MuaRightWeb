@@ -5,6 +5,11 @@ async function getProducts(sellerId) {
     return await productModel.getProductsBySeller(sellerId);
 }
 
+async function getProductReviews(productId) {
+    if (isNaN(productId)) throw new Error("Product ID không hợp lệ.");
+    return await productModel.getReviewsByProductId(productId);
+}
+
 async function updateProduct(productId, productData) {
     if (isNaN(productId)) throw new Error("Product ID không hợp lệ.");
     const success = await productModel.updateProductById(productId, productData);
@@ -22,5 +27,6 @@ async function deleteProduct(productId) {
 module.exports = {
     getProducts,
     updateProduct,
+    getProductReviews,
     deleteProduct,
 };

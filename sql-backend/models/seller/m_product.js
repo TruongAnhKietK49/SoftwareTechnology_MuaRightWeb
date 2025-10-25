@@ -95,8 +95,28 @@ async function deleteProductById(productId) {
     }
 }
 
+/**
+ * Lấy đánh giá của một sản phẩm
+ */
+async function getReviewsByProductId(productId) {
+    const pool = await getPool();
+    const request = await pool.request()
+        .input('productId', sql.Int, productId)
+        .query(`
+            SELECT 
+                R.ReviewId, R.CustomerId, A.Username AS CustomerName, R.Rating, R.Comment, R.CreatedAt
+            FROM Review R
+            JOIN CustomerProfile CP ON R.CustomerId = CP.CustomerId
+            JOIN Account A ON CP.CustomerId = A.AccountId
+            WHERE R.ProductId = @ProductId
+            ORDER BY R.CreatedAt DESC;
+        `);
+    return request.recordset;
+}
+
 module.exports = {
     getProductsBySeller,
+    getReviewsByProductId,
     addProductForApproval,
     updateProductById,
     deleteProductById
