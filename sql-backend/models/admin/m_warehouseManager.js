@@ -3,10 +3,25 @@ const { getPool, closePool } = require("../../routes/config");
 const getProducts = async () => {
   try {
     const pool = await getPool();
-    const result = await pool.request().query("SELECT * FROM Product");
+    const result = await pool.request().query(`
+      SELECT 
+          p.*,
+          a.Username AS SellerName,
+          ISNULL(AVG(r.Rating), 0) AS AverageRating,      -- ⭐ Trung bình sao
+          COUNT(r.ReviewId) AS TotalReviews               -- 🔢 Tổng số đánh giá
+      FROM Product AS p
+      JOIN Account AS a ON p.SellerId = a.AccountId
+      LEFT JOIN Review AS r ON p.ProductId = r.ProductId
+      GROUP BY 
+          p.ProductId, p.SellerId, p.NameProduct, p.Category, 
+          p.Quantity, p.Price, p.Description, p.Warranty, 
+          p.ImageUrl, p.TagName, p.Brand, p.CreatedAt, 
+          a.Username
+      ORDER BY p.CreatedAt DESC
+    `);
     return result.recordset;
   } catch (err) {
-    console.error("Lỗi khi lấy danh sách sản phẩm:", err);
+    console.error("❌ Lỗi khi lấy danh sách sản phẩm:", err);
     return [];
   }
 };

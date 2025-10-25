@@ -1,6 +1,6 @@
 let allAccountsCache = [];
 let currentPage = 1;
-const itemsPerPage = 5;
+const itemsPerPage = 8;
 
 // --- Lấy dữ liệu account từ API
 async function getAccount() {
@@ -62,83 +62,71 @@ async function testGetAccount(filterRole = "All") {
     const visibleAccounts = filteredAccounts.slice(startIndex, endIndex);
 
     // --- Render danh sách ---
-    visibleAccounts.forEach((account, index) => {
-      const row = document.createElement("tr");
+    visibleAccounts.forEach((account) => {
+      const roleClass =
+        account.Role === "Customer"
+          ? "role-customer"
+          : account.Role === "Seller"
+          ? "role-seller"
+          : account.Role === "Shipper"
+          ? "role-shipper"
+          : "";
+
+      const statusClass =
+        account.State === "Active" ? "status-active" : "status-inactive";
+      const row = document.createElement("div");
       row.innerHTML = `
-        <td class="text-center" data-label="Chọn">
-          <input class="form-check-input item" type="checkbox">
-        </td>
-        <td data-label="Ảnh">
-          <img src="${account.ImageUrl}" class="user-avatar" alt="User Avatar">
-        </td>
-        <td data-label="Thông tin">
-          <div class="user-name-email">
-            <div class="user-name">${account.Username}</div>
-            <div class="user-email">${account.Email}</div>
+        <div class="user-card">
+          <div class="card-checkbox">
+            <input class="form-check-input item" type="checkbox" value="${account.AccountId}">
           </div>
-        </td>
-        <td data-label="Vai trò">
-          <span class="badge ${
-            account.Role == "Customer"
-              ? "bg-primary"
-              : account.Role == "Seller"
-              ? "bg-secondary"
-              : "bg-info"
-          }">${account.Role}</span>
-        </td>
-        <td data-label="Trạng thái"><span class="badge ${
-          account.State === "Active" ? "bg-success" : "bg-warning"
-        }">${account.State}</span></td>
-        <td data-label="Số điện thoại"><span class="badge bg-warning">${
-          account.Phone || "-"
-        } </span></td>
-        <td class="text-center" data-label="Hành động">
-          <div class="btn-group btn-group-custom" role="group">
-            <button class="btn btn-outline-primary btn-sm" title="Sửa"
-                data-bs-toggle="modal" data-bs-target="#editUserModal">
-              <i class="bi bi-pencil"></i>
+          <div class="user-card-header">
+            <img src="${account.ImageUrl}" alt="${account.Username}" class="user-avatar">
+            <div class="user-info">
+              <div class="user-username">@${account.Username}</div>
+            </div>
+          </div>
+          <div class="user-details">
+            <div class="user-detail-item">
+              <i class="bi bi-envelope"></i>
+              <span>${account.Email}</span>
+            </div>
+            <div class="user-detail-item">
+              <i class="bi bi-telephone"></i>
+              <span>${account.Phone}</span>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="user-role ${roleClass}">${account.Role}</span>
+            <span class="user-status ${statusClass}">
+              <i class="bi bi-circle-fill me-1"></i>${account.State}
+            </span>
+          </div>
+          <div class="user-actions">
+            <button class="btn btn-sm btn-outline-primary edit-user"
+                data-id="${account.AccountId}"
+                data-bs-toggle="modal"
+                data-bs-target="#editUserModal">
+              <i class="bi bi-pencil me-1"></i>Sửa
             </button>
-            <button class="btn btn-outline-danger btn-sm" title="Xóa">
-              <i class="bi bi-trash"></i>
+
+            <button class="btn btn-sm btn-outline-danger delete-user" data-id="${account.AccountId}">
+              <i class="bi bi-trash me-1"></i>Xóa
             </button>
           </div>
-        </td>
+        </div>
       `;
       tableAccount.appendChild(row);
     });
 
-    // --- Checkbox tổng ---
-    const checkAllId =
-      filterRole === "Customer"
-        ? "checkAllCustomers"
-        : filterRole === "Seller"
-        ? "checkAllSellers"
-        : filterRole === "Shipper"
-        ? "checkAllShippers"
-        : "checkAll";
-
-    const checkAll = document.getElementById(checkAllId);
-    const checkboxes = tableAccount.querySelectorAll(".item");
-
-    if (checkAll) {
-      checkAll.addEventListener("change", function () {
-        checkboxes.forEach((cb) => (cb.checked = this.checked));
-      });
-
-      checkboxes.forEach((cb) => {
-        cb.addEventListener("change", function () {
-          if (!this.checked) checkAll.checked = false;
-          else if (Array.from(checkboxes).every((c) => c.checked))
-            checkAll.checked = true;
-        });
-      });
-    }
+    // --- Gọi lại setup checkbox tổng ---
+    setupCheckAll(filterRole);
 
     // --- Nút Xóa ---
     const deleteButtons = tableAccount.querySelectorAll(".btn-outline-danger");
     deleteButtons.forEach((btn, i) => {
-    btn.addEventListener("click", async () => {
-    const username = visibleAccounts[i].Username;
+      btn.addEventListener("click", async () => {
+        const username = visibleAccounts[i].Username;
         if (!confirm(`Bạn có chắc muốn xóa tài khoản "${username}" không?`))
           return;
 
@@ -170,20 +158,133 @@ async function testGetAccount(filterRole = "All") {
       });
     });
 
-    // --- Cập nhật thông tin phân trang ---
+    // --- Cập nhật phân trang ---
     const info = document.getElementById("paginationInfo");
     if (info) {
       info.innerHTML = `
-    Hiển thị <strong>${endIndex}</strong> trong tổng số <strong>${totalItems}</strong> người dùng
-  `;
+        Hiển thị <strong>${endIndex}</strong> trong tổng số <strong>${totalItems}</strong> người dùng
+      `;
     }
 
-    // --- Render nút phân trang ---
     renderPagination(totalPages, filterRole);
   } catch (err) {
     console.error("❌ Lỗi tải tài khoản:", err);
   }
 }
+
+// --- Checkbox tổng (Select All) ---
+function setupCheckAll() {
+  const checkAll = document.getElementById("selectAll");
+  if (!checkAll) return;
+
+  // Lấy tất cả checkbox con trong phần danh sách user
+  const checkboxes = document.querySelectorAll(
+    '.user-cards-container input[type="checkbox"].item'
+  );
+
+  // Khi click checkbox tổng
+  checkAll.addEventListener("change", function () {
+    const isChecked = this.checked;
+    checkboxes.forEach((cb) => (cb.checked = isChecked));
+  });
+
+  // Khi click từng checkbox con → cập nhật lại checkbox tổng
+  checkboxes.forEach((cb) => {
+    cb.addEventListener("change", function () {
+      const allChecked = Array.from(checkboxes).every((c) => c.checked);
+      checkAll.checked = allChecked;
+    });
+  });
+}
+
+// --- Hành động hàng loạt ---
+document.querySelectorAll(".action-buttons .btn").forEach((button) => {
+  button.addEventListener("click", async function () {
+    const checkedBoxes = document.querySelectorAll(
+      '.user-card input[type="checkbox"].item:checked'
+    );
+
+    if (checkedBoxes.length === 0) {
+      alert("Vui lòng chọn ít nhất một người dùng!");
+      return;
+    }
+
+    const action = this.textContent.trim();
+    const isDelete = action.includes("Xóa");
+    const isLock = action.includes("Tạm khóa");
+    const isActivate = action.includes("Kích hoạt");
+
+    if (
+      !confirm(
+        `Bạn có chắc chắn muốn ${action.toLowerCase()} ${
+          checkedBoxes.length
+        } người dùng này không?`
+      )
+    )
+      return;
+
+    for (const checkbox of checkedBoxes) {
+      const userCard = checkbox.closest(".user-card");
+      const username = userCard
+        ?.querySelector(".user-username")
+        ?.textContent.replace("@", "")
+        .trim();
+
+      if (!username) continue;
+
+      try {
+        if (isDelete) {
+          const res = await fetch(
+            `http://localhost:3000/admin/accounts/${username}`,
+            { method: "DELETE" }
+          );
+          const data = await res.json();
+          if (!data.success) console.warn(`Không xóa được ${username}`);
+        } else {
+          const newState = isLock ? "Inactive" : isActivate ? "Active" : null;
+          if (!newState) continue;
+
+          const res = await fetch(
+            `http://localhost:3000/admin/accounts/${username}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ State: newState }),
+            }
+          );
+          const data = await res.json();
+          if (!data.success) console.warn(`Không cập nhật được ${username}`);
+        }
+      } catch (err) {
+        console.error(`Lỗi khi xử lý ${username}:`, err);
+      }
+    }
+
+    alert(
+      `✅ Đã ${action.toLowerCase()} ${
+        checkedBoxes.length
+      } người dùng thành công!`
+    );
+
+    // Bỏ chọn checkbox tổng sau khi xử lý xong
+    const selectAll = document.getElementById("selectAll");
+    if (selectAll) selectAll.checked = false;
+
+    // Reload lại danh sách
+    const activeTab = document
+      .querySelector("#userTabs .nav-link.active")
+      .textContent.trim();
+    const currentRole = activeTab.includes("Khách")
+      ? "Customer"
+      : activeTab.includes("Người bán")
+      ? "Seller"
+      : activeTab.includes("Shipper")
+      ? "Shipper"
+      : "All";
+
+    testGetAccount(currentRole);
+  });
+});
 
 // --- Nút chỉnh sửa ---
 document.getElementById("saveEditBtn").addEventListener("click", async () => {
@@ -252,107 +353,9 @@ document.querySelectorAll("#userTabs .nav-link").forEach((tab) => {
       .forEach((link) => link.classList.remove("active"));
     tab.classList.add("active");
 
-    const text = tab.textContent.trim();
-    let role = "All";
-    if (text.includes("Khách")) role = "Customer";
-    else if (text.includes("Người bán")) role = "Seller";
-    else if (text.includes("Shipper")) role = "Shipper";
+    const role = tab.dataset.role;
 
     testGetAccount(role);
-  });
-});
-
-// --- Handle bulk actions (Tạm khóa / Kích hoạt / Xóa) ---
-document.querySelectorAll(".action-buttons .btn").forEach((button) => {
-  button.addEventListener("click", async function () {
-    const checkedRows = document.querySelectorAll(
-      'tbody input[type="checkbox"]:checked'
-    );
-    const selectedCount = checkedRows.length;
-
-    if (selectedCount === 0) {
-      alert("Vui lòng chọn ít nhất một người dùng để thực hiện thao tác này.");
-      return;
-    }
-
-    const action = this.textContent.trim();
-
-    // Xác định loại hành động
-    const isLockAction = action.includes("Tạm khóa");
-    const isDeleteAction = action.includes("Xóa");
-    const isActivateAction = action.includes("Kích hoạt");
-
-    if (
-      !confirm(
-        `Bạn có chắc chắn muốn ${action.toLowerCase()} ${selectedCount} người dùng đã chọn?`
-      )
-    )
-      return;
-
-    for (const checkbox of checkedRows) {
-      const row = checkbox.closest("tr");
-      const username = row.querySelector(".user-name")?.textContent.trim();
-      if (!username) continue;
-
-      try {
-        // 🗑️ Nếu là hành động XÓA
-        if (isDeleteAction) {
-          const res = await fetch(
-            `http://localhost:3000/admin/accounts/${username}`,
-            { method: "DELETE" }
-          );
-          const data = await res.json();
-          if (data.success) console.log(`🗑️ Đã xóa: ${username}`);
-          else console.warn(`⚠️ Không thể xóa ${username}: ${data.message}`);
-        }
-
-        // 🔒 Nếu là hành động TẠM KHÓA hoặc KÍCH HOẠT
-        else {
-          const newState = isLockAction
-            ? "Inactive"
-            : isActivateAction
-            ? "Active"
-            : null;
-          if (!newState) continue;
-
-          const res = await fetch(
-            `http://localhost:3000/admin/accounts/${username}`,
-            {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ State: newState }),
-            }
-          );
-
-          const data = await res.json();
-          if (data.success) console.log(`🔄 ${username} → ${newState}`);
-          else
-            console.warn(`⚠️ Không thể cập nhật ${username}: ${data.message}`);
-        }
-      } catch (err) {
-        console.error(`❌ Lỗi khi xử lý ${username}:`, err);
-      }
-    }
-
-    // ✅ Lấy tab hiện tại để reload đúng danh sách
-    const activeTab = document
-      .querySelector("#userTabs .nav-link.active")
-      .textContent.trim();
-
-    const currentRole = activeTab.includes("Khách")
-      ? "Customer"
-      : activeTab.includes("Người bán")
-      ? "Seller"
-      : activeTab.includes("Shipper")
-      ? "Shipper"
-      : "All";
-
-    alert(
-      `✅ Đã ${action.toLowerCase()} ${selectedCount} người dùng thành công!`
-    );
-
-    // 🔁 Reload đúng tab hiện tại
-    testGetAccount(currentRole);
   });
 });
 
@@ -460,38 +463,45 @@ function renderFilteredAccounts(accounts) {
   accounts.forEach((account) => {
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td class="text-center"><input class="form-check-input item" type="checkbox"></td>
-      <td><img src="${
-        account.ImageUrl
-      }" class="user-avatar" alt="User Avatar"></td>
-      <td>
-        <div class="user-name">${account.Username}</div>
-        <div class="user-email">${account.Email}</div>
-      </td>
-      <td><span class="badge ${
-        account.Role == "Customer"
-          ? "bg-primary"
-          : account.Role == "Seller"
-          ? "bg-secondary"
-          : "bg-info"
-      }">${account.Role}</span></td>
-      <td><span class="badge ${
-        account.State === "Active" ? "bg-success" : "bg-warning"
-      }">${account.State}</span></td>
-      <td data-label="phone"><span class="badge bg-warning">${
-        account.Phone || "-"
-      } </span></td>
-      <td class="text-center">
-        <div class="btn-group btn-group-custom" role="group">
-          <button class="btn btn-outline-primary btn-sm" title="Sửa"
-              data-bs-toggle="modal" data-bs-target="#editUserModal">
-            <i class="bi bi-pencil"></i>
-          </button>
-          <button class="btn btn-outline-danger btn-sm" title="Xóa">
-            <i class="bi bi-trash"></i>
-          </button>
+      <div class="user-card">
+          <div class="card-checkbox">
+            <input class="form-check-input item" type="checkbox" value="${account.AccountId}">
+          </div>
+          <div class="user-card-header">
+            <img src="${account.ImageUrl}" alt="${account.Username}" class="user-avatar">
+            <div class="user-info">
+              <div class="user-username">@${account.Username}</div>
+            </div>
+          </div>
+          <div class="user-details">
+            <div class="user-detail-item">
+              <i class="bi bi-envelope"></i>
+              <span>${account.Email}</span>
+            </div>
+            <div class="user-detail-item">
+              <i class="bi bi-telephone"></i>
+              <span>${account.Phone}</span>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="user-role">${account.Role}</span>
+            <span class="user-status">
+              <i class="bi bi-circle-fill me-1"></i>${account.State}
+            </span>
+          </div>
+          <div class="user-actions">
+            <button class="btn btn-sm btn-outline-primary edit-user"
+                data-id="${account.AccountId}"
+                data-bs-toggle="modal"
+                data-bs-target="#editUserModal">
+              <i class="bi bi-pencil me-1"></i>Sửa
+            </button>
+
+            <button class="btn btn-sm btn-outline-danger delete-user" data-id="${account.AccountId}">
+              <i class="bi bi-trash me-1"></i>Xóa
+            </button>
+          </div>
         </div>
-      </td>
     `;
     tableAccount.appendChild(row);
   });
@@ -513,6 +523,7 @@ function renderPagination(totalPages, currentRole) {
     if (currentPage > 1) {
       currentPage--;
       testGetAccount(currentRole);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   });
   pagination.appendChild(prevItem);
@@ -526,6 +537,7 @@ function renderPagination(totalPages, currentRole) {
       e.preventDefault();
       currentPage = i;
       testGetAccount(currentRole);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
     pagination.appendChild(li);
   }
@@ -541,6 +553,7 @@ function renderPagination(totalPages, currentRole) {
     if (currentPage < totalPages) {
       currentPage++;
       testGetAccount(currentRole);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   });
   pagination.appendChild(nextItem);

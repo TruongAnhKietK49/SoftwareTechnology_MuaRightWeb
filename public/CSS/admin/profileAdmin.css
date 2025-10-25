@@ -21,7 +21,6 @@
 }
 
 body {
-  display: flex;
   min-height: 100vh;
   background: var(--bg-gradient);
   color: var(--text-primary);
@@ -29,9 +28,16 @@ body {
   overflow-x: hidden;
 }
 
+/* Layout chính */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
 /* Main Content Styles */
 .main-content {
-  flex-grow: 1;
+  flex: 1;
+  margin-left: var(--sidebar-width);
   padding: 1.5rem;
   transition: all 0.3s ease;
 }
@@ -211,6 +217,18 @@ body {
 .modal-footer-custom {
   border-top: 1px solid var(--card-border);
   border-radius: 0 0 12px 12px;
+}
+
+.modal-footer-custom .cancel {
+  background-color: var(--danger-color);
+}
+
+.modal-footer-custom .update {
+  background-color: var(--secondary-color)
+}
+
+.modal-footer-custom .update:hover {
+  background-color: var(--info-color)
 }
 
 .form-control,

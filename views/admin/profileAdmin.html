@@ -21,102 +21,104 @@
         <i class="bi bi-list"></i>
     </button>
 
-    <!-- Sidebar -->
-    <nav class="sidebar" id="sidebar">
-    </nav>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+        </nav>
 
-    <!-- Main Content -->
-    <main class="main-content" id="mainContent">
-        <div class="container-fluid p-0">
-            <!-- Page Header -->
-            <div class="page-header">
-                <h1 class="page-title">Hồ sơ cá nhân</h1>
-                <button class="btn btn-edit" data-bs-toggle="modal" data-bs-target="#editProfileModal">
-                    <i class="bi bi-pencil me-2"></i> Chỉnh sửa hồ sơ
-                </button>
-            </div>
-
-            <!-- Profile Card -->
-            <div class="card profile-card">
-                <div class="profile-header">
-                    <div class="profile-avatar">
-                        <img src="https://i.pravatar.cc/150?u=anhkiet" alt="Avatar" id="admin-avatar">
-                    </div>
-                    <h2 class="profile-name" id="admin-name">Nguyễn Anh Kiệt</h2>
-                    <div class="profile-role">Quản trị viên</div>
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <div class="container-fluid p-0">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-title">Hồ sơ cá nhân</h1>
+                    <button class="btn btn-edit" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                        <i class="bi bi-pencil me-2"></i> Chỉnh sửa hồ sơ
+                    </button>
                 </div>
 
-                <div class="profile-body">
-                    <div class="row">
-                        <!-- Thông tin tài khoản -->
-                        <div class="col-md-6 mb-3">
-                            <div class="profile-section">
-                                <h3 class="section-title">Thông tin tài khoản</h3>
+                <!-- Profile Card -->
+                <div class="card profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <img src="https://i.pravatar.cc/150?u=anhkiet" alt="Avatar" id="admin-avatar">
+                        </div>
+                        <h2 class="profile-name" id="admin-name"></h2>
+                        <div class="profile-role"></div>
+                    </div>
 
-                                <div class="info-item">
-                                    <div class="info-label">Ảnh đại diện (URL)</div>
-                                    <div class="info-value" id="admin-imgUrl">https://i.pravatar.cc/150?u=anhkiet</div>
+                    <div class="profile-body">
+                        <div class="row">
+                            <!-- Thông tin tài khoản -->
+                            <div class="col-md-6 mb-3">
+                                <div class="profile-section">
+                                    <h3 class="section-title">Thông tin tài khoản</h3>
+
+                                    <div class="info-item">
+                                        <div class="info-label">Ảnh đại diện (URL)</div>
+                                        <div class="info-value" id="admin-imgUrl">
+                                        </div>
+                                    </div>
+
+                                    <div class="info-item">
+                                        <div class="info-label">Tên đăng nhập</div>
+                                        <div class="info-value" id="admin-username"></div>
+                                    </div>
+
+                                    <div class="info-item">
+                                        <div class="info-label">Email</div>
+                                        <div class="info-value" id="admin-email"></div>
+                                    </div>
+
+                                    <div class="info-item">
+                                        <div class="info-label">Số điện thoại</div>
+                                        <div class="info-value" id="admin-phone"></div>
+                                    </div>
+
+                                    <div class="info-item">
+                                        <div class="info-label">Mật khẩu</div>
+                                        <div class="info-value password-mask"></div>
+                                    </div>
                                 </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <!-- Thông tin cá nhân -->
+                                <div class="profile-section">
+                                    <h3 class="section-title">Thông tin cá nhân</h3>
 
-                                <div class="info-item">
-                                    <div class="info-label">Tên đăng nhập</div>
-                                    <div class="info-value" id="admin-username">anhkiet_admin</div>
-                                </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Họ và tên</div>
+                                        <div class="info-value" id="admin-fullName"></div>
+                                    </div>
 
-                                <div class="info-item">
-                                    <div class="info-label">Email</div>
-                                    <div class="info-value" id="admin-email">anhkiet@example.com</div>
-                                </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Ngày sinh</div>
+                                        <div class="info-value" id="admin-birthday"></div>
+                                    </div>
 
-                                <div class="info-item">
-                                    <div class="info-label">Số điện thoại</div>
-                                    <div class="info-value" id="admin-phone">+84 912 345 678</div>
-                                </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Giới tính</div>
+                                        <div class="info-value" id="admin-gender"></div>
+                                    </div>
 
-                                <div class="info-item">
-                                    <div class="info-label">Mật khẩu</div>
-                                    <div class="info-value password-mask">••••••••</div>
+                                    <div class="info-item">
+                                        <div class="info-label">Chức vụ</div>
+                                        <div class="info-value" id="admin-position"></div>
+                                    </div>
+
+                                    <div class="info-item">
+                                        <div class="info-label">Note</div>
+                                        <div class="info-value" id="admin-note"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <!-- Thông tin cá nhân -->
-                            <div class="profile-section">
-                                <h3 class="section-title">Thông tin cá nhân</h3>
-
-                                <div class="info-item">
-                                    <div class="info-label">Họ và tên</div>
-                                    <div class="info-value" id="admin-fullName">Nguyễn Anh Kiệt</div>
-                                </div>
-
-                                <div class="info-item">
-                                    <div class="info-label">Ngày sinh</div>
-                                    <div class="info-value" id="admin-birthday">15/05/1990</div>
-                                </div>
-
-                                <div class="info-item">
-                                    <div class="info-label">Giới tính</div>
-                                    <div class="info-value" id="admin-gender">Nam</div>
-                                </div>
-
-                                <div class="info-item">
-                                    <div class="info-label">Chức vụ</div>
-                                    <div class="info-value" id="admin-position">Quản trị viên hệ thống</div>
-                                </div>
-
-                                <div class="info-item">
-                                    <div class="info-label">Note</div>
-                                    <div class="info-value" id="admin-note">Quản lý toàn bộ hệ thống và người dùng</div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
+
             </div>
-
-        </div>
-    </main>
-
+        </main>
+    </div>
     <!-- Edit Profile Modal -->
     <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel"
         aria-hidden="true">
@@ -124,8 +126,7 @@
             <div class="modal-content">
                 <div class="modal-header modal-header-custom">
                     <h5 class="modal-title" id="editProfileModalLabel">Chỉnh sửa hồ sơ</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form>
@@ -143,24 +144,22 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="avatarUrl" class="form-label">URL ảnh đại diện</label>
-                                <input type="url" class="form-control" id="avatarUrl"
-                                    value="https://i.pravatar.cc/150?u=anhkiet">
+                                <input type="url" class="form-control" id="avatarUrl" value="">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="username" class="form-label">Tên đăng nhập</label>
-                                <input type="text" class="form-control" id="userName" value="anhkiet_admin" readonly>
+                                <input type="text" class="form-control" id="userName" value="" readonly>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" value="anhkiet@example.com"
-                                    readonly>
+                                <input type="email" class="form-control" id="email" value="" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="phone" class="form-label">Số điện thoại</label>
-                                <input type="tel" class="form-control" id="phone" value="+84 912 345 678">
+                                <input type="tel" class="form-control" id="phone" value="">
                             </div>
                         </div>
 
@@ -178,11 +177,11 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="fullName" class="form-label">Họ và tên</label>
-                                <input type="text" class="form-control" id="fullName" value="Nguyễn Anh Kiệt">
+                                <input type="text" class="form-control" id="fullName" value="">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="birthDate" class="form-label">Ngày sinh</label>
-                                <input type="date" class="form-control" id="birthDate" value="1990-05-15">
+                                <input type="date" class="form-control" id="birthDate" value="">
                             </div>
                         </div>
 
@@ -197,20 +196,20 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="position" class="form-label">Chức vụ</label>
-                                <input type="text" class="form-control" id="position" value="Quản trị viên hệ thống">
+                                <input type="text" class="form-control" id="position" value="">
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label for="adminNote" class="form-label">Ghi chú của quản trị viên</label>
                                 <textarea class="form-control" id="adminNote" rows="3"
-                                    placeholder="Nhập ghi chú nội bộ (không hiển thị cho người dùng)">Quản lý toàn bộ hệ thống và người dùng</textarea>
-                                <div class="form-text">Ghi chú này chỉ hiển thị với quản trị viên.</div>
+                                    placeholder="Nhập ghi chú nội bộ (không hiển thị cho người dùng)"></textarea>
+                                <div class="form-text"></div>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer modal-footer-custom">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-primary">Lưu thay đổi</button>
+                    <button type="button" class="btn cancel" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn update">Lưu thay đổi</button>
                 </div>
             </div>
         </div>

@@ -22,7 +22,6 @@
 }
 
 body {
-  display: flex;
   min-height: 100vh;
   background: var(--bg-gradient);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -39,9 +38,16 @@ textarea::placeholder {
   /* Giúp chữ rõ ràng, không mờ */
 }
 
+/* Layout chính */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
 /* Main Content Styles */
 .main-content {
-  flex-grow: 1;
+  flex: 1;
+  margin-left: var(--sidebar-width);
   padding: 1.5rem;
   transition: all 0.3s ease;
 }
@@ -297,7 +303,7 @@ textarea::placeholder {
   background-color: var(--card-bg);
 }
 
-#topProductsTable tr:hover td{
+#topProductsTable tr:hover td {
   background-color: #192e2b !important;
   box-shadow: 1px 0 8px rgba(71, 233, 255, 0.863);
 }

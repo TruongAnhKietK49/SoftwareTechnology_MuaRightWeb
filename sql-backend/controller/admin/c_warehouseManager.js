@@ -1,35 +1,139 @@
 let Products = [];
 let filteredProducts = [];
 let currentPage = 1;
-const itemsPerPage = 5;
+const itemsPerPage = 8;
 
 // 🧭 Tải danh sách sản phẩm
 async function loadProducts() {
+  const container = document.getElementById("product-cards-container");
+  container.innerHTML = `
+    <div class="text-center py-5 w-100">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Đang tải dữ liệu...</span>
+      </div>
+      <p class="mt-3">Đang tải dữ liệu sản phẩm...</p>
+    </div>
+  `;
+
   try {
     const res = await fetch("http://localhost:3000/admin/Products");
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     Products = await res.json();
     filteredProducts = [...Products];
     renderProducts(1);
+    populateFilters();
     console.log("✅ Tải danh sách sản phẩm:", Products);
-    
   } catch (err) {
-    console.error("❌ Lỗi khi tải danh sách sản phẩm chờ duyệt:", err);
+    console.error("❌ Lỗi khi tải danh sách sản phẩm:", err);
+    container.innerHTML = `
+      <div class="text-center text-muted py-5">
+        <i class="bi bi-exclamation-triangle display-6"></i>
+        <p class="mt-3">Không thể tải dữ liệu sản phẩm.</p>
+      </div>`;
   }
 }
 
-// 📦 Render danh sách theo trang
+// ✅ Hàm đổ dữ liệu vào các filter (danh mục, người bán, thương hiệu)
+function populateFilters() {
+  const categorySet = new Set();
+  const sellerSet = new Set();
+  const brandSet = new Set();
+
+  Products.forEach((p) => {
+    if (p.Category) categorySet.add(p.Category);
+    if (p.SellerName) sellerSet.add(p.SellerName);
+    if (p.Brand) brandSet.add(p.Brand);
+  });
+
+  const categoryFilter = document.getElementById("categoryFilter");
+  const sellerFilter = document.getElementById("sellerFilter");
+  const brandFilter = document.getElementById("brandFilter");
+
+  // Thêm danh mục
+  categorySet.forEach((category) => {
+    const opt = document.createElement("option");
+    opt.value = category;
+    opt.textContent = category;
+    categoryFilter.appendChild(opt);
+  });
+
+  // Thêm người bán
+  sellerSet.forEach((seller) => {
+    const opt = document.createElement("option");
+    opt.value = seller;
+    opt.textContent = seller;
+    sellerFilter.appendChild(opt);
+  });
+
+  // Thêm thương hiệu
+  brandSet.forEach((brand) => {
+    const opt = document.createElement("option");
+    opt.value = brand;
+    opt.textContent = brand;
+    brandFilter.appendChild(opt);
+  });
+}
+
+// ✅ Áp dụng bộ lọc
+function applyFilters() {
+  const categoryValue = document.getElementById("categoryFilter").value;
+  const sellerValue = document.getElementById("sellerFilter").value;
+  const priceValue = document.getElementById("priceFilter").value;
+  const brandValue = document.getElementById("brandFilter").value;
+
+  filteredProducts = Products.filter((p) => {
+    const matchCategory = !categoryValue || p.Category === categoryValue;
+    const matchSeller = !sellerValue || p.SellerName === sellerValue;
+    const matchBrand = !brandValue || p.Brand === brandValue;
+
+    // Xử lý khoảng giá
+    let matchPrice = true;
+    if (priceValue) {
+      const [min, max] = priceValue.split("-");
+      const priceK = p.Price / 1000; // đổi sang nghìn để dễ so
+      if (priceValue === "1000+") matchPrice = priceK > 1000;
+      else matchPrice = priceK >= Number(min) && priceK <= Number(max);
+    }
+
+    return matchCategory && matchSeller && matchBrand && matchPrice;
+  });
+
+  currentPage = 1;
+  renderProducts(currentPage);
+}
+
+// ✅ Đặt lại bộ lọc
+function resetFilters() {
+  document.getElementById("categoryFilter").value = "";
+  document.getElementById("sellerFilter").value = "";
+  document.getElementById("priceFilter").value = "";
+  document.getElementById("brandFilter").value = "";
+
+  filteredProducts = [...Products];
+  renderProducts(1);
+}
+
+// ✅ Gán sự kiện cho nút
+document.addEventListener("DOMContentLoaded", () => {
+  document
+    .getElementById("applyFilters")
+    ?.addEventListener("click", applyFilters);
+  document
+    .getElementById("resetFilters")
+    ?.addEventListener("click", resetFilters);
+});
+
+// 📦 Render danh sách sản phẩm dạng card
 function renderProducts(page = 1) {
-  const tableBody = document.getElementById("Product-table");
-  tableBody.innerHTML = "";
+  const container = document.getElementById("product-cards-container");
+  container.innerHTML = "";
 
   if (!filteredProducts || filteredProducts.length === 0) {
-    tableBody.innerHTML = `
-      <tr>
-        <td colspan="8" class="text-center text-muted py-4">
-          Không có sản phẩm nào
-        </td>
-      </tr>`;
+    container.innerHTML = `
+      <div class="text-center text-muted py-5">
+        <i class="bi bi-box-seam display-6 mb-2"></i>
+        <p>Không có sản phẩm nào.</p>
+      </div>`;
     renderPagination();
     return;
   }
@@ -38,59 +142,142 @@ function renderProducts(page = 1) {
   const end = start + itemsPerPage;
   const pageItems = filteredProducts.slice(start, end);
 
-  pageItems.forEach((p, index) => {
-    const globalIndex = Products.indexOf(p);
-    renderProductRow(p, globalIndex, tableBody);
-  });
-
-  renderPagination();
-  setupSelectAllCheckbox();
-}
-
-// 📃 Render từng dòng sản phẩm
-function renderProductRow(p, index, tableBody) {
-  const tr = document.createElement("tr");
-  tr.innerHTML = `
-    <td class="text-center" data-label="Chọn">
-      <input class="form-check-input" type="checkbox" data-index="${index}">
-    </td>
-    <td data-label="Ảnh">
-      <img src="${p.ImageUrl || "https://via.placeholder.com/200"}" 
-           class="product-img" alt="Product Image">
-    </td>
-    <td data-label="Sản phẩm">
-      <div class="product-name">${p.NameProduct || "Không có tên"}</div>
-      <div class="product-sku">SKU: SP-${1000 + index}</div>
-    </td>
-    <td data-label="Danh mục">${p.Category || "Khác"}</td>
-    <td data-label="Người bán">${
-      p.SellerName || "Người bán #" + p.SellerId
-    }</td>
-    <td data-label="Số lượng"> ${p.Quantity || 0}</td>
-    <td class="text-end" data-label="Giá">${Number(p.Price || 0).toLocaleString(
-      "vi-VN"
-    )}₫</td>
-    <td class="text-center" data-label="Hành động">
-      <div class="btn-group btn-group-custom" role="group">
-        <button class="btn btn-outline-danger btn-sm" title="Từ chối" onclick="removeProduct(${index})">
-          <i class="bi bi-x-lg"></i>
+  pageItems.forEach((p) => {
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+      <div class="card-checkbox">
+        <input class="form-check-input product-checkbox item" type="checkbox" value="${
+          p.ProductId
+        }">
+      </div>
+      <div class="product-card-header">
+        <img src="${p.ImageUrl || "https://via.placeholder.com/150"}" 
+             alt="${p.NameProduct}" class="product-img">
+        <div class="product-info">
+          <div class="product-name">${p.NameProduct}</div>
+          <span class="product-category">${p.Category || "Không rõ"}</span>
+        </div>
+      </div>
+      <div class="product-details">
+        <div class="product-detail-item">
+          <span class="product-detail-label">Người bán:</span>
+          <span class="product-detail-value">${p.SellerName}</span>
+        </div>
+        <div class="product-detail-item">
+          <span class="product-detail-label">Số lượng:</span>
+          <span class="product-detail-value">${p.Quantity}</span>
+        </div>
+        <div class="product-detail-item">
+          <span class="product-detail-label">Giá:</span>
+          <span class="product-price">${formatPrice(p.Price)}</span>
+        </div>
+        <div class="product-detail-item rating">
+          <span class="product-detail-label">Đánh giá:</span>
+          <span class="product-detail-value">
+            ${renderStars(p.AverageRating)} 
+            <span class="text-muted small">(${p.TotalReviews || 0})</span>
+          </span>
+        </div>
+      </div>
+      <div class="product-actions">
+        <button class="btn btn-outline-primary btn-sm view-product" data-id="${
+          p.ProductId
+        }">
+          <i class="bi bi-eye me-1"></i> Xem
         </button>
-        <button class="btn btn-outline-info btn-sm" title="Xem chi tiết" onclick="viewProductDetail(${index})">
-          <i class="bi bi-eye"></i>
+        <button class="btn btn-outline-danger btn-sm delete-product" data-id="${
+          p.ProductId
+        }">
+          <i class="bi bi-trash me-1"></i> Xóa
         </button>
       </div>
-    </td>
-  `;
-  tableBody.appendChild(tr);
+    `;
+    container.appendChild(card);
+  });
+
+  // Gắn sự kiện sau khi render
+  setupCheckAll();
+  setupProductEvents();
+  renderPagination();
 }
 
-// 🗑️ Xóa sản phẩm
-async function removeProduct(index) {
-  const nameProduct = filteredProducts[index].NameProduct;
-  const productId = filteredProducts[index].ProductId;
-  console.log("🗑️ Đang xóa sản phẩm có ID:", productId);
+// Checkbox tổng
+function setupCheckAll() {
+  const checkAll = document.getElementById("selectAll");
+  if (!checkAll) return;
 
-  if (!confirm("Bạn có chắc chắn muốn xóa sản phẩm " + nameProduct + "?"))
+  // Lấy tất cả checkbox con trong phần danh sách user
+  const checkboxes = document.querySelectorAll(
+    '.card-checkbox input[type="checkbox"].item'
+  );
+
+  // Khi click checkbox tổng
+  checkAll.addEventListener("change", function () {
+    const isChecked = this.checked;
+    checkboxes.forEach((cb) => (cb.checked = isChecked));
+  });
+
+  // Khi click từng checkbox con → cập nhật lại checkbox tổng
+  checkboxes.forEach((cb) => {
+    cb.addEventListener("change", function () {
+      const allChecked = Array.from(checkboxes).every((c) => c.checked);
+      checkAll.checked = allChecked;
+    });
+  });
+}
+
+// Render đánh giá cho sản phẩm
+function renderStars(rating) {
+  const fullStars = Math.floor(rating);
+  const halfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+  let stars = "";
+
+  // Sao đầy
+  for (let i = 0; i < fullStars; i++) {
+    stars += `<i class="bi bi-star-fill text-warning"></i>`;
+  }
+
+  // Nửa sao
+  if (halfStar) {
+    stars += `<i class="bi bi-star-half text-warning"></i>`;
+  }
+
+  // Sao rỗng
+  for (let i = 0; i < emptyStars; i++) {
+    stars += `<i class="bi bi-star text-warning"></i>`;
+  }
+
+  return stars;
+}
+
+// 💰 Format giá
+function formatPrice(price) {
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(price);
+}
+
+// 🎯 Thiết lập sự kiện nút Xem / Xóa
+function setupProductEvents() {
+  document.querySelectorAll(".view-product").forEach((btn) => {
+    btn.addEventListener("click", () => viewProductDetail(btn.dataset.id));
+  });
+
+  document.querySelectorAll(".delete-product").forEach((btn) => {
+    btn.addEventListener("click", () => removeProduct(btn.dataset.id));
+  });
+}
+
+// 🗑️ Xóa sản phẩm đơn
+async function removeProduct(productId) {
+  const product = Products.find((p) => p.ProductId == productId);
+  if (!product) return;
+
+  if (!confirm(`Bạn có chắc chắn muốn xóa sản phẩm "${product.NameProduct}"?`))
     return;
 
   try {
@@ -101,18 +288,10 @@ async function removeProduct(index) {
       }
     );
 
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || "Không thể xóa sản phẩm");
-    }
+    if (!res.ok) throw new Error("Không thể xóa sản phẩm");
 
-    const data = await res.json();
-    alert(data.message || "Xóa sản phẩm thành công!");
-
-    // ✅ Xóa sản phẩm khỏi danh sách hiển thị
-    filteredProducts.splice(index, 1);
-
-    // ✅ Gọi hàm render lại bảng
+    alert("✅ Xóa sản phẩm thành công!");
+    filteredProducts = filteredProducts.filter((p) => p.ProductId != productId);
     renderProducts(currentPage);
   } catch (error) {
     console.error("❌ Lỗi khi xóa sản phẩm:", error);
@@ -120,47 +299,33 @@ async function removeProduct(index) {
   }
 }
 
-// 📦 Xóa tất cả sản phẩm chọn
+// 🗑️ Xóa nhiều sản phẩm
 async function removeSelectedProducts() {
-  const checkboxes = document.querySelectorAll(
-    "tbody input.form-check-input:checked"
-  );
+  const checkboxes = document.querySelectorAll(".product-checkbox:checked");
   if (checkboxes.length === 0) {
     alert("Vui lòng chọn ít nhất một sản phẩm để xóa!");
     return;
   }
 
   if (!confirm(`Bạn có chắc muốn xóa ${checkboxes.length} sản phẩm đã chọn?`))
-    return; 
+    return;
 
-  const selectedIds = Array.from(checkboxes).map((cb) => {
-    const index = cb.dataset.index;
-    return filteredProducts[index].ProductId;
-  });
+  const selectedIds = Array.from(checkboxes).map((cb) => cb.value);
 
   try {
     for (const id of selectedIds) {
-      const res = await fetch(`http://localhost:3000/admin/products/${id}`, {
+      await fetch(`http://localhost:3000/admin/products/${id}`, {
         method: "DELETE",
       });
-      if (!res.ok) {
-        const err = await res.json();
-        console.error(`❌ Lỗi khi xóa sản phẩm ${id}:`, err.error);
-      } else {
-        console.log(`🗑️ Đã xóa sản phẩm ID: ${id}`);
-      }
     }
 
     alert("✅ Xóa sản phẩm thành công!");
-
-    // ✅ Cập nhật lại danh sách sản phẩm hiển thị
     filteredProducts = filteredProducts.filter(
-      (p) => !selectedIds.includes(p.ProductId)
+      (p) => !selectedIds.includes(p.ProductId.toString())
     );
     renderProducts(currentPage);
   } catch (error) {
     console.error("❌ Lỗi khi xóa sản phẩm:", error);
-    alert("Đã xảy ra lỗi khi xóa sản phẩm!");
   }
 }
 
@@ -202,24 +367,12 @@ function changePage(page) {
   if (page < 1 || page > totalPages) return;
   currentPage = page;
   renderProducts(currentPage);
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// ✅ Checkbox “chọn tất cả”
-function setupSelectAllCheckbox() {
-  const selectAllCheckbox = document.querySelector("th .form-check-input");
-  if (!selectAllCheckbox) return;
-
-  selectAllCheckbox.addEventListener("change", (e) => {
-    const isChecked = e.target.checked;
-    document
-      .querySelectorAll("#Product-table .form-check-input")
-      .forEach((cb) => (cb.checked = isChecked));
-  });
-}
-
-// 👁️ Xem chi tiết sản phẩm
-function viewProductDetail(index) {
-  const product = Products[index];
+// 👁️ Xem chi tiết sản phẩm (hiển thị modal)
+function viewProductDetail(productId) {
+  const product = Products.find((p) => p.ProductId == productId);
   if (!product) return;
 
   document.getElementById("detailImage").src =
@@ -230,9 +383,7 @@ function viewProductDetail(index) {
     product.Category || "Không xác định";
   document.getElementById("detailSeller").innerText =
     product.SellerName || `Người bán #${product.SellerId}`;
-  document.getElementById("detailPrice").innerText = `${Number(
-    product.Price || 0
-  ).toLocaleString("vi-VN")}₫`;
+  document.getElementById("detailPrice").innerText = formatPrice(product.Price);
   document.getElementById("detailQuantity").innerText =
     product.Quantity || "Không rõ";
   document.getElementById("detailWarranty").innerText =
@@ -242,35 +393,8 @@ function viewProductDetail(index) {
   document.getElementById("detailDescription").innerText =
     product.Description || "Không có mô tả";
 
-  const modal = new bootstrap.Modal(
-    document.getElementById("productDetailModal")
-  );
-  modal.show();
+  new bootstrap.Modal(document.getElementById("productDetailModal")).show();
 }
-
-// 🧩 Fix aria-hidden cho modal
-document.querySelectorAll(".modal").forEach((modal) => {
-  modal.addEventListener("hide.bs.modal", () => {
-    if (document.activeElement && modal.contains(document.activeElement)) {
-      document.activeElement.blur();
-    }
-  });
-  modal.addEventListener("hidden.bs.modal", () =>
-    modal.removeAttribute("aria-hidden")
-  );
-  modal.addEventListener("shown.bs.modal", () => {
-    let parent = modal.parentElement;
-    while (parent) {
-      if (parent.hasAttribute("aria-hidden"))
-        parent.removeAttribute("aria-hidden");
-      parent = parent.parentElement;
-    }
-  });
-});
-window.addEventListener("focusin", () => {
-  const modal = document.querySelector(".modal.show");
-  if (modal?.hasAttribute("aria-hidden")) modal.removeAttribute("aria-hidden");
-});
 
 // 🚀 Khi trang load
 document.addEventListener("DOMContentLoaded", () => {
@@ -278,6 +402,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const searchInput = document.getElementById("search-input");
   const searchBtn = document.getElementById("btn-search");
-  searchInput?.addEventListener("input", (e) => handleSearch(e.target.value));
   searchBtn?.addEventListener("click", () => handleSearch(searchInput.value));
+  searchInput?.addEventListener("input", (e) => handleSearch(e.target.value));
 });
+
+// 🔍 Tìm kiếm sản phẩm theo tên
+function handleSearch(keyword) {
+  keyword = keyword.trim().toLowerCase();
+  filteredProducts = Products.filter((p) =>
+    p.NameProduct.toLowerCase().includes(keyword)
+  );
+  currentPage = 1;
+  renderProducts();
+}

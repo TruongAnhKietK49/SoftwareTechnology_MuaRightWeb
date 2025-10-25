@@ -1,34 +1,37 @@
+// ==================== CẤU HÌNH ====================
 let pendingProducts = [];
 let filteredProducts = [];
 let currentPage = 1;
-const itemsPerPage = 5;
+const itemsPerPage = 8;
 
-// 🧭 Tải danh sách sản phẩm chờ duyệt
+// ==================== TẢI DỮ LIỆU ====================
 async function loadPendingProducts() {
   try {
     const res = await fetch("http://localhost:3000/seller/pendingProducts");
-    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    if (!res.ok) throw new Error("Không thể tải dữ liệu!");
     pendingProducts = await res.json();
     filteredProducts = [...pendingProducts];
-    renderProducts(1);
+    populateFilterOptions();
+    renderProducts();
   } catch (err) {
-    console.error("❌ Lỗi khi tải danh sách sản phẩm chờ duyệt:", err);
+    console.error("❌ Lỗi khi tải sản phẩm:", err);
+    document.getElementById(
+      "product-cards-container"
+    ).innerHTML = `<p class="text-center text-danger py-5">Không thể tải dữ liệu sản phẩm!</p>`;
   }
 }
 
-// 📦 Render danh sách theo trang
+// ==================== HIỂN THỊ SẢN PHẨM ====================
 function renderProducts(page = 1) {
-  const tableBody = document.getElementById("pendingProduct-table");
-  tableBody.innerHTML = "";
+  const container = document.getElementById("product-cards-container");
+  container.innerHTML = "";
 
-  if (!filteredProducts || filteredProducts.length === 0) {
-    tableBody.innerHTML = `
-      <tr>
-        <td colspan="8" class="text-center text-muted py-4">
-          Không có sản phẩm nào đang chờ duyệt
-        </td>
-      </tr>`;
-    renderPagination();
+  if (!filteredProducts.length) {
+    container.innerHTML = `
+      <div class="text-center py-5 w-100 text-muted">
+        <i class="bi bi-box-seam display-6 d-block mb-3"></i>
+        Không có sản phẩm nào đang chờ duyệt
+      </div>`;
     return;
   }
 
@@ -37,97 +40,90 @@ function renderProducts(page = 1) {
   const pageItems = filteredProducts.slice(start, end);
 
   pageItems.forEach((p, index) => {
-    const globalIndex = pendingProducts.indexOf(p);
-    renderProductRow(p, globalIndex, tableBody);
-  });
+    const card = document.createElement("div");
+    card.className = "product-card";
 
-  renderPagination();
-  setupSelectAllCheckbox();
-}
+    card.innerHTML = `
+      <div class="card-checkbox">
+        <input class="form-check-input product-checkbox item" 
+              type="checkbox" 
+              data-index="${pendingProducts.indexOf(p)}">
+      </div>
 
-// 📃 Render từng dòng sản phẩm
-function renderProductRow(p, index, tableBody) {
-  const tr = document.createElement("tr");
-  tr.innerHTML = `
-    <td class="text-center" data-label="Chọn">
-      <input class="form-check-input" type="checkbox" data-index="${index}">
-    </td>
-    <td data-label="Ảnh">
-      <img src="${p.ImageUrl || "https://via.placeholder.com/200"}" 
-           class="product-img" alt="Product Image">
-    </td>
-    <td data-label="Sản phẩm">
-      <div class="product-name">${p.NameProduct || "Không có tên"}</div>
-      <div class="product-sku">SKU: SP-${1000 + index}</div>
-    </td>
-    <td data-label="Danh mục" style="font-weight:600; color:${
-      p.Category === "Nam"
-        ? "#007bff"
-        : p.Category === "Nữ"
-        ? "#dc3545"
-        : "#6c757d"
-    }">
-      ${
-        p.Category === "Nam" ? "Nam 👔" : p.Category === "Nữ" ? "Nữ 💄" : "Khác 🎃"
-      }
-    </td>
+      <div class="product-card-header">
+        <img src="${p.ImageUrl || "https://via.placeholder.com/300x200"}" 
+            alt="${p.NameProduct}" class="product-img">
+        <div class="product-info">
+          <div class="product-name">${p.NameProduct}</div>
+          <span class="product-category">${p.Category || "Không rõ"}</span>
+        </div>
+      </div>
 
-    <td data-label="Người bán">${
-      p.SellerName || "Người bán #" + p.SellerId
-    }</td>
-    <td data-label="Ngày gửi">${new Date(
-      p.CreatedAt || Date.now()
-    ).toLocaleDateString("vi-VN")}</td>
-    <td class="text-end" data-label="Giá">${Number(p.Price || 0).toLocaleString(
-      "vi-VN"
-    )}₫</td>
-    <td class="text-center" data-label="Hành động">
-      <div class="btn-group btn-group-custom" role="group">
-        <button class="btn btn-outline-success btn-sm" title="Duyệt" onclick="approveProduct(${index})">
-          <i class="bi bi-check-lg"></i>
+      <div class="product-details">
+        <div class="product-detail-item">
+          <span class="product-detail-label">Người bán:</span>
+          <span class="product-detail-value">${p.SellerName || "Ẩn danh"}</span>
+        </div>
+        <div class="product-detail-item">
+          <span class="product-detail-label">Giá:</span>
+          <span class="product-price">${Number(p.Price || 0).toLocaleString(
+            "vi-VN"
+          )}₫</span>
+        </div>
+      </div>
+
+      <div class="product-actions">
+        <button class="btn btn-outline-success btn-sm" 
+                title="Duyệt" 
+                onclick="approveProduct(${pendingProducts.indexOf(p)})">
+          <i class="bi bi-check-lg me-1"></i> Duyệt
         </button>
-        <button class="btn btn-outline-danger btn-sm" title="Từ chối" onclick="rejectProduct(${index})">
-          <i class="bi bi-x-lg"></i>
+        <button class="btn btn-outline-danger btn-sm" 
+                title="Từ chối" 
+                onclick="rejectProduct(${pendingProducts.indexOf(p)})">
+          <i class="bi bi-x-lg me-1"></i> Từ chối
         </button>
-        <button class="btn btn-outline-info btn-sm" title="Xem chi tiết" onclick="viewProductDetail(${index})">
-          <i class="bi bi-eye"></i>
+        <button class="btn btn-outline-info btn-sm" 
+                title="Xem chi tiết" 
+                onclick="viewProductDetail(${pendingProducts.indexOf(p)})">
+          <i class="bi bi-eye me-1"></i> Xem
         </button>
       </div>
-    </td>
-  `;
-  tableBody.appendChild(tr);
+    `;
+
+    container.appendChild(card);
+  });
+
+  setupSelectAllCheckbox();
+  renderPagination(page);
 }
 
-// 📄 Phân trang
-function renderPagination() {
+// ==================== PHÂN TRANG ====================
+function renderPagination(page) {
   const pagination = document.querySelector(".pagination");
   if (!pagination) return;
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   pagination.innerHTML = "";
 
-  const prevDisabled = currentPage === 1 ? "disabled" : "";
-  const nextDisabled = currentPage === totalPages ? "disabled" : "";
+  const prevDisabled = page === 1 ? "disabled" : "";
+  const nextDisabled = page === totalPages ? "disabled" : "";
 
   pagination.innerHTML += `
     <li class="page-item ${prevDisabled}">
-      <a class="page-link" href="#" onclick="changePage(${
-        currentPage - 1
-      })">Trước</a>
+      <a class="page-link" href="#" onclick="changePage(${page - 1})">Trước</a>
     </li>`;
 
   for (let i = 1; i <= totalPages; i++) {
     pagination.innerHTML += `
-      <li class="page-item ${i === currentPage ? "active" : ""}">
+      <li class="page-item ${i === page ? "active" : ""}">
         <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
       </li>`;
   }
 
   pagination.innerHTML += `
     <li class="page-item ${nextDisabled}">
-      <a class="page-link" href="#" onclick="changePage(${
-        currentPage + 1
-      })">Sau</a>
+      <a class="page-link" href="#" onclick="changePage(${page + 1})">Sau</a>
     </li>`;
 }
 
@@ -138,24 +134,28 @@ function changePage(page) {
   renderProducts(currentPage);
 }
 
-// ✅ Checkbox “chọn tất cả”
+// ==================== CHECKBOX ====================
 function setupSelectAllCheckbox() {
-  const selectAllCheckbox = document.querySelector("th .form-check-input");
-  if (!selectAllCheckbox) return;
+  const selectAll = document.getElementById("selectAll");
+  const checkboxes = document.querySelectorAll(".product-checkbox");
+  if (!selectAll) return;
 
-  selectAllCheckbox.addEventListener("change", (e) => {
-    const isChecked = e.target.checked;
-    document
-      .querySelectorAll("#pendingProduct-table .form-check-input")
-      .forEach((cb) => (cb.checked = isChecked));
+  selectAll.addEventListener("change", (e) => {
+    checkboxes.forEach((cb) => (cb.checked = e.target.checked));
+  });
+
+  checkboxes.forEach((cb) => {
+    cb.addEventListener("change", () => {
+      const allChecked = [...checkboxes].every((c) => c.checked);
+      selectAll.checked = allChecked;
+    });
   });
 }
 
-// ✅ DUYỆT 1 sản phẩm
+// ==================== DUYỆT / TỪ CHỐI ====================
 async function approveProduct(index) {
   const product = pendingProducts[index];
   if (!product) return;
-  if (!confirm(`Duyệt sản phẩm "${product.NameProduct}"?`)) return;
 
   try {
     const res = await fetch("http://localhost:3000/admin/approveProduct", {
@@ -166,19 +166,18 @@ async function approveProduct(index) {
     const data = await res.json();
 
     if (res.ok) {
-      alert("✅ Đã duyệt sản phẩm thành công!");
+      alert("✅ Đã duyệt sản phẩm!");
       pendingProducts.splice(index, 1);
       filteredProducts = [...pendingProducts];
-      renderProducts(1);
+      renderProducts(currentPage);
     } else {
       alert("❌ " + data.error);
     }
   } catch (err) {
-    console.error("❌ Lỗi duyệt sản phẩm:", err);
+    console.error("❌ Lỗi duyệt:", err);
   }
 }
 
-// ❌ TỪ CHỐI 1 sản phẩm
 async function rejectProduct(index) {
   const product = pendingProducts[index];
   if (!product) return;
@@ -196,25 +195,20 @@ async function rejectProduct(index) {
       alert("🗑️ Đã từ chối sản phẩm!");
       pendingProducts.splice(index, 1);
       filteredProducts = [...pendingProducts];
-      renderProducts(1);
+      renderProducts(currentPage);
     } else {
       alert("❌ " + data.error);
     }
   } catch (err) {
-    console.error("❌ Lỗi khi từ chối:", err);
+    console.error("❌ Lỗi từ chối:", err);
   }
 }
 
-// ✅ DUYỆT các mục đã chọn
+// ==================== DUYỆT / XOÁ NHIỀU ====================
 async function approveSelectedProducts() {
-  const checked = [
-    ...document.querySelectorAll(
-      "#pendingProduct-table .form-check-input:checked"
-    ),
-  ];
-  if (checked.length === 0)
-    return alert("⚠️ Vui lòng chọn ít nhất 1 sản phẩm!");
-  if (!confirm(`Duyệt ${checked.length} sản phẩm được chọn?`)) return;
+  const checked = [...document.querySelectorAll(".product-checkbox:checked")];
+  if (checked.length === 0) return alert("⚠️ Chưa chọn sản phẩm nào!");
+  if (!confirm(`Duyệt ${checked.length} sản phẩm?`)) return;
 
   for (const cb of checked) {
     const index = parseInt(cb.dataset.index);
@@ -222,16 +216,10 @@ async function approveSelectedProducts() {
   }
 }
 
-// ❌ TỪ CHỐI các mục đã chọn
-async function rejectSelectedProducts() {
-  const checked = [
-    ...document.querySelectorAll(
-      "#pendingProduct-table .form-check-input:checked"
-    ),
-  ];
-  if (checked.length === 0)
-    return alert("⚠️ Vui lòng chọn ít nhất 1 sản phẩm!");
-  if (!confirm(`Từ chối ${checked.length} sản phẩm được chọn?`)) return;
+async function removeSelectedProducts() {
+  const checked = [...document.querySelectorAll(".product-checkbox:checked")];
+  if (checked.length === 0) return alert("⚠️ Chưa chọn sản phẩm nào!");
+  if (!confirm(`Từ chối ${checked.length} sản phẩm?`)) return;
 
   for (const cb of checked) {
     const index = parseInt(cb.dataset.index);
@@ -239,7 +227,7 @@ async function rejectSelectedProducts() {
   }
 }
 
-// 🔍 Tìm kiếm
+// ==================== TÌM KIẾM ====================
 function normalizeString(str = "") {
   return str
     .normalize("NFD")
@@ -252,26 +240,89 @@ function normalizeString(str = "") {
 
 function handleSearch(keyword) {
   const kw = normalizeString(keyword);
-  if (!kw) {
-    filteredProducts = [...pendingProducts];
-  } else {
-    filteredProducts = pendingProducts.filter((p) => {
-      const name = normalizeString(p.NameProduct || "");
-      const category = normalizeString(p.Category || "");
-      const tag = normalizeString(p.TagName || "");
-      const seller = normalizeString(p.SellerName || "");
-      return (
-        name.includes(kw) ||
-        category.includes(kw) ||
-        tag.includes(kw) ||
-        seller.includes(kw)
+  filteredProducts = !kw
+    ? [...pendingProducts]
+    : pendingProducts.filter((p) =>
+        normalizeString(
+          p.NameProduct + p.Category + p.TagName + p.SellerName
+        ).includes(kw)
       );
-    });
-  }
   renderProducts(1);
 }
 
-// 👁️ Xem chi tiết sản phẩm
+// ==================== BỘ LỌC ====================
+
+// 🔹 Điền dữ liệu động vào các select box
+function populateFilterOptions() {
+  const categoryFilter = document.getElementById("categoryFilter");
+  const sellerFilter = document.getElementById("sellerFilter");
+  const brandFilter = document.getElementById("brandFilter");
+
+  // Lấy danh sách duy nhất cho từng loại
+  const categories = [
+    ...new Set(pendingProducts.map((p) => p.Category).filter(Boolean)),
+  ];
+  const sellers = [
+    ...new Set(pendingProducts.map((p) => p.SellerName).filter(Boolean)),
+  ];
+  const brands = [
+    ...new Set(pendingProducts.map((p) => p.Brand).filter(Boolean)),
+  ];
+
+  // Đổ dữ liệu vào select
+  categoryFilter.innerHTML =
+    `<option value="">Tất cả danh mục</option>` +
+    categories.map((c) => `<option value="${c}">${c}</option>`).join("");
+
+  sellerFilter.innerHTML =
+    `<option value="">Tất cả người bán</option>` +
+    sellers.map((s) => `<option value="${s}">${s}</option>`).join("");
+
+  brandFilter.innerHTML =
+    `<option value="">Tất cả thương hiệu</option>` +
+    brands.map((b) => `<option value="${b}">${b}</option>`).join("");
+}
+
+// 🔹 Áp dụng bộ lọc
+function applyFilters() {
+  const category = document.getElementById("categoryFilter").value;
+  const seller = document.getElementById("sellerFilter").value;
+  const price = document.getElementById("priceFilter").value;
+  const brand = document.getElementById("brandFilter").value;
+
+  filteredProducts = pendingProducts.filter((p) => {
+    let match = true;
+
+    if (category && p.Category !== category) match = false;
+    if (seller && p.SellerName !== seller) match = false;
+    if (brand && p.Brand !== brand) match = false;
+
+    // Lọc theo khoảng giá
+    if (price) {
+      const [minStr, maxStr] = price.split("-");
+      const min = minStr ? Number(minStr) * 1000 : 0;
+      const max = maxStr ? Number(maxStr) * 1000 : Infinity;
+      const priceValue = Number(p.Price) || 0;
+      if (priceValue < min || priceValue > max) match = false;
+    }
+
+    return match;
+  });
+
+  renderProducts(1);
+}
+
+// 🔹 Đặt lại bộ lọc
+function resetFilters() {
+  document.getElementById("categoryFilter").value = "";
+  document.getElementById("sellerFilter").value = "";
+  document.getElementById("priceFilter").value = "";
+  document.getElementById("brandFilter").value = "";
+  filteredProducts = [...pendingProducts];
+  renderProducts(1);
+}
+
+// ==================== MODAL CHI TIẾT ====================
 function viewProductDetail(index) {
   const product = pendingProducts[index];
   if (!product) return;
@@ -281,12 +332,11 @@ function viewProductDetail(index) {
   document.getElementById("detailName").innerText =
     product.NameProduct || "Không có tên";
   document.getElementById("detailCategory").innerText =
-    product.Category || "Không xác định";
+    product.Category || "Không rõ";
   document.getElementById("detailSeller").innerText =
-    product.SellerName || `Người bán #${product.SellerId}`;
-  document.getElementById("detailPrice").innerText = `${Number(
-    product.Price || 0
-  ).toLocaleString("vi-VN")}₫`;
+    product.SellerName || "Không rõ";
+  document.getElementById("detailPrice").innerText =
+    Number(product.Price || 0).toLocaleString("vi-VN") + "₫";
   document.getElementById("detailQuantity").innerText =
     product.Quantity || "Không rõ";
   document.getElementById("detailWarranty").innerText =
@@ -302,39 +352,25 @@ function viewProductDetail(index) {
   modal.show();
 }
 
-// 🧩 Fix aria-hidden cho modal
-document.querySelectorAll(".modal").forEach((modal) => {
-  modal.addEventListener("hide.bs.modal", () => {
-    if (document.activeElement && modal.contains(document.activeElement)) {
-      document.activeElement.blur();
-    }
-  });
-  modal.addEventListener("hidden.bs.modal", () =>
-    modal.removeAttribute("aria-hidden")
-  );
-  modal.addEventListener("shown.bs.modal", () => {
-    let parent = modal.parentElement;
-    while (parent) {
-      if (parent.hasAttribute("aria-hidden"))
-        parent.removeAttribute("aria-hidden");
-      parent = parent.parentElement;
-    }
-  });
-});
-window.addEventListener("focusin", () => {
-  const modal = document.querySelector(".modal.show");
-  if (modal?.hasAttribute("aria-hidden")) modal.removeAttribute("aria-hidden");
-});
-
-// 🚀 Khi trang load
+// ==================== KHI TẢI TRANG ====================
 document.addEventListener("DOMContentLoaded", () => {
   loadPendingProducts();
+
+  document
+    .getElementById("applyFilters")
+    ?.addEventListener("click", applyFilters);
+
+  document
+    .getElementById("resetFilters")
+    ?.addEventListener("click", resetFilters);
+
   document
     .getElementById("btn-approve-selected")
     ?.addEventListener("click", approveSelectedProducts);
+
   document
     .getElementById("btn-reject-selected")
-    ?.addEventListener("click", rejectSelectedProducts);
+    ?.addEventListener("click", removeSelectedProducts);
 
   const searchInput = document.getElementById("search-input");
   const searchBtn = document.getElementById("btn-search");

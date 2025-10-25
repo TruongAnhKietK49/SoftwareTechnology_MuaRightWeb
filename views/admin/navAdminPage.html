@@ -86,6 +86,9 @@
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
         z-index: 1000;
         border-right: 1px solid #333;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
     }
 
     .sidebar.collapsed {
@@ -131,7 +134,7 @@
 
     .sidebar .nav-link.active {
         color: var(--primary-color);
-        background-color: rgba(255, 215, 0, 0.15);
+        background-color: rgba(255, 215, 0, 0.15) !important;
         box-shadow: var(--neon-glow);
         border: 1px solid var(--primary-color);
     }

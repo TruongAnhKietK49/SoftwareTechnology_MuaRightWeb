@@ -359,6 +359,59 @@ async function loadUserRegistrationChart() {
   }
 }
 
+document
+  .getElementById("printReportBtn")
+  .addEventListener("click", function () {
+    const mainContent = document.querySelector("main");
+    const clone = mainContent.cloneNode(true);
+
+    const printWindow = window.open("", "", "width=1000,height=800");
+
+    const styles = Array.from(
+      document.querySelectorAll('link[rel="stylesheet"], style')
+    )
+      .map((node) => node.outerHTML)
+      .join("\n");
+
+    // Thay canvas bằng hình ảnh trong clone
+    clone.querySelectorAll("canvas").forEach((canvasClone) => {
+      // Tìm canvas gốc cùng vị trí (hoặc chính canvasClone nếu đã có toDataURL)
+      const id = canvasClone.id;
+      const originalCanvas = document.getElementById(id);
+      if (originalCanvas) {
+        const img = document.createElement("img");
+        img.src = originalCanvas.toDataURL("image/png");
+        img.style.maxWidth = "100%";
+        img.style.height = "auto";
+        img.className = "chart-image";
+        canvasClone.replaceWith(img);
+      }
+    });
+
+    printWindow.document.open();
+    printWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Báo cáo</title>
+        ${styles}
+        <style>
+          body { font-family: "Segoe UI", sans-serif; margin: 20px; background: #fff; color: #000; }
+          h1, h2, h3 { color: #333; }
+          .chart-image { display: block; margin: 10px auto; }
+        </style>
+      </head>
+      <body>
+        ${clone.outerHTML}
+        <script>
+          window.onload = function() { window.print(); window.onafterprint = function() { window.close(); }; };
+        <\/script>
+      </body>
+    </html>
+  `);
+    printWindow.document.close();
+  });
+
 document.addEventListener(
   "DOMContentLoaded",
   () => loadingStatistics(),
