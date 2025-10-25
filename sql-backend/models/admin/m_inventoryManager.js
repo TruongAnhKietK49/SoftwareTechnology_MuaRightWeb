@@ -1,3 +1,4 @@
+const { get } = require("../../routes/Admin/inventoryRoute");
 const { getPool, closePool } = require("../../routes/config");
 
 async function insertProduct(data) {

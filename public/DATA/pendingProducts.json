@@ -94,5 +94,16 @@
     "Warranty": "Bảo hành 12 tháng",
     "ImageUrl": "https://cdn.vuahanghieu.com/unsafe/0x0/left/top/smart/filters:quality(90)/https://admin.vuahanghieu.com/upload/news/content/2022/06/nuoc-hoa-hermes-terre-d-hermes-e-jpg-1655521241-18062022100041.jpg",
     "TagName": "Hermès, Nam, hương gỗ, sang trọng"
+  },
+  {
+    "NameProduct": "Máy tính bảng cao cấp",
+    "Category": "Nam",
+    "Price": 10000000,
+    "Quantity": 50,
+    "ImageUrl": "https://tse2.mm.bing.net/th/id/OIP.Big-1RIQYerSsmEJMPyqNQHaEK?rs=1&pid=ImgDetMain&o=7&rm=3",
+    "TagName": "Máy tính bảng, Điện thoại",
+    "Warranty": "12 năm",
+    "Description": "Rất mượt",
+    "SellerId": 12
   }
 ]
