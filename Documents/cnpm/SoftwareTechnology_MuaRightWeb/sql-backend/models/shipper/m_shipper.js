@@ -147,7 +147,7 @@ async function getPendingOrders() {
                 OP.OrderDate,
                 OP.State
             FROM OrderProduct OP
-            WHERE OP.ShipperId IS NULL AND OP.State = 'Approved'
+            WHERE OP.State = 'Approved'
             ORDER BY OP.OrderDate ASC;
         `);
 
