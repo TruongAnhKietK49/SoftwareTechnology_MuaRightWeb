@@ -4,7 +4,11 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+app.use(express.json({ limit: '20mb' }));
+app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+
+
 
 const accountRoutes = require("./routes/Admin/accountRoute");
 const adminProfileRoutes = require("./routes/Admin/adminProfileRoute");
@@ -12,7 +16,8 @@ const inventoryRoutes = require("./routes/Admin/inventoryRoute");
 const warehouseRoutes = require("./routes/Admin/warehouseRoute");
 const dashboardRoutes = require("./routes/Admin/dashboardRoute")
 app.use("/admin", adminProfileRoutes, accountRoutes, inventoryRoutes, warehouseRoutes, dashboardRoutes);
-
+const shipperRoutes = require("./routes/Shipper/shipperRoutes"); 
+app.use("/api/shipper", shipperRoutes);            
 const sellerDashboardRoutes = require("./routes/Seller/sellerDashboardRoute");
 const productRoutes = require("./routes/Seller/productRoute");
 const sellerOrderRoute = require('./routes/Seller/orderRoute');
@@ -30,15 +35,6 @@ app.use(
 const signUpRoutes = require("./routes/signUpRoute")
 const signInRoutes = require("./routes/signInRoute")
 app.use('/api', signUpRoutes, signInRoutes)
-
-const cartRoutes = require("./routes/cartRoutes");
-app.use("/cart", cartRoutes);
-
-const productUserRoutes = require("./routes/productRoutes");
-app.use("/products", productUserRoutes);
-
-const userProfileRoutes = require("./routes/userRoutes");
-app.use("/user", userProfileRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

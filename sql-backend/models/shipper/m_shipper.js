@@ -1,6 +1,6 @@
 // models/m_shipper.js
 
-const { getPool } = require('../routes/config');
+const { getPool } = require('../../routes/config'); // Giả định config.js chứa hàm getPool()
 const sql = require('mssql');
 
 // Hàm 1: Lấy tất cả thông tin Profile của Shipper
@@ -84,10 +84,7 @@ async function updateShipperProfile(shipperId, data) {
             reqAcc.input('phone', sql.NVarChar, data.phone);
             
             let accUpdateFields = 'Email = @email, Phone = @phone';
-            if (data.passwordHash) {
-                reqAcc.input('passwordHash', sql.NVarChar, data.passwordHash);
-                accUpdateFields += ', PasswordHash = @passwordHash';
-            }
+           
             if (data.imageUrl) {
                 reqAcc.input('imageUrl', sql.NVarChar, data.imageUrl);
                 accUpdateFields += ', ImageUrl = @imageUrl';
@@ -112,10 +109,6 @@ async function updateShipperProfile(shipperId, data) {
         throw err;
     }
 }
-// models/m_shipper.js
-
-const { getPool } = require('../routes/config'); // Giả định config.js chứa hàm getPool()
-const sql = require('mssql');
 
 // Hàm Helper để lấy thông tin chi tiết sản phẩm (Join OrderItem và Product)
 async function getOrderDetails(orderId) {
@@ -154,7 +147,7 @@ async function getPendingOrders() {
                 OP.OrderDate,
                 OP.State
             FROM OrderProduct OP
-            WHERE OP.ShipperId IS NULL AND OP.State = 'Pending'
+            WHERE OP.State = 'Approved'
             ORDER BY OP.OrderDate ASC;
         `);
 
@@ -190,10 +183,6 @@ async function getMyOrders(shipperId) {
                     OP.ShippingFee
                 FROM OrderProduct OP
                 WHERE OP.ShipperId = @shipperId
-                ORDER BY CASE 
-                             WHEN OP.State = 'Approved' THEN 1  -- Đang giao lên đầu
-                             ELSE 2 
-                         END, OP.OrderDate DESC;
             `);
         return result.recordset;
     } catch (err) {
@@ -214,8 +203,8 @@ async function acceptOrder(orderId, shipperId) {
             .input('shipperId', sql.Int, shipperId)
             .query(`
                 UPDATE OrderProduct
-                SET ShipperId = @shipperId, State = 'Approved', UpdatedAt = GETDATE()
-                WHERE OrderId = @orderId AND ShipperId IS NULL AND State = 'Pending';
+                SET ShipperId = @shipperId, State = 'Shipped', UpdatedAt = GETDATE()
+                WHERE OrderId = @orderId AND ShipperId IS NULL AND State = 'Approved';
             `);
         
         return result.rowsAffected[0] > 0;
@@ -230,40 +219,73 @@ async function acceptOrder(orderId, shipperId) {
 // 4. CẬP NHẬT TRẠNG THÁI (Đã Giao / Hủy Giao)
 // -------------------------------------------------------------
 async function updateOrderStatus(orderId, shipperId, newState) {
-    try {
-        const pool = await getPool();
-        let updateQuery = `
-            UPDATE OrderProduct
-            SET State = @newState, UpdatedAt = GETDATE()
-            WHERE OrderId = @orderId AND ShipperId = @shipperId;
-        `;
-        
-        // Nếu ĐÃ GIAO, cập nhật thời gian DeliveredAt
-        if (newState === 'Delivered') {
-            updateQuery = updateQuery.replace('SET State', 'SET State, DeliveredAt = GETDATE()');
-        }
-        
-        // Nếu HỦY GIAO, xóa ShipperId để đơn hàng trở lại nhóm chờ nhận
-        if (newState === 'Cancelled') {
-            updateQuery = `
-                UPDATE OrderProduct
-                SET ShipperId = NULL, State = 'Pending', UpdatedAt = GETDATE()
-                WHERE OrderId = @orderId AND ShipperId = @shipperId;
-            `;
-            // Lưu ý: Đơn hàng quay về trạng thái Pending và không còn ShipperId
-        }
+  try {
+    const pool = await getPool();
+    let updateQuery = '';
+    const req = pool.request()
+      .input('orderId', sql.Int, orderId)
+      .input('shipperId', sql.Int, shipperId)
+      .input('newState', sql.NVarChar, newState);
 
-        const result = await pool.request()
-            .input('orderId', sql.Int, orderId)
-            .input('shipperId', sql.Int, shipperId)
-            .input('newState', sql.NVarChar, newState)
-            .query(updateQuery);
-
-        return result.rowsAffected[0] > 0;
-    } catch (err) {
-        console.error("Lỗi Model - updateOrderStatus:", err.message);
-        throw err;
+    if (newState === 'Delivered') {
+      // ✅ Cập nhật trạng thái + thời gian giao
+      updateQuery = `
+        UPDATE OrderProduct
+        SET State = @newState,
+            DeliveredAt = GETDATE(),
+            UpdatedAt = GETDATE()
+        WHERE OrderId = @orderId AND ShipperId = @shipperId;
+      `;
+    } else if (newState === 'Cancelled') {
+      // ✅ Hủy giao: trả lại đơn hàng
+      updateQuery = `
+        UPDATE OrderProduct
+        SET ShipperId = NULL,
+            State = 'Approved',
+            UpdatedAt = GETDATE()
+        WHERE OrderId = @orderId AND ShipperId = @shipperId;
+      `;
+    } else {
+      // ✅ Mặc định: chỉ cập nhật trạng thái
+      updateQuery = `
+        UPDATE OrderProduct
+        SET State = @newState,
+            UpdatedAt = GETDATE()
+        WHERE OrderId = @orderId AND ShipperId = @shipperId;
+      `;
     }
+
+    const result = await req.query(updateQuery);
+    return result.rowsAffected[0] > 0;
+
+  } catch (err) {
+    console.error("Lỗi Model - updateOrderStatus:", err.message);
+    throw err;
+  }
+}
+
+async function getShipperAuthByIdentity(identity) {
+  // identity: username hoặc email
+  const pool = await getPool();
+  const rs = await pool.request()
+    .input('identity', sql.NVarChar, identity)
+    .query(`
+      SELECT 
+        A.AccountId     AS ShipperId,
+        A.Username,
+        A.Email,
+        A.PasswordHash,
+        A.ImageUrl,
+        A.State,
+        A.Role,
+        SP.FullName
+      FROM Account A
+      JOIN ShipperProfile SP ON SP.ShipperId = A.AccountId
+      WHERE (A.Username = @identity OR A.Email = @identity)
+        AND A.Role = 'Shipper'
+        AND A.State = 'Active';
+    `);
+  return rs.recordset[0] || null;
 }
 
 
@@ -274,5 +296,6 @@ module.exports = {
     getMyOrders,
     acceptOrder,
     updateOrderStatus,
+    getShipperAuthByIdentity
     // ... các hàm khác cho Product/Order sẽ thêm sau
 };
