@@ -1,8 +1,44 @@
 // controller/c_shipper.js
+const shipperModel = require('../../models/shipper/m_shipper'); // Import Model
+const crypto = require('crypto');
+async function loginShipper(req, res) {
+  try {
+    const { identity, password } = req.body;
 
-const shipperModel = require('../models/m_shipper'); // Import Model
-// const authService = require('../services/authService'); // Giả định có service mã hóa mật khẩu
+    if (!identity || !password) {
+      return res.status(400).json({ success: false, message: 'Thiếu identity hoặc password.' });
+    }
 
+    const acc = await shipperModel.getShipperAuthByIdentity(identity);
+    if (!acc) {
+      return res.status(401).json({ success: false, message: 'Tài khoản không tồn tại hoặc không phải shipper.' });
+    }
+
+    // ✅ Hash MD5
+    const md5 = crypto.createHash('md5').update(password).digest('hex');
+    const ok = (acc.PasswordHash === md5);
+
+    if (!ok) {
+      return res.status(401).json({ success: false, message: 'Sai mật khẩu.' });
+    }
+
+ 
+    return res.status(200).json({
+      success: true,
+      message: 'Đăng nhập thành công.',
+      shipper: {
+        shipperId: acc.ShipperId,
+        fullName: acc.FullName,
+        username: acc.Username,
+        email: acc.Email,
+        avatar: acc.ImageUrl,
+      },
+    });
+  } catch (err) {
+    console.error('loginShipper error:', err);
+    return res.status(500).json({ success: false, message: 'Lỗi máy chủ khi đăng nhập.', error: err.message });
+  }
+}
 // Controller 1: Lấy thông tin Profile
 async function getProfile(req, res) {
     const shipperId = req.params.id; // Lấy ID Shipper từ URL (ví dụ: /api/shipper/profile/101)
@@ -29,12 +65,6 @@ async function getProfile(req, res) {
 async function updateProfile(req, res) {
     const shipperId = req.params.id;
     const updateData = req.body;
-    
-    // 1. Mã hóa mật khẩu mới nếu có
-    if (updateData.newPassword && updateData.newPassword.length > 0) {
-        // updateData.passwordHash = await authService.hashPassword(updateData.newPassword); // Giả định hàm mã hóa
-        updateData.passwordHash = 'hashed_' + updateData.newPassword; // Dùng placeholder
-    }
 
     try {
         await shipperModel.updateShipperProfile(shipperId, updateData);
@@ -66,9 +96,6 @@ function logout(req, res) {
         redirect: '/signin' // Frontend sẽ tự động chuyển hướng về trang này
     });
 }
-// controller/c_shipper.js (Phần bổ sung cho các hàm Profile đã có)
-
-const shipperModel = require('../models/m_shipper');
 
 // Controller 4: Lấy danh sách đơn hàng mới (Pending)
 async function getPendingOrders(req, res) {
@@ -148,5 +175,6 @@ module.exports = {
     getMyOrders,
     acceptOrder,
     updateOrderStatus,
+    loginShipper
     // ... các controllers cho đơn hàng sẽ thêm sau
 };
