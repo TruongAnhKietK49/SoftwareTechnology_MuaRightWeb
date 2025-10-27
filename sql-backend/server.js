@@ -23,13 +23,15 @@ const productRoutes = require("./routes/Seller/productRoute");
 const sellerOrderRoute = require('./routes/Seller/orderRoute');
 const statisticRoutes = require("./routes/Seller/statisticRoute");
 const profileRoutes = require("./routes/Seller/profileRoute");
+const voucherRoutes = require("./routes/Seller/voucherRoute");
 app.use(
   "/seller",
   sellerOrderRoute,
   sellerDashboardRoutes,
   productRoutes,
   statisticRoutes,
-  profileRoutes
+  profileRoutes,
+  voucherRoutes
 );
 
 const signUpRoutes = require("./routes/signUpRoute")
