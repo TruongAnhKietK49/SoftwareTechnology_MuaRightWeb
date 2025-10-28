@@ -74,10 +74,30 @@ router.post("/addReview", async (req, res) => {
       .query(`INSERT INTO Review (ProductId, CustomerId, Rating, Comment, CreatedAt) 
               VALUES (@ProductId, @CustomerId, @Rating, @Comment, @CreatedAt);`);
     res.json({ success: true, message: "Thêm đánh giá thành công!" });
+    res.json(result);
   } catch (err) {
     console.error("Error adding product review:", err);
     res.status(500).json({ success: false, message: "Lỗi server." });
   } 
 });
+
+router.get("/bestSeller", async(req, res) => {
+  try {
+    const pool = await getPool();
+    const result = await pool
+    .request()
+    .query(`
+        SELECT TOP 10
+        p.*
+        From Product p JOIN Review r ON p.ProductId = r.ProductId
+        ORDER BY r.Rating DESC 
+      `)
+  
+    res.json(result);
+  }
+  catch(err){
+    console.error("Error: ", err);
+  }
+})
 
 module.exports = router;

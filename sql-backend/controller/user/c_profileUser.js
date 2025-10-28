@@ -1,5 +1,3 @@
-alert("c_profileUser.js loaded");
-
 // Lấy thông tin tài khoản từ localStorage
 const account =
   JSON.parse(localStorage.getItem("account")) || { AccountId: null };
