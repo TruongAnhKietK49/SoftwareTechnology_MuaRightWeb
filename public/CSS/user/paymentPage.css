@@ -51,6 +51,16 @@ span {
   font-weight: 600;
 }
 
+#cartTable th,
+#cartTable td {
+  background-color: var(--secondary-color) !important;
+  color: var(--accent-color);
+}
+
+#cartTable small {
+  color: var(--light-color) !important;
+}
+
 .product-img {
   width: 80px;
   height: 80px;
@@ -100,16 +110,6 @@ span {
   background-color: var(--secondary-color);
   color: var(--text-color);
   margin: 0 5px;
-}
-
-.remove-btn {
-  color: #dc3545;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.remove-btn:hover {
-  transform: scale(1.1);
 }
 
 .form-control {

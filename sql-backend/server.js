@@ -51,7 +51,9 @@ const productUserRoutes = require("./routes/productRoutes");
 app.use("/products", productUserRoutes);
 
 const userProfileRoutes = require("./routes/userRoutes");
-app.use("/user", userProfileRoutes);
+const paymentRoutes = require("./routes/User/paymentRoute");
+const orderHistoryRoutes = require("./routes/User/orderHistoryRoute");
+app.use("/user", userProfileRoutes, paymentRoutes, orderHistoryRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
