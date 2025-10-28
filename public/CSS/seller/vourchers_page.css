@@ -1,144 +1,85 @@
 :root {
-    --primary-orange: #ff7d1a;
-    --primary-dark: #071b2f;
-    --hover-orange: #ff9642;
-    --light-bg: #f8f9fa;
-    --card-shadow: 0 4px 20px rgba(7, 27, 47, 0.08);
-    --card-hover-shadow: 0 8px 30px rgba(7, 27, 47, 0.15);
+  --primary-color: #ffd700;
+  --primary-glow: rgba(255, 215, 0, 0.3);
+  --success-color: #00ff9d;
+  --danger-color: #ff3860;
+  --info-color: #00d1b2;
+  --dark-color: #121212;
+  --sidebar-width: 280px;
+  --card-bg: #1e1e1e;
+  --card-border: #333333;
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0b0;
+  --bg-gradient: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+  --sidebar-gradient: linear-gradient(180deg, #0c0c0c 0%, #1a1a1a 100%);
+  --neon-glow: 0 0 10px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.5),
+    0 0 30px rgba(255, 215, 0, 0.3);
 }
 
 .voucher-card {
-    background: white;
+    background: var(--card-bg);
     border-radius: 16px;
-    box-shadow: var(--card-shadow);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    transition: all 0.4s;
     display: flex;
     flex-direction: column;
+    border: 1px solid var(--card-border);
     border-left: 5px solid transparent;
 }
-
 .voucher-card:hover {
     transform: translateY(-8px);
-    box-shadow: var(--card-hover-shadow);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
 }
 
-.voucher-card.status-active { border-left-color: #2e7d32; }
-.voucher-card.status-expired { border-left-color: #6c757d; }
-.voucher-card.status-inactive { border-left-color: #1976d2; }
-
+.voucher-card.status-active { border-left-color: var(--success-color); }
+.voucher-card.status-expired { border-left-color: var(--text-secondary); }
+.voucher-card.status-inactive { border-left-color: var(--info-color); }
 
 .voucher-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    border-bottom: 1px solid #f0f0f0;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 20px; border-bottom: 1px solid var(--card-border);
 }
-
 .voucher-code {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--primary-dark);
-    background: #f0f2f5;
-    padding: 5px 12px;
-    border-radius: 8px;
+    font-family: 'Courier New', Courier, monospace; font-size: 1.2rem; font-weight: 700;
+    color: var(--primary-color); background: var(--dark-color);
+    padding: 5px 12px; border-radius: 8px;
 }
-
-.voucher-body {
-    padding: 20px;
-    flex-grow: 1;
-}
-
+.voucher-body { padding: 20px; flex-grow: 1; }
 .voucher-body h5 {
-    font-weight: 700;
-    color: var(--primary-orange);
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
+    font-weight: 700; color: var(--primary-color); margin-bottom: 1rem;
+    font-size: 1.5rem; text-shadow: var(--neon-glow);
 }
-
-.voucher-body p {
-    margin-bottom: 0.5rem;
-    color: #6c757d;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.voucher-body p i {
-    width: 16px;
-    text-align: center;
-    color: #adb5bd;
-}
+.voucher-body p { margin-bottom: 0.5rem; color: var(--text-secondary); display: flex; align-items: center; gap: 10px; }
+.voucher-body p i { width: 16px; text-align: center; color: var(--text-secondary); }
 
 .voucher-actions {
-    display: flex; 
-    gap: 8px; 
-    padding: 15px 20px;
-    border-top: 1px solid #f0f0f0;
-    background-color: #f8f9fa;
+    display: flex; gap: 8px; padding: 15px 20px;
+    border-top: 1px solid var(--card-border);
+    background-color: var(--dark-color);
     border-bottom-left-radius: 16px;
     border-bottom-right-radius: 16px;
 }
-
 .btn-action {
-    flex: 1;
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
+    flex: 1; padding: 10px; border-radius: 10px; border: none; font-weight: 600;
+    cursor: pointer; transition: all 0.3s; display: flex; align-items: center;
+    justify-content: center; gap: 6px;
 }
-
-
-.btn-edit {
-    background: #e3f2fd;
-    color: #1976d2;
-}
-.btn-edit:hover {
-    background: #1976d2;
-    color: white;
-    transform: translateY(-2px);
-}
-
-.btn-delete {
-    background: #ffebee;
-    color: #c62828;
-}
-.btn-delete:hover {
-    background: #c62828;
-    color: white;
-    transform: translateY(-2px);
-}
-
-
-.btn-action:disabled {
-    background: #e9ecef;
-    color: #adb5bd;
-    cursor: not-allowed;
-    transform: none;
-}
-.btn-action:disabled:hover {
-    background: #e9ecef;
-    color: #adb5bd;
-}
+.btn-edit { background: rgba(0, 209, 178, 0.1); color: var(--info-color); }
+.btn-edit:hover { background: var(--info-color); color: var(--dark-color); transform: translateY(-2px); }
+.btn-delete { background: rgba(255, 56, 96, 0.1); color: var(--danger-color); }
+.btn-delete:hover { background: var(--danger-color); color: var(--text-primary); transform: translateY(-2px); }
 
 #addEditVoucherSection {
-    background: white; padding: 30px; border-radius: 20px;
-    box-shadow: var(--card-shadow);
+    background: var(--card-bg); padding: 30px; border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3); border: 1px solid var(--card-border);
 }
 #addEditVoucherSection .card-header {
     background: none; border: none; padding: 0 0 20px 0;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--card-border);
 }
 #addEditVoucherSection .card-header h5 {
-     color: var(--primary-dark); font-weight: 700;
+     color: var(--text-primary); font-weight: 700;
      display: flex; align-items: center; gap: 15px;
 }
-#addEditVoucherSection .card-header h5 i { color: var(--primary-orange); }
+#addEditVoucherSection .card-header h5 i { color: var(--primary-color); text-shadow: var(--neon-glow); }
 #addEditVoucherSection .card-body { padding: 20px 0 0 0; }
