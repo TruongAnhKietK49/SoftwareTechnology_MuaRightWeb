@@ -133,6 +133,55 @@ main {
   text-decoration: underline;
 }
 
+/* ----------- Founder Section ----------- */
+.founder-section {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border-radius: 20px;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.founder-card {
+  background-color: var(--secondary-color) !important;
+  border-radius: 20px !important;
+  border: 1px solid rgb(239, 255, 15) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  height: 350px !important;
+}
+
+.founder-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 0 30px rgba(255, 193, 7, 0.25);
+}
+
+.founder-card img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border: 3px solid var(--accent-color);
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+}
+
+.founder-card .card-title {
+  color: var(--accent-color);
+  font-size: 1.4rem;
+  margin-top: 15px;
+}
+
+.founder-card .card-text {
+  color: var(--light-color);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
 /* ----------- Modal Style ----------- */
 .modal-content {
   background: #111;

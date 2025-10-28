@@ -47,7 +47,7 @@ async function displayCartItems() {
   if (cartItems.length === 0) {
     cartList.innerHTML = `
       <tr>
-        <td colspan="5" class="text-center text-muted py-4">
+        <td colspan="5" class="text-center text-white py-4">
           <i class="bi bi-cart-x fs-1 d-block mb-2"></i>
           <p>Giỏ hàng của bạn đang trống.</p>
         </td>

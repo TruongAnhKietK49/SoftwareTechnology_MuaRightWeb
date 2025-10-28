@@ -43,7 +43,7 @@
         <div class="col-lg-6" data-aos="fade-left" data-aos-duration="900">
           <!-- use your real image path -->
           <img class="hero-img"
-            src="https://img.freepik.com/premium-photo/purple-color-bottle-perfume-purple-background_145644-18479.jpg?w=2000"
+            src="./public/img/banner/LOGO.png"
             alt="Hero perfume">
         </div>
       </div>
@@ -61,7 +61,7 @@
 
           <!-- Slide 1 (4 items) -->
           <div class="carousel-item active">
-            <div class="row">
+            <div class="row" id="carousel-item-tab1">
               <div class="col-6 col-md-3">
                 <div class="product-card h-100">
                   <img src="hình ảnh/17.jpg" alt="Luxurious Elixir">
@@ -126,7 +126,7 @@
 
           <!-- Slide 2 (repeat or other products) -->
           <div class="carousel-item">
-            <div class="row">
+            <div class="row" id="carousel-item-tab2">
               <div class="col-6 col-md-3">
                 <div class="product-card h-100">
                   <img src="hình ảnh/21.jpg" alt="Natural Heart">
@@ -208,35 +208,34 @@
 
       <div class="blog-grid">
         <article class="blog-card" data-aos="fade-up" data-aos-delay="50">
-          <img class="blog-img" src="https://images.pexels.com/photos/1379636/pexels-photo-1379636.jpeg" alt="Lavender">
+          <img class="blog-img" src="https://i.pinimg.com/736x/50/70/99/507099d9678519482eddefd4d36becbd.jpg"
+            alt="Lavender">
           <div class="blog-body">
             <div class="blog-title">💜 Bản hòa ca dịu êm của hương oải hương</div>
             <p class="mb-3">Oải hương – biểu tượng thư giãn và thuần khiết; khám phá nguồn gốc, cách sử dụng và phối
               hương.</p>
-            <a href="views/user/Blog.html" class="btn btn-outline-warning btn-sm rounded-pill px-3">Đọc tiếp</a>
+            <a href="./views/user/Blog_Page.html" class="btn btn-outline-warning btn-sm rounded-pill px-3">Đọc tiếp</a>
           </div>
         </article>
 
         <article class="blog-card" data-aos="fade-up" data-aos-delay="120">
-          <img class="blog-img"
-            src="https://tse4.mm.bing.net/th/id/OIP.01VSlXaIZpvCZnpi6gSnFgHaEV?cb=12&w=1366&h=800&rs=1&pid=ImgDetMain&o=7&rm=3"
+          <img class="blog-img" src="https://i.pinimg.com/736x/0b/01/c8/0b01c86ed2e5596f7ba536b41f95265f.jpg"
             alt="Art of Selection">
           <div class="blog-body">
             <div class="blog-title">🌸 Nghệ thuật tuyển chọn nước hoa cao cấp</div>
             <p class="mb-3">Từ nguyên liệu đến chữ ký hương — tìm hiểu quá trình tạo nên một tuyệt tác mùi hương.</p>
-            <a href="views/user/Blog.html" class="btn btn-outline-warning btn-sm rounded-pill px-3">Đọc tiếp</a>
+            <a href="./views/user/Blog_Page.html" class="btn btn-outline-warning btn-sm rounded-pill px-3">Đọc tiếp</a>
           </div>
         </article>
 
         <article class="blog-card" data-aos="fade-up" data-aos-delay="180">
-          <img class="blog-img"
-            src="https://tse1.mm.bing.net/th/id/OIP.jDrDbYuliLcnYc3lugwbZwHaFX?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3"
+          <img class="blog-img" src="https://i.pinimg.com/736x/d3/17/17/d31717d297eb9f20f5a6bd5bf99a97ac.jpg"
             alt="Rose Timeless">
           <div class="blog-body">
             <div class="blog-title">🥀 Vẻ đẹp vượt thời gian của nước hoa hồng</div>
             <p class="mb-3">Hoa hồng – từ Grasse đến Thổ Nhĩ Kỳ — khám phá dải sắc thái và sự quý phái trong từng giọt
               hương.</p>
-            <a href="views/user/Blog.html" class="btn btn-outline-warning btn-sm rounded-pill px-3">Đọc tiếp</a>
+            <a href="./views/user/Blog_Page.html" class="btn btn-outline-warning btn-sm rounded-pill px-3">Đọc tiếp</a>
           </div>
         </article>
       </div>
@@ -261,8 +260,8 @@
         </div>
 
         <div class="col-lg-6" data-aos="fade-left">
-          <img src="https://tse1.mm.bing.net/th/id/OIP.TFWvbnjTTOq7eC3dfaApAwHaEK?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3"
-            alt="Value image" class="value-img">
+          <img src="https://i.pinimg.com/736x/e0/62/6b/e0626be6fbef6b5f4f131e5e1a5c8fce.jpg" alt="Value image"
+            class="value-img">
         </div>
       </div>
     </section>
@@ -276,13 +275,13 @@
           <div class="carousel-item active">
             <div class="testi-card">
               <p>“MuaRight đã thay đổi cách mình chọn nước hoa — sản phẩm chất lượng, dịch vụ tận tâm.”</p>
-              <div class="text-muted small">— Lan, Hà Nội</div>
+              <div class="small">— Lan, Hà Nội</div>
             </div>
           </div>
           <div class="carousel-item">
             <div class="testi-card">
               <p>“Hương thơm rất bền, giàu tầng mùi — mình được nhiều lời khen khi dùng.”</p>
-              <div class="text-muted small">— Minh, TP.HCM</div>
+              <div class="small">— Minh, TP.HCM</div>
             </div>
           </div>
         </div>
@@ -300,29 +299,22 @@
 
   <!-- Link JS sidebar -->
   <script src="./public/JS/sidebarCustomer.js"></script>
+  <script src="./sql-backend/controller/user/bestSellerProduct.js"></script>
 
   <script>
-    // init AOS
     AOS.init({
       once: true,
       duration: 700,
       easing: 'ease-out-cubic',
       offset: 120
     });
-
-    // Optional: make carousel show multiple cards responsively by cloning items if needed
-    // (Bootstrap 5 default shows one slide; our slides contain multiple columns so it's fine.)
-    // Ensure keyboard swipe works
     const bestCarouselEl = document.getElementById('bestCarousel');
     if (bestCarouselEl) {
       bestCarouselEl.addEventListener('slide.bs.carousel', function (e) {
-        // placeholder for logic if want to lazy-load images or analytics
       });
     }
   </script>
 
-  <!-- Optional: your site sidebar script (if used) -->
-  <script src="./public/JS/sidebarCustomer.js"></script>
 </body>
 
 </html>

@@ -75,11 +75,13 @@ const api = {
       body: JSON.stringify(data),
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json?.() || null;
   },
 
   async delete(url) {
     const res = await fetch(`${API_BASE}${url}`, { method: "DELETE" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json?.() || null;
   },
 };
 
@@ -90,7 +92,7 @@ const utils = {
   },
 
   fmtPrice(n) {
-    return `$${n}`;
+    return `${n}đ`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   },
 
   starIcons(score) {
@@ -121,9 +123,9 @@ const dataManager = {
         api.get("/products/getProductList"),
         api.get("/products/getProductReview"),
       ]);
-      PRODUCTS = products.data;
-      PRODUCTS_REVIEW = reviews.data;
-      renderManager.render(); // Fixed: call renderManager directly
+      PRODUCTS = products.data || [];
+      PRODUCTS_REVIEW = reviews.data || [];
+      renderManager.render();
     } catch (error) {
       console.error("Initialization error:", error);
       PRODUCTS = [];
@@ -150,16 +152,18 @@ const dataManager = {
 
   fillBrands() {
     const brands = [...new Set(PRODUCTS.map((p) => p.Brand))].sort();
-    elements.brandSelect.innerHTML =
-      '<option value="">Thương hiệu</option>' +
-      brands
-        .map((brand) => `<option value="${brand}">${brand}</option>`)
-        .join("");
+    if (elements.brandSelect)
+      elements.brandSelect.innerHTML =
+        '<option value="">Thương hiệu</option>' +
+        brands
+          .map((brand) => `<option value="${brand}">${brand}</option>`)
+          .join("");
   },
 };
 
 // Cart Functions
 const cartManager = {
+  // helper: get latest cart
   async getCart() {
     try {
       const data = await api.get(`/cart/getAllItem/${account.AccountId}`);
@@ -170,19 +174,64 @@ const cartManager = {
     }
   },
 
+  // helper: try to fetch latest product stock; fallback to refresh PRODUCTS
+  async getProductStock(productId) {
+    // Try to call an endpoint for single product if available
+    try {
+      const res = await api.get(`/products/getProductById/${productId}`);
+      if (res && res.data && typeof res.data.Quantity !== "undefined") {
+        return res.data.Quantity;
+      }
+    } catch (err) {
+      // ignore — fallback below
+    }
+
+    // Fallback: refresh PRODUCTS list and read from memory
+    try {
+      await dataManager.init(); // refresh PRODUCTS
+      const p = PRODUCTS.find((x) => x.ProductId == productId);
+      return p ? p.Quantity ?? p.Stock ?? null : null;
+    } catch (err) {
+      console.error("Failed to refresh products for stock check", err);
+      return null;
+    }
+  },
+
+  // Add to cart — now checks stock (including existing quantity in cart)
   async addToCart(product, quantity = 1) {
+    if (!product) return;
+
+    // get latest cart and existing item if any
     const cart = await this.getCart();
     const existingItem = cart.find(
       (item) => item.ProductId == product.ProductId
     );
 
+    // fetch latest stock
+    const latestStock = await this.getProductStock(product.ProductId);
+    const currentInCartQty = existingItem ? existingItem.Quantity : 0;
+    const desiredTotal = currentInCartQty + quantity;
+
+    if (latestStock !== null && desiredTotal > latestStock) {
+      alert(
+        `Chỉ còn ${latestStock} sản phẩm trong kho. Bạn đã có ${currentInCartQty} trong giỏ hàng.`
+      );
+      return;
+    }
+
     if (existingItem) {
-      existingItem.Quantity += quantity;
+      const newQty = existingItem.Quantity + quantity;
       await api.put(`/cart/update/${existingItem.ProductId}`, {
-        Quantity: existingItem.Quantity,
-        UnitPrice: existingItem.Quantity * existingItem.Price,
+        Quantity: newQty,
+        UnitPrice: newQty * existingItem.Price,
       });
     } else {
+      // final check for new add
+      if (latestStock !== null && quantity > latestStock) {
+        alert(`Chỉ còn ${latestStock} sản phẩm trong kho.`);
+        return;
+      }
+
       await api.post("/cart/add", {
         CustomerId: account.AccountId,
         ProductId: product.ProductId,
@@ -191,40 +240,69 @@ const cartManager = {
         UnitPrice: quantity * product.Price,
       });
     }
-    this.renderCartUI();
+
+    // Refresh UI (and refresh cart from server inside render)
+    await this.renderCartUI();
   },
 
+  // Update cart item by +/- 1 (updates.Quantity === 1 => increment, -1 => decrement)
   async updateCartItem(productId, updates) {
+    // get current cart and item
     const cart = await this.getCart();
-    const item = cart.find((item) => item.ProductId == productId);
+    const item = cart.find((c) => c.ProductId == productId);
     if (!item) return;
 
+    // handle increment
     if (updates.Quantity === 1) {
-      item.Quantity++;
+      // fetch latest stock
+      const latestStock = await this.getProductStock(productId);
+      const currentInCartQty = item.Quantity;
+      const desiredTotal = currentInCartQty + 1;
+
+      if (latestStock !== null && desiredTotal > latestStock) {
+        alert(`Chỉ còn ${latestStock} sản phẩm trong kho.`);
+        return;
+      }
+
+      const newQty = currentInCartQty + 1;
+      await api.put(`/cart/update/${productId}`, {
+        Quantity: newQty,
+        UnitPrice: newQty * item.Price,
+      });
     } else if (updates.Quantity === -1) {
-      item.Quantity = Math.max(1, item.Quantity - 1);
+      // decrement but not below 1
+      const newQty = Math.max(1, item.Quantity - 1);
+      if (newQty === item.Quantity) {
+        alert("Số lượng tối thiểu là 1.");
+        return;
+      }
+
+      await api.put(`/cart/update/${productId}`, {
+        Quantity: newQty,
+        UnitPrice: newQty * item.Price,
+      });
     }
 
-    await api.put(`/cart/update/${productId}`, {
-      Quantity: item.Quantity,
-      UnitPrice: item.Quantity * item.Price,
-    });
-    this.renderCartUI();
+    // Re-render cart UI (will fetch fresh cart)
+    await this.renderCartUI();
   },
 
   async removeCartItem(productId) {
     await api.delete(`/cart/remove/${productId}`);
-    this.renderCartUI();
+    await this.renderCartUI();
   },
 
   async clearCart() {
     await api.delete("/cart/clear");
     localStorage.removeItem("cart");
-    this.renderCartUI();
+    await this.renderCartUI();
   },
 
+  // Render cart UI (just render; event handling delegated in eventHandlers)
   async renderCartUI() {
     const cart = await this.getCart();
+    // console.log(cart);
+
     const totalQty = cart.reduce((sum, item) => sum + item.Quantity, 0);
     const totalMoney = cart.reduce(
       (sum, item) => sum + item.Quantity * item.Price,
@@ -232,66 +310,66 @@ const cartManager = {
     );
 
     // Update cart badge
-    elements.cartCount.textContent = totalQty;
-    elements.cartCount.style.display = totalQty ? "inline-block" : "none";
+    if (elements.cartCount) {
+      elements.cartCount.textContent = totalQty;
+      elements.cartCount.style.display = totalQty ? "inline-block" : "none";
+    }
     if (elements.miniCartLabel) {
       elements.miniCartLabel.textContent = `🛒 Giỏ hàng (${totalQty})`;
     }
 
-    // Update cart items
+    // Render items
     if (elements.cartItems) {
       elements.cartItems.innerHTML = cart.length
         ? cart
             .map(
               (item) => `
-                    <div class="list-group-item py-3">
-                        <div class="d-flex align-items-center">
-                            <img src="${
-                              item.ImageUrl
-                            }" class="cart-thumb me-3" alt="${
+              <div class="list-group-item py-3" data-product-id="${
+                item.ProductId
+              }">
+                <div class="d-flex align-items-center">
+                  <img src="${item.ImageUrl}" class="cart-thumb me-3" alt="${
                 item.NameProduct
               }">
-                            <div class="flex-grow-1">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div>
-                                        <div class="fw-semibold">${
-                                          item.NameProduct
-                                        }</div>
-                                        <div class="small text-secondary">Đơn giá: ${utils.fmtPrice(
-                                          item.Price
-                                        )}</div>
-                                        <div class="small mt-1">
-                                            <span class="badge bg-light text-dark">SL: ${
-                                              item.Quantity
-                                            }</span>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-sm btn-outline-light" data-remove="${
-                                      item.ProductId
-                                    }" title="Xóa">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
-                                </div>
-                                <div class="d-flex align-items-center gap-2 mt-2">
-                                    <div class="input-group input-group-sm" style="width:140px">
-                                        <button class="btn btn-outline-gold" data-dec="${
-                                          item.ProductId
-                                        }" type="button">–</button>
-                                        <input class="form-control text-center" value="${
-                                          item.Quantity
-                                        }" readonly>
-                                        <button class="btn btn-gold" data-inc="${
-                                          item.ProductId
-                                        }" type="button">+</button>
-                                    </div>
-                                    <div class="ms-auto fw-semibold">${utils.fmtPrice(
-                                      item.Quantity * item.Price
-                                    )}</div>
-                                </div>
-                            </div>
+                  <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <div class="fw-semibold">${item.NameProduct}</div>
+                        <div class="small text-secondary">Đơn giá: ${utils.fmtPrice(
+                          item.Price
+                        )}</div>
+                        <div class="small mt-1">
+                          <span class="badge bg-light text-dark">SL: ${
+                            item.Quantity
+                          }</span>
                         </div>
+                      </div>
+                      <button class="btn btn-sm btn-outline-light" data-remove="${
+                        item.ProductId
+                      }" title="Xóa">
+                        <i class="bi bi-x-lg"></i>
+                      </button>
                     </div>
-                `
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                      <div class="input-group input-group-sm" style="width:140px">
+                        <button class="btn btn-outline-gold" data-dec="${
+                          item.ProductId
+                        }" type="button">–</button>
+                        <input class="form-control text-center" value="${
+                          item.Quantity
+                        }" readonly>
+                        <button class="btn btn-gold" data-inc="${
+                          item.ProductId
+                        }" type="button">+</button>
+                      </div>
+                      <div class="ms-auto fw-semibold">${utils.fmtPrice(
+                        item.Quantity * item.Price
+                      )}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `
             )
             .join("")
         : '<div class="text-secondary small">Giỏ hàng đang trống.</div>';
@@ -384,53 +462,42 @@ const renderManager = {
       .map((product) => {
         const { avg, count } = dataManager.averageWithUser(product);
         return `
-                    <div class="col-6 col-md-3">
-                        <div id="${
-                          product.ProductId
-                        }" class="product-card h-100">
-                            <img class="product-thumb" src="${
-                              product.ImageUrl
-                            }" alt="${product.NameProduct}">
-                            <div class="card-overlay">
-                                <button class="btn btn-sm btn-outline-light pill" data-view="${
-                                  product.ProductId
-                                }" 
-                                        data-bs-toggle="modal" data-bs-target="#productModal">
-                                    Xem chi tiết <i class="bi bi-arrow-right"></i>
-                                </button>
-                            </div>
-                            <div class="p-3">
-                                <div class="d-flex justify-content-between small mb-1">
-                                    <span class="badge rounded-pill badge-tag">${
-                                      product.Brand
-                                    }</span>
-                                    <span class="small-muted">${
-                                      product.Category
-                                    }</span>
-                                </div>
-                                <div class="product-title mb-1">${
-                                  product.NameProduct
-                                }</div>
-                                <div class="d-flex align-items-center gap-1 mb-2">
-                                    <span class="stars small">${utils.starIcons(
-                                      avg
-                                    )}</span>
-                                    <span class="small text-secondary">(${count})</span>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="price">${utils.fmtPrice(
-                                      product.Price
-                                    )}</span>
-                                    <button class="btn btn-sm btn-gold" data-cart="${
-                                      product.ProductId
-                                    }" title="Thêm vào giỏ">
-                                        <i class="bi bi-bag-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
+          <div class="col-6 col-md-3">
+            <div id="${product.ProductId}" class="product-card h-100">
+              <img class="product-thumb" src="${product.ImageUrl}" alt="${
+          product.NameProduct
+        }">
+              <div class="card-overlay">
+                <button class="btn btn-sm btn-outline-light pill" data-view="${
+                  product.ProductId
+                }" data-bs-toggle="modal" data-bs-target="#productModal">
+                  Xem chi tiết <i class="bi bi-arrow-right"></i>
+                </button>
+              </div>
+              <div class="p-3">
+                <div class="d-flex justify-content-between small mb-1">
+                  <span class="badge rounded-pill badge-tag">${
+                    product.Brand
+                  }</span>
+                  <span class="small-muted">${product.Category}</span>
+                </div>
+                <div class="product-title mb-1">${product.NameProduct}</div>
+                <div class="d-flex align-items-center gap-1 mb-2">
+                  <span class="stars small">${utils.starIcons(avg)}</span>
+                  <span class="small text-secondary">(${count})</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="price">${utils.fmtPrice(product.Price)}</span>
+                  <button class="btn btn-sm btn-gold" data-cart="${
+                    product.ProductId
+                  }" title="Thêm vào giỏ">
+                    <i class="bi bi-bag-plus"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
       })
       .join("");
   },
@@ -444,8 +511,8 @@ const renderManager = {
       html += `<li class="page-item ${disabled ? "disabled" : ""} ${
         active ? "active" : ""
       }">
-                           <a class="page-link" href="#" data-page="${page}">${text}</a>
-                         </li>`;
+                 <a class="page-link" href="#" data-page="${page}">${text}</a>
+               </li>`;
     };
 
     addPageItem(currentPage - 1, "&laquo;", currentPage === 1);
@@ -512,22 +579,21 @@ const renderManager = {
         const reviewEl = document.createElement("div");
         reviewEl.className = "review-item";
         reviewEl.innerHTML = `
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div class="fw-semibold">${(
-                          review.Name || "Khách"
-                        ).replace(/</g, "&lt;")}</div>
-                        <div class="stars">${utils.starIcons(
-                          review.Rating
-                        )}</div>
-                    </div>
-                    <div class="small text-secondary">${new Date(
-                      review.CreatedAt
-                    ).toLocaleString()}</div>
-                    <div class="mt-1">${(review.Comment || "").replace(
-                      /</g,
-                      "&lt;"
-                    )}</div>
-                `;
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="fw-semibold">${(review.Name || "Khách").replace(
+              /</g,
+              "&lt;"
+            )}</div>
+            <div class="stars">${utils.starIcons(review.Rating)}</div>
+          </div>
+          <div class="small text-secondary">${new Date(
+            review.CreatedAt
+          ).toLocaleString()}</div>
+          <div class="mt-1">${(review.Comment || "").replace(
+            /</g,
+            "&lt;"
+          )}</div>
+        `;
         modalElements.reviews.appendChild(reviewEl);
       });
 
@@ -580,8 +646,8 @@ const eventHandlers = {
       });
     }
 
-    // Product interactions
-    document.addEventListener("click", (e) => {
+    // Product interactions (view modal, add quick to cart)
+    document.addEventListener("click", async (e) => {
       const viewBtn = e.target.closest("[data-view]");
       const cartBtn = e.target.closest("[data-cart]");
 
@@ -593,34 +659,41 @@ const eventHandlers = {
         const product = PRODUCTS.find(
           (p) => p.ProductId === cartBtn.dataset.cart
         );
-        if (product) cartManager.addToCart(product, 1);
+        if (product) await cartManager.addToCart(product, 1);
       }
     });
 
-    // Cart actions
+    // Cart actions: use delegation on cartItems container (single listener)
     if (elements.cartItems) {
       elements.cartItems.addEventListener("click", async (e) => {
         const incBtn = e.target.closest("[data-inc]");
         const decBtn = e.target.closest("[data-dec]");
         const remBtn = e.target.closest("[data-remove]");
 
-        if (incBtn)
+        if (incBtn) {
+          // increment via updateCartItem (which checks stock)
           await cartManager.updateCartItem(incBtn.dataset.inc, { Quantity: 1 });
-        if (decBtn)
+        } else if (decBtn) {
           await cartManager.updateCartItem(decBtn.dataset.dec, {
             Quantity: -1,
           });
-        if (remBtn) await cartManager.removeCartItem(remBtn.dataset.remove);
+        } else if (remBtn) {
+          if (confirm("Bạn có chắc muốn xóa sản phẩm khỏi giỏ hàng?")) {
+            await cartManager.removeCartItem(remBtn.dataset.remove);
+          }
+        }
       });
     }
 
     if (elements.btnClearCart) {
-      elements.btnClearCart.addEventListener("click", () =>
-        cartManager.clearCart()
-      );
+      elements.btnClearCart.addEventListener("click", async () => {
+        if (confirm("Bạn có chắc muốn xóa toàn bộ giỏ hàng?")) {
+          await cartManager.clearCart();
+        }
+      });
     }
 
-    // Modal events
+    // Modal events (qty +/- inside modal)
     if (modalElements.minus) {
       modalElements.minus.addEventListener("click", () => {
         modalElements.qty.value = Math.max(
@@ -639,16 +712,27 @@ const eventHandlers = {
       });
     }
 
+    // Modal add to cart: ensure stock check via cartManager.addToCart
     if (modalElements.addCart) {
-      modalElements.addCart.addEventListener("click", () => {
+      modalElements.addCart.addEventListener("click", async () => {
         const product = PRODUCTS.find(
           (p) => p.ProductId == modalElements.id.textContent
         );
         const quantity = parseInt(modalElements.qty.value) || 1;
-        if (product) cartManager.addToCart(product, quantity);
+
+        if (!product) return;
+
+        if (quantity <= 0) {
+          alert("Số lượng phải lớn hơn 0.");
+          modalElements.qty.value = 1;
+          return;
+        }
+
+        await cartManager.addToCart(product, quantity);
       });
     }
 
+    // Review form
     if (modalElements.form) {
       modalElements.form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -669,8 +753,13 @@ const eventHandlers = {
           });
 
           modalElements.text.value = "";
-          modalElements.toast.style.display = "block";
-          setTimeout(() => (modalElements.toast.style.display = "none"), 1500);
+          if (modalElements.toast) {
+            modalElements.toast.style.display = "block";
+            setTimeout(
+              () => (modalElements.toast.style.display = "none"),
+              1500
+            );
+          }
 
           await dataManager.init();
           renderManager.openProductModal(modalElements.id.textContent);
