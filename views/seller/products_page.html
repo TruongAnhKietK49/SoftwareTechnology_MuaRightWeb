@@ -17,6 +17,7 @@
             <li><a href="homeSeller_page.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
             <li><a href="products_page.html" class="active"><i class="fas fa-box"></i> Quản lý sản phẩm</a></li>
             <li><a href="orders_page.html"><i class="fas fa-shopping-cart"></i> Quản lý đơn hàng</a></li>
+            <li><a href="vouchers_page.html"><i class="fas fa-tags"></i> Quản lý Voucher</a></li>
             <li><a href="satisfaction_page.html"><i class="fas fa-chart-bar"></i> Thống kê doanh thu</a></li>
             <li><a href="profileSeller_page.html"><i class="fas fa-cog"></i> Cài đặt trang cá nhân</a></li>
             <li><a href="#logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
@@ -359,7 +360,7 @@
         }
     }
     
-    function openDetailModal(product) {
+    async function openDetailModal(product) {
         const modalBody = document.getElementById('productDetailContent');
         modalBody.innerHTML = `
             <div class="row">
@@ -379,9 +380,49 @@
             <hr>
             <h5>Mô tả chi tiết</h5>
             <p>${product.Description || 'Chưa có mô tả cho sản phẩm này.'}</p>
+            <hr>
+            <h5>Đánh giá từ khách hàng (${product.ReviewCount} lượt)</h5>
+            <div id="productReviews" class="list-group">
+                <!-- Reviews will be loaded here -->
+            </div>
         `;
+
+        await loadProductReviews(product.ProductId);
+
         const detailModal = new bootstrap.Modal(document.getElementById('productDetailModal'));
         detailModal.show();
+    }
+
+    async function loadProductReviews(productId) {
+        const reviewsContainer = document.getElementById('productReviews');
+        reviewsContainer.innerHTML = '<p class="text-muted">Đang tải đánh giá...</p>';
+        try {
+            const response = await fetch(`${API_URL}/seller/products/${productId}/reviews`);
+            const result = await response.json();
+            if (result.success && result.data.length > 0) {
+                reviewsContainer.innerHTML = ''; 
+                result.data.forEach(review => {
+                    reviewsContainer.insertAdjacentHTML('beforeend', `
+                        <div class="list-group-item list-group-item-action flex-column align-items-start">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">${review.CustomerName || 'Khách hàng ẩn danh'}</h6>
+                                <small class="text-muted">${new Date(review.CreatedAt).toLocaleDateString('vi-VN')}</small>
+                            </div>
+                            <p class="mb-1">
+                                ${'<i class="fas fa-star text-warning"></i>'.repeat(review.Rating)}
+                                ${'<i class="far fa-star text-warning"></i>'.repeat(5 - review.Rating)}
+                            </p>
+                            <p class="mb-1">${review.Comment || 'Không có bình luận.'}</p>
+                        </div>
+                    `);
+                });
+            } else {
+                reviewsContainer.innerHTML = '<p class="text-muted">Chưa có đánh giá nào cho sản phẩm này.</p>';
+            }
+        } catch (error) {
+            console.error('Lỗi khi tải đánh giá:', error);
+            reviewsContainer.innerHTML = '<p class="text-danger">Không thể tải đánh giá.</p>';
+        }
     }
 
     function openEditModal(product) {
