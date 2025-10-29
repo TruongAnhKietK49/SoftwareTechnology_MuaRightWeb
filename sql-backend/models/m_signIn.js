@@ -10,11 +10,11 @@ async function checkLogin(dataUser) {
       .input("Email", sql.NVarChar, dataUser.Email)
       .input("PasswordHash", sql.NVarChar, dataUser.PasswordHash).query(`
         SELECT * FROM Account 
-        WHERE Email = @Email AND PasswordHash = @PasswordHash
+        WHERE Email = @Email AND PasswordHash = @PasswordHash AND State = 'Active'
       `);
 
     if (result.recordset.length > 0) {
-      return result.recordset[0]; // ✅ Trả về thông tin account
+      return result.recordset[0]; 
     } else {
       return null;
     }
