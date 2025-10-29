@@ -214,54 +214,91 @@ async function acceptOrder(orderId, shipperId) {
     }
 }
 
-
 // -------------------------------------------------------------
-// 4. CẬP NHẬT TRẠNG THÁI (Đã Giao / Hủy Giao)
+// 4. CẬP NHẬT TRẠNG THÁI (Đã Giao / Hủy Giao) - ĐÃ THÊM LOGIC CỘNG TIỀN
 // -------------------------------------------------------------
 async function updateOrderStatus(orderId, shipperId, newState) {
-  try {
-    const pool = await getPool();
-    let updateQuery = '';
-    const req = pool.request()
-      .input('orderId', sql.Int, orderId)
-      .input('shipperId', sql.Int, shipperId)
-      .input('newState', sql.NVarChar, newState);
+    try {
+        const pool = await getPool();
+        const transaction = new sql.Transaction(pool);
+        await transaction.begin();
 
-    if (newState === 'Delivered') {
-      // ✅ Cập nhật trạng thái + thời gian giao
-      updateQuery = `
-        UPDATE OrderProduct
-        SET State = @newState,
-            DeliveredAt = GETDATE(),
-            UpdatedAt = GETDATE()
-        WHERE OrderId = @orderId AND ShipperId = @shipperId;
-      `;
-    } else if (newState === 'Cancelled') {
-      // ✅ Hủy giao: trả lại đơn hàng
-      updateQuery = `
-        UPDATE OrderProduct
-        SET ShipperId = NULL,
-            State = 'Approved',
-            UpdatedAt = GETDATE()
-        WHERE OrderId = @orderId AND ShipperId = @shipperId;
-      `;
-    } else {
-      // ✅ Mặc định: chỉ cập nhật trạng thái
-      updateQuery = `
-        UPDATE OrderProduct
-        SET State = @newState,
-            UpdatedAt = GETDATE()
-        WHERE OrderId = @orderId AND ShipperId = @shipperId;
-      `;
+        try {
+            // 1. CẬP NHẬT TRẠNG THÁI ĐƠN HÀNG (TRONG TRANSACTION)
+            let updateOrderQuery = '';
+            const reqOrder = transaction.request()
+                .input('orderId', sql.Int, orderId)
+                .input('shipperId', sql.Int, shipperId)
+                .input('newState', sql.NVarChar, newState);
+
+            if (newState === 'Delivered') {
+                updateOrderQuery = `
+                    UPDATE OrderProduct
+                    SET State = @newState,
+                        DeliveredAt = GETDATE(),
+                        UpdatedAt = GETDATE()
+                    WHERE OrderId = @orderId AND ShipperId = @shipperId;
+                `;
+            } else if (newState === 'Cancelled') {
+                updateOrderQuery = `
+                    UPDATE OrderProduct
+                    SET ShipperId = NULL,
+                        State = 'Approved',
+                        UpdatedAt = GETDATE()
+                    WHERE OrderId = @orderId AND ShipperId = @shipperId;
+                `;
+            } else {
+                updateOrderQuery = `
+                    UPDATE OrderProduct
+                    SET State = @newState,
+                        UpdatedAt = GETDATE()
+                    WHERE OrderId = @orderId AND ShipperId = @shipperId;
+                `;
+            }
+
+            const resultOrder = await reqOrder.query(updateOrderQuery);
+            if (resultOrder.rowsAffected[0] === 0) {
+                // Đơn hàng không tìm thấy hoặc đã bị hủy/giao bởi người khác
+                await transaction.rollback();
+                return false; 
+            }
+
+            // 2. LOGIC CỘNG TIỀN NẾU LÀ 'Delivered'
+            if (newState === 'Delivered') {
+                // A. Lấy Phí Ship (ShippingFee) của đơn hàng vừa giao
+                const reqFee = transaction.request().input('orderId', sql.Int, orderId);
+                const feeResult = await reqFee.query(`
+                    SELECT ShippingFee FROM OrderProduct WHERE OrderId = @orderId;
+                `);
+                const shippingFee = feeResult.recordset[0]?.ShippingFee || 0;
+
+                if (shippingFee > 0) {
+                    // B. Cộng Phí Ship vào Balance của ShipperProfile
+                    const reqBalance = transaction.request()
+                        .input('shipperId', sql.Int, shipperId)
+                        .input('shippingFee', sql.Decimal(18, 2), shippingFee);
+                        
+                    await reqBalance.query(`
+                        UPDATE ShipperProfile 
+                        SET Balance = Balance + @shippingFee 
+                        WHERE ShipperId = @shipperId;
+                    `);
+                }
+            }
+
+            await transaction.commit();
+            return true;
+
+        } catch (err) {
+            await transaction.rollback();
+            console.error("Lỗi Transaction - updateOrderStatus:", err.message);
+            throw err;
+        }
+
+    } catch (err) {
+        console.error("Lỗi Model - updateOrderStatus:", err.message);
+        throw err;
     }
-
-    const result = await req.query(updateQuery);
-    return result.rowsAffected[0] > 0;
-
-  } catch (err) {
-    console.error("Lỗi Model - updateOrderStatus:", err.message);
-    throw err;
-  }
 }
 
 async function getShipperAuthByIdentity(identity) {

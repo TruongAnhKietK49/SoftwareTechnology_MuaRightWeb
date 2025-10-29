@@ -4,6 +4,15 @@ body {
   font-family: Arial, sans-serif;
 }
 .navbar-custom {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1030 !important;
+  background: rgba(16, 16, 16, .78) !important;
+  backdrop-filter: saturate(140%) blur(6px) !important;
+  border-bottom: 1px solid rgba(255,255,255,.08) !important;
+}
+
+.navbar-custom {
   background-color: #000 !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }

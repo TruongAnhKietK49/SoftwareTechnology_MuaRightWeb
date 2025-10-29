@@ -57,6 +57,7 @@ const fLicense = $('#modal-license-no');
 const fVehicle = $('#modal-vehicle-info');
 const fGender = $('#modal-gender');
 const fAvatarUrl = $('#modal-avatar-url');   // ⬅️ thêm biến trỏ input URL
+const balanceDisp = $('#shipper-balance-display');
 
 // logout
 const btnLogout = $('#logout-btn');
@@ -125,6 +126,11 @@ function renderProfile(p) {
   if (navName) navName.textContent = `Hi, ${p.FullName || p.Username || '—'}`;
   if (navAvatar) navAvatar.src = p.ImageUrl || '../../img/image 11.png';
   if (vehicleIcon) vehicleIcon.innerHTML = `<i class="${vehicleIconClass(p.VehicleInfo)}" style="font-size:1.5rem"></i>`;
+  if (balanceDisp) {
+        const balance = p.Balance ?? 0;
+        // Sử dụng .toLocaleString('vi-VN') để định dạng số (100000 -> 100.000)
+        balanceDisp.textContent = balance.toLocaleString('vi-VN') + ' VND'; 
+    }
 
   // left
   avatarMain.src = p.ImageUrl || '../../img/image 11.png';
