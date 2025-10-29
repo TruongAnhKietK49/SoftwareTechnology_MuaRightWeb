@@ -2,46 +2,81 @@ async function SignIn() {
   try {
     const emailInput = document.getElementById("email");
     const passInput = document.getElementById("password");
-    console.log("Email element:", emailInput);
-    console.log("Password element:", passInput);
+
+    const email = emailInput.value.trim();
+    const password = passInput.value;
+
+    if (!email && !password) {
+        alert("Vui lòng nhập email và mật khẩu.");
+        return;
+    }
+    if (!email) {
+        alert("Vui lòng nhập email.");
+        return;
+    }
+    if (!password) {
+        alert("Vui lòng nhập mật khẩu.");
+        return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert("Định dạng email không hợp lệ.");
+        return;
+    }
 
     const objData = {
-      Email: emailInput.value,
-      PasswordHash: passInput.value,
+      Email: email,
+      PasswordHash: password,
     };
-    console.log("Gửi lên server:", objData);
 
-    const response = await fetch("http://localhost:3000/api/signin", {
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectValue = urlParams.get('redirect'); 
+
+    let apiUrl = "http://localhost:3000/api/signin";
+    if (redirectValue) {
+      apiUrl += `?redirect=${redirectValue}`;
+    }
+    
+    console.log("Gửi yêu cầu tới API URL:", apiUrl); 
+
+
+    const response = await fetch(apiUrl, { 
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(objData),
     });
 
+
     const result = await response.json();
     if (response.ok && result.success) {
-      // ✅ Lưu thông tin tài khoản vào localStorage
       localStorage.setItem("account", JSON.stringify(result.account));
-      // ✅ Chuyển trang theo Role
       const role = result.account.Role;
-      console.log(role);
+
       alert(result.message);
-      
-      switch (role) {
-        case "Customer":
-          window.location.href = "../../index.html";
-          break;
-        case "Seller":
-          window.location.href = "../../views/seller/homeSeller_page.html";
-          break;
-        case "Shipper":
-          window.location.href = "../../views/shipper/homeShipper_page.html";
-          break;
-        case "Admin":
-          window.location.href = "../../views/admin/admin_dashboard.html";
-          break;
-        default:
-          alert("Không xác định được vai trò người dùng!");
+
+      if (result.redirect) {
+        window.location.href = result.redirect;
+      } else {
+          switch (role) {
+            case "Customer":
+              window.location.href = "../../index.html";
+              break;
+            case "Seller":
+              window.location.href = "../../views/seller/homeSeller_page.html";
+              break;
+            case "Shipper":
+              window.location.href = "../../views/shipper/homeShipper_page.html";
+              break;
+            case "Admin":
+              window.location.href = "../../views/admin/admin_dashboard.html";
+              break;
+            default:
+              alert("Không xác định được vai trò người dùng!");
+          }
       }
+
     } else {
       alert(result.message || "Đăng nhập thất bại!");
     }
