@@ -1,5 +1,7 @@
 ﻿Create database WebDB
+GO
 Use WebDB
+GO
 
 -- Ngắt kết nối để drop database
 USE master;
@@ -17,7 +19,7 @@ CREATE TABLE Account (
     ImageUrl        NVARCHAR(1000) NULL,
     CreatedAt       DATETIME2 DEFAULT SYSUTCDATETIME(),
 	CONSTRAINT CHK_Account_Role CHECK (Role IN ('Customer','Seller','Shipper','Admin'))
-)
+);
 Drop Table Account
 
 CREATE TABLE CustomerProfile (
@@ -90,7 +92,7 @@ CREATE TABLE Product (
     CreatedAt DATETIME2 DEFAULT SYSUTCDATETIME(),
     CONSTRAINT FK_Product_Seller FOREIGN KEY (SellerId) 
         REFERENCES SellerProfile(SellerId) ON DELETE CASCADE
-)
+);
 DROP Table Product
 
 CREATE TABLE Review (

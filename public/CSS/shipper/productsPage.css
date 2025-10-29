@@ -4,6 +4,15 @@ body {
   font-family: Arial, sans-serif;
 }
 .navbar-custom {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1030 !important;
+  background: rgba(16, 16, 16, .78) !important;
+  backdrop-filter: saturate(140%) blur(6px) !important;
+  border-bottom: 1px solid rgba(255,255,255,.08) !important;
+}
+
+.navbar-custom {
   background-color: #000 !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -54,4 +63,16 @@ body {
   --bs-table-striped-color: #fff;
   --bs-table-hover-bg: #353535;
   --bs-table-hover-color: #fff;
+}
+.footer-custom {
+  background-image: linear-gradient(to bottom, #303030, #1a1a1a);
+  color: #d1d1d1;
+  padding-top: 50px;
+}
+.footer-custom a {
+  color: #d1d1d1;
+  text-decoration: none;
+}
+.footer-custom a:hover {
+  color: #fff;
 }
