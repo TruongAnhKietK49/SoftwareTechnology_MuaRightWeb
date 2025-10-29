@@ -279,8 +279,12 @@ a {
 }
 
 #searchInput {
-  color: #070707 !important;
   font-weight: 500;
+  color: rgb(24, 147, 218) !important;
+}
+
+.btn-outline-gold {
+  background-color: var(--accent-hover) !important;
 }
 
 .btn-outline-gold:hover {
@@ -395,10 +399,11 @@ a {
 
 /* Modal - Tương thích với script */
 .modal-content {
-  background: var(--secondary-color);
-  border: 1px solid var(--border-color);
+  background: var(--secondary-color) !important;
+  border: 1px solid var(--accent-hover) !important;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
+  color: var(--text-primary) !important;
 }
 
 .modal-header {
@@ -429,9 +434,9 @@ a {
 /* Form Controls - Tương thích với script */
 .form-control,
 .form-select {
-  background: var(--tertiary-color);
+  background: var(--tertiary-color) !important;
   border: 1px solid var(--border-color);
-  color: var(--text-primary);
+  color: var(--text-primary) !important;
   border-radius: var(--radius-md);
 }
 
@@ -442,7 +447,9 @@ a {
   background: var(--secondary-color);
   color: var(--text-primary);
 }
-
+.form-control::placeholder {
+  color: var(--text-primary) !important;
+}
 .form-control:disabled {
   opacity: 1;
   color: var(--text-primary);

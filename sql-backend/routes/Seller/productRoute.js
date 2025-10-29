@@ -40,6 +40,18 @@ router.get("/products/:sellerId", async (req, res) => {
     }
 });
 
+// [GET] Lấy danh sách đánh giá của một sản phẩm
+// URL: GET /seller/products/:productId/reviews
+router.get("/products/:productId/reviews", async (req, res) => {
+    try {
+        const productId = parseInt(req.params.productId);
+        const reviews = await productController.getProductReviews(productId);
+        res.json({ success: true, data: reviews });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
 // Người bán gửi một sản phẩm mới để CHỜ DUYỆT
 // URL: POST /seller/products/submit
 router.post("/products/submit", async (req, res) => {

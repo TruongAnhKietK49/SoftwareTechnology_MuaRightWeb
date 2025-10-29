@@ -16,7 +16,8 @@ router.get("/getAllItem/:CustomerId", async (req, res) => {
       Product.NameProduct,
       Product.Price,
       Product.ImageUrl,
-      Product.Brand
+      Product.Brand,
+      Product.SellerId
       FROM Basket JOIN Product ON Basket.ProductId = Product.ProductId
       WHERE Basket.CustomerId = @CustomerId
     `);

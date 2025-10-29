@@ -28,6 +28,32 @@ router.get("/getProductList", async (req, res) => {
   }
 });
 
+// Lấy sản phẩm theo ID
+router.get("/getProductById/:productId", async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const pool = await getPool();
+    const request = pool.request();
+    request.input("ProductId", productId);
+    const result = await request.query(`
+      SELECT * FROM Product WHERE ProductId = @ProductId;
+    `);
+    if (result) {
+      res.json({
+        data: result.recordset
+      });
+    } else {
+      res.json({
+        success: false,
+        message: "Không thể lấy sản phẩm.",
+      });
+    }
+  } catch (err) {
+    console.error("Error adding to cart:", err);
+    res.status(500).json({ success: false, message: "Lỗi server." });
+  }                                                                           
+})
+
 router.get("/getProductReview", async (req, res) => {
   try {
     const pool = await getPool();
@@ -74,10 +100,30 @@ router.post("/addReview", async (req, res) => {
       .query(`INSERT INTO Review (ProductId, CustomerId, Rating, Comment, CreatedAt) 
               VALUES (@ProductId, @CustomerId, @Rating, @Comment, @CreatedAt);`);
     res.json({ success: true, message: "Thêm đánh giá thành công!" });
+    res.json(result);
   } catch (err) {
     console.error("Error adding product review:", err);
     res.status(500).json({ success: false, message: "Lỗi server." });
   } 
 });
+
+router.get("/bestSeller", async(req, res) => {
+  try {
+    const pool = await getPool();
+    const result = await pool
+    .request()
+    .query(`
+        SELECT TOP 10
+        p.*
+        From Product p JOIN Review r ON p.ProductId = r.ProductId
+        ORDER BY r.Rating DESC 
+      `)
+  
+    res.json(result);
+  }
+  catch(err){
+    console.error("Error: ", err);
+  }
+})
 
 module.exports = router;
