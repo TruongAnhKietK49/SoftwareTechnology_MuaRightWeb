@@ -41,7 +41,7 @@ const modalElements = {
   minus: document.getElementById("pm-minus"),
   plus: document.getElementById("pm-plus"),
   qty: document.getElementById("pm-qty"),
-  form: document.getElementById("pm-form"),
+  form: document.getElementById("pm-form"), 
   rating: document.getElementById("rv-rating"),
   text: document.getElementById("rv-text"),
   toast: document.getElementById("pm-toast"),

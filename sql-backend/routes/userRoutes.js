@@ -16,6 +16,7 @@ router.get("/profile/:CustomerId", async (req, res) => {
           a.AccountId,
           a.Username,
           a.Email,
+          a.PasswordHash,
           a.Phone,
           a.Role,
           a.ImageUrl,
@@ -47,13 +48,14 @@ router.put("/profile/:CustomerId", async (req, res) => {
   try {
   const {
     Email,
-    Phone,
+    PasswordHash,
     ImageUrl, 
+    Phone,
     FullName,
     Address,
     Birthday,
     Gender,
-    PasswordHash
+    
     } = req.body;
 
     // Cập nhật bảng Account
@@ -61,10 +63,12 @@ router.put("/profile/:CustomerId", async (req, res) => {
   reqAcc.input("AccountId", accountId);
   reqAcc.input("Email", Email);
   reqAcc.input("Phone", Phone);
+  reqAcc.input("PasswordHash", PasswordHash);
+  reqAcc.input("ImageUrl", ImageUrl);
 
   await reqAcc.query(`
     UPDATE Account
-    SET Email=@Email, Phone=@Phone
+    SET Email=@Email, Phone=@Phone, PasswordHash=@PasswordHash, ImageUrl=@ImageUrl
     WHERE AccountId=@AccountId
   `);
 
@@ -75,6 +79,7 @@ router.put("/profile/:CustomerId", async (req, res) => {
   reqProf.input("Birthday", Birthday);
   reqProf.input("Gender", Gender);
   reqProf.input("Address", Address);
+  
 
   await reqProf.query(`
     MERGE CustomerProfile AS target

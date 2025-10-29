@@ -67,6 +67,8 @@ async function openEditModal() {
   if (!profile) return;
 
   document.getElementById("edit-email").value = profile.Email || "";
+  document.getElementById("edit-password").value = profile.PasswordHash || "";
+  document.getElementById("edit-imageUrl").value = profile.ImageUrl || "";
   document.getElementById("edit-phone").value = profile.Phone || "";
   document.getElementById("edit-fullname").value = profile.FullName || "";
   document.getElementById("edit-address").value = profile.Address || "";
@@ -81,6 +83,8 @@ async function updateUserProfile() {
 
   const updatedData = {
     Email: document.getElementById("edit-email").value,
+    PasswordHash: document.getElementById("edit-password").value,
+    ImageUrl: document.getElementById("edit-imageUrl").value,
     Phone: document.getElementById("edit-phone").value,
     FullName: document.getElementById("edit-fullname").value,
     Address: document.getElementById("edit-address").value,
@@ -111,7 +115,7 @@ async function updateUserProfile() {
     modal.hide();
   } catch (error) {
     console.error("Error updating profile:", error);
-    alert("Lỗi khi cập nhật thông tin người dùng.");
+    alert("Thông tin cập nhật thất bại do đã có người sử dụng Email hoặc SĐT. Vui lòng thử lại.");
   }
 }
 
