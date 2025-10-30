@@ -318,7 +318,7 @@ body {
 .card .table {
   background-color: var(--card-bg); 
   color: var(--text-secondary);
-  border-collapse: collapse; /* Đảm bảo không có viền kép */
+  border-collapse: collapse; 
 }
 
 .table thead th {
@@ -455,8 +455,6 @@ body {
   background: rgba(0, 255, 157, 0.1);
   color: var(--success-color);
 }
-
-/* Các phần khác giữ nguyên */
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
@@ -472,5 +470,21 @@ body {
     gap: 15px;
     text-align: center;
   }
-  .stats-card h3 { font-size: 28px; }
+.stats-card h3 { font-size: 28px; }
+}
+
+.form-control, .form-select {
+    color: var(--text-primary) !important;
+}
+
+.form-control::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.8; 
+}
+
+.form-control:-ms-input-placeholder { 
+  color: var(--text-secondary);
+}
+.form-control::-ms-input-placeholder { 
+  color: var(--text-secondary);
 }

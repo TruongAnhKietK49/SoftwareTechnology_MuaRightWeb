@@ -65,7 +65,7 @@
                 <h5 class="mb-0" id="formTitle"><i class="fas fa-plus-circle"></i> Tạo Voucher mới</h5>
             </div>
             <div class="card-body">
-                <form id="addEditVoucherForm">
+                <form id="addEditVoucherForm" novalidate>
                     <input type="hidden" name="VoucherId" id="voucherId">
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -302,22 +302,61 @@
         async function handleFormSubmit(event) {
             event.preventDefault();
             const form = event.target;
-            if (!form.checkValidity()) { form.reportValidity(); return; }
+            const MIN_FIXED_DISCOUNT = 1000;
+
+            const voucherCode = document.getElementById('voucherCode').value.trim();
+            const discountValue = document.getElementById('discountValue').value;
+            const validFrom = document.getElementById('validFrom').value;
+            const validTo = document.getElementById('validTo').value;
+
+            if (!voucherCode) {
+                alert('Vui lòng nhập Mã Voucher.');
+                return;
+            }
+            if (!discountValue) {
+                alert('Vui lòng nhập Giá trị giảm.');
+                return;
+            }
+            if (!validFrom) {
+                alert('Vui lòng chọn Ngày bắt đầu hiệu lực.');
+                return;
+            }
+            if (!validTo) {
+                alert('Vui lòng chọn Ngày hết hạn.');
+                return;
+            }
 
             const voucherData = {
                 VoucherId: document.getElementById('voucherId').value,
-                Code: document.getElementById('voucherCode').value,
+                Code: voucherCode, 
                 DiscountType: document.getElementById('discountType').value,
-                DiscountVal: document.getElementById('discountValue').value,
-                MinOrderAmt: document.getElementById('minOrderAmt').value || null,
-                ValidFrom: document.getElementById('validFrom').value,
-                ValidTo: document.getElementById('validTo').value,
+                DiscountVal: parseFloat(discountValue),
+                MinOrderAmt: document.getElementById('minOrderAmt').value ? parseFloat(document.getElementById('minOrderAmt').value) : null,
+                ValidFrom: validFrom,
+                ValidTo: validTo,
                 IsActive: document.getElementById('isActiveSwitch').checked,
                 CreatedBySeller: sellerId
             };
             
             if (new Date(voucherData.ValidFrom) >= new Date(voucherData.ValidTo)) {
-                alert("Ngày bắt đầu phải trước ngày hết hạn."); return;
+                alert("Ngày bắt đầu phải trước ngày hết hạn."); 
+                return;
+            }
+
+            if (voucherData.DiscountType === 'Percent') {
+                if (voucherData.DiscountVal <= 0 || voucherData.DiscountVal > 100) {
+                    alert('Giá trị giảm theo % phải lớn hơn 0 và không quá 100.');
+                    return;
+                }
+            } else if (voucherData.DiscountType === 'Fixed') {
+                if (voucherData.DiscountVal < MIN_FIXED_DISCOUNT) {
+                    alert(`Giá trị giảm theo số tiền phải ít nhất là ${MIN_FIXED_DISCOUNT.toLocaleString('vi-VN')} VNĐ.`);
+                    return;
+                }
+                if (voucherData.MinOrderAmt && voucherData.DiscountVal > voucherData.MinOrderAmt) {
+                    alert('Số tiền giảm không được lớn hơn giá trị đơn hàng tối thiểu.');
+                    return;
+                }
             }
 
             const isUpdating = !!voucherData.VoucherId;
