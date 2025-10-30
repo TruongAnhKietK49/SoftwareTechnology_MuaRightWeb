@@ -45,8 +45,6 @@ body {
   text-shadow: none;
 }
 
-
-
 .card-header h4 {
     color: var(--text-primary);
     text-shadow: none;
@@ -70,6 +68,16 @@ body {
 .form-label {
     color: var(--text-secondary);
 }
+
+.form-control::placeholder {
+  color: var(--text-secondary); 
+  opacity: 1;
+}
+
+.form-label .bi {
+  color: var(--primary-color);
+}
+
 
 .btn-primary {
   background-color: var(--primary-color);
