@@ -24,4 +24,36 @@ async function checkLogin(dataUser) {
   }
 }
 
-module.exports = { checkLogin };
+async function findUserByEmail(email) {
+    try {
+        const pool = await getPool();
+        const result = await pool.request()
+            .input("Email", sql.NVarChar, email)
+            .query('SELECT * FROM Account WHERE Email = @Email');
+        
+        return result.recordset.length > 0 ? result.recordset[0] : null;
+    } catch (err) {
+        console.error("Lỗi khi tìm người dùng bằng email trong model:", err);
+        throw err;
+    }
+}
+
+async function lockUserAccount(accountId) {
+    try {
+        const pool = await getPool();
+        await pool.request()
+            .input('AccountId', sql.Int, accountId)
+            .query("UPDATE Account SET State = 'Inactive' WHERE AccountId = @AccountId");
+        console.log(`🔒 Đã khóa vĩnh viễn tài khoản ID: ${accountId} trong CSDL.`);
+        return true;
+    } catch (err) {
+        console.error("Lỗi khi khóa tài khoản trong model:", err);
+        throw err;
+    }
+}
+
+module.exports = { 
+  checkLogin, 
+  findUserByEmail,
+  lockUserAccount 
+};

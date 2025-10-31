@@ -55,6 +55,9 @@ const paymentRoutes = require("./routes/User/paymentRoute");
 const orderHistoryRoutes = require("./routes/User/orderHistoryRoute");
 app.use("/user", userProfileRoutes, paymentRoutes, orderHistoryRoutes);
 
+const passwordResetRoutes = require('./routes/passwordResetRoute');
+app.use('/api', passwordResetRoutes);
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server đang chạy trên cổng ${PORT}`);

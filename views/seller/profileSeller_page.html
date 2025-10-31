@@ -24,7 +24,6 @@
             <li><a href="#logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
         </ul>
     </div>
-
     <div class="main-content">
         <div class="page-header">
             <h2><i class="fas fa-cog"></i> Cài đặt & Thông tin Profile</h2>
@@ -38,43 +37,48 @@
                         <img id="imagePreview" src="https://placehold.co/150x150?text=Avatar" alt="Avatar"/>
                     </div>
                 </div>
-
                 <div class="mb-3">
                     <label for="imageUrl" class="form-label">URL Ảnh đại diện</label>
                     <input type="url" class="form-control" id="imageUrl" name="ImageUrl" disabled oninput="previewImage(this.value)">
                 </div>
-
                 <hr>
+
+                <h5 class="card-title text-center mb-4">Thông tin Tài khoản</h5>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="username" class="form-label">Tên đăng nhập</label>
+                        <input type="text" class="form-control" id="username" name="Username" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="Email" readonly>
+                    </div>
+                </div>
+                <hr>
+
                 <h5 class="card-title text-center mb-4">Thông tin Cá nhân</h5>
-                
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="fullName" class="form-label">Họ và tên</label>
                         <input type="text" class="form-control" id="fullName" name="FullName" required disabled> 
                     </div>
                     <div class="col-md-6">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="Email" readonly title="Không thể thay đổi Email">
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
                         <label for="phone" class="form-label">Số điện thoại</label>
                         <input type="tel" class="form-control" id="phone" name="Phone" required disabled>
                     </div>
+                </div>
+                <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="address" class="form-label">Địa chỉ cá nhân</label>
                         <input type="text" class="form-control" id="address" name="Address" disabled>
                     </div>
-                </div>
-
-                <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="birthday" class="form-label">Ngày sinh</label>
                         <input type="date" class="form-control" id="birthday" name="Birthday" disabled>
                     </div>
-                    <div class="col-md-6">
+                </div>
+                <div class="row mb-3">
+                     <div class="col-md-6">
                         <label for="gender" class="form-label">Giới tính</label>
                         <select id="gender" name="Gender" class="form-select" disabled>
                             <option value="">Chọn giới tính</option>
@@ -84,10 +88,9 @@
                         </select>
                     </div>
                 </div>
-
                 <hr>
-                <h5 class="card-title text-center mb-4">Thông tin Cửa hàng</h5>
 
+                <h5 class="card-title text-center mb-4">Thông tin Cửa hàng</h5>
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="storeName" class="form-label">Tên cửa hàng</label>
@@ -98,13 +101,29 @@
                         <input type="text" class="form-control" id="storeAddress" name="StoreAddress" disabled>
                     </div>
                 </div>
+                <hr>
 
-                <div class="d-flex justify-content-end mt-4" id="button-group">
-                    <!-- Các nút sẽ được quản lý bằng JavaScript -->
+                <div id="changePasswordSection" style="display: none;">
+                    <h5 class="card-title text-center mb-4 text-warning">Thay đổi Mật khẩu</h5>
+                    <div class="mb-3">
+                        <label for="currentPassword" class="form-label">Mật khẩu hiện tại</label>
+                        <input type="password" class="form-control" id="currentPassword">
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label">Mật khẩu mới</label>
+                        <input type="password" class="form-control" id="newPassword">
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmNewPassword" class="form-label">Xác nhận mật khẩu mới</label>
+                        <input type="password" class="form-control" id="confirmNewPassword">
+                    </div>
                 </div>
+
+     
+                <div class="d-flex justify-content-end mt-4" id="button-group"></div>
             </form>
         </div>
-    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -181,24 +200,22 @@
             editableFields.forEach(field => {
                 field.disabled = !isEditable;
             });
+            document.getElementById('changePasswordSection').style.display = isEditable ? 'block' : 'none';
         }
-        
-        // Xử lý nút "Chỉnh Sửa"
+
         function handleEditToggle() {
             isEditMode = true;
             setFormEditable(true);
             updateButtons(); 
         }
 
-        // Xử lý nút "Hủy"
         function handleCancel() {
             isEditMode = false;
             fillForm(originalProfileData); 
             setFormEditable(false);
             updateButtons(); 
         }
-        
-        // Tải thông tin 
+
         async function loadProfile(id) {
             try {
                 const response = await fetch(`${API_URL}/seller/profile/${id}`);
@@ -217,8 +234,10 @@
         }
 
         function fillForm(data) {
-            document.getElementById('fullName').value = data.FullName || '';
+            document.getElementById('username').value = data.Username || '';
             document.getElementById('email').value = data.Email || '';
+
+            document.getElementById('fullName').value = data.FullName || '';
             document.getElementById('phone').value = data.Phone || '';
             document.getElementById('address').value = data.Address || '';
             
@@ -238,12 +257,35 @@
             previewImage(imageUrl);
         }
 
+
         function previewImage(url) {
             document.getElementById('imagePreview').src = url || 'https://placehold.co/150x150?text=NA';
         }
 
         async function handleSaveProfile(event) {
             event.preventDefault();
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+            if (newPassword) { 
+                if (!currentPassword) {
+                    return alert('Vui lòng nhập mật khẩu hiện tại để đổi mật khẩu mới.');
+                }
+                if (newPassword.length < 8) {
+                    return alert('Mật khẩu mới phải có ít nhất 8 ký tự.');
+                }
+                if (newPassword !== confirmNewPassword) {
+                    return alert('Mật khẩu mới và xác nhận mật khẩu không khớp.');
+                }
+
+                const passwordChanged = await changePassword(currentPassword, newPassword);
+                if (!passwordChanged) {
+                    return; 
+                }
+            }
+
             const formData = {
                 FullName: document.getElementById('fullName').value,
                 Phone: document.getElementById('phone').value,
@@ -268,21 +310,43 @@
                 });
 
                 const result = await response.json();
-                
-                if (result.success) {
+                if (result.success && !newPassword) {
                     alert(result.message);
+                } else if (!result.success) {
+                    alert('Lưu thông tin thất bại: ' + (result.message || result.error));
+                }
+
+                if (result.success) {
                     originalProfileData = { ...result.data }; 
                     fillForm(result.data); 
+
+                    document.getElementById('currentPassword').value = '';
+                    document.getElementById('newPassword').value = '';
+                    document.getElementById('confirmNewPassword').value = '';
                     
                     isEditMode = false; 
                     setFormEditable(false);
                     updateButtons();
-                } else {
-                    alert('Lưu thất bại: ' + (result.message || result.error));
                 }
             } catch (error) {
-                console.error('Lỗi Network/Server:', error);
+                console.error('Lỗi Network/Server khi lưu Profile:', error);
                 alert('Lỗi kết nối Server khi lưu Profile!');
+            }
+        }
+        async function changePassword(currentPassword, newPassword) {
+            try {
+                const response = await fetch(`${API_URL}/seller/profile/${sellerId}/change-password`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ currentPassword, newPassword })
+                });
+                const result = await response.json();
+                alert(result.message);
+                return result.success;
+            } catch (error) {
+                console.error('Lỗi khi đổi mật khẩu:', error);
+                alert('Lỗi kết nối khi đổi mật khẩu.');
+                return false;
             }
         }
     </script>
