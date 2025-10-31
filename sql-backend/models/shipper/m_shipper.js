@@ -147,7 +147,7 @@ async function getPendingOrders() {
                 OP.OrderDate,
                 OP.State
             FROM OrderProduct OP
-            WHERE OP.State = 'Approved'
+            WHERE OP.State = 'Shipped' AND OP.ShipperId IS NULL
             ORDER BY OP.OrderDate ASC;
         `);
 
@@ -203,8 +203,8 @@ async function acceptOrder(orderId, shipperId) {
             .input('shipperId', sql.Int, shipperId)
             .query(`
                 UPDATE OrderProduct
-                SET ShipperId = @shipperId, State = 'Shipped', UpdatedAt = GETDATE()
-                WHERE OrderId = @orderId AND ShipperId IS NULL AND State = 'Approved';
+                SET ShipperId = @shipperId, UpdatedAt = GETDATE()
+                WHERE OrderId = @orderId AND ShipperId IS NULL AND State = 'Shipped';
             `);
         
         return result.rowsAffected[0] > 0;
@@ -243,7 +243,6 @@ async function updateOrderStatus(orderId, shipperId, newState) {
                 updateOrderQuery = `
                     UPDATE OrderProduct
                     SET ShipperId = NULL,
-                        State = 'Approved',
                         UpdatedAt = GETDATE()
                     WHERE OrderId = @orderId AND ShipperId = @shipperId;
                 `;

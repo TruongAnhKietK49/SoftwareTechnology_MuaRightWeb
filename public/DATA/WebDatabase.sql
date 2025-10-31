@@ -10,7 +10,7 @@ DROP DATABASE WebDB;
 
 CREATE TABLE Account (
 	AccountId		INT IDENTITY(1,1) PRIMARY KEY,
-	Username		NVARCHAR(100) NOT NULL UNIQUE,
+	Username		NVARCHAR(100)   ,
 	Email			NVARCHAR(100) NOT NULL UNIQUE,
 	Phone			NVARCHAR(50) NOT NULL UNIQUE,
 	PasswordHash	NVARCHAR(255) NOT NULL,
@@ -209,7 +209,7 @@ DBCC CHECKIDENT ('Basket', RESEED, 0);
 Delete From Basket
 
 SELECT * FROM OrderProduct
-WHERE State = 'Delivered'
+WHERE State = 'Shipped'
 DBCC CHECKIDENT ('OrderProduct', RESEED, 0);
 Delete From OrderProduct
 
