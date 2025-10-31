@@ -80,7 +80,39 @@ async function updateSellerProfile(sellerId, data) {
     }
 }
 
+async function changeSellerPassword(sellerId, currentPassword, newPassword) {
+    try {
+        const pool = await getPool();
+        const request = pool.request();
+
+        const userResult = await request
+            .input('sellerId', sql.Int, sellerId)
+            .query('SELECT PasswordHash FROM Account WHERE AccountId = @sellerId');
+
+        if (userResult.recordset.length === 0) {
+            return { success: false, message: 'Không tìm thấy tài khoản.' };
+        }
+
+        const currentPasswordInDB = userResult.recordset[0].PasswordHash;
+
+        if (currentPasswordInDB !== currentPassword) {
+            return { success: false, message: 'Mật khẩu hiện tại không chính xác.' };
+        }
+
+        await pool.request()
+            .input('sellerId', sql.Int, sellerId)
+            .input('newPassword', sql.NVarChar(255), newPassword)
+            .query('UPDATE Account SET PasswordHash = @newPassword WHERE AccountId = @sellerId');
+        
+        return { success: true, message: 'Đổi mật khẩu thành công!' };
+
+    } catch (err) {
+        console.error("SQL Error - changeSellerPassword:", err);
+        throw err;
+    }
+}
 module.exports = {
     getSellerProfile,
-    updateSellerProfile
+    updateSellerProfile,
+    changeSellerPassword
 };

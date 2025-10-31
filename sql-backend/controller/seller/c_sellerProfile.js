@@ -57,7 +57,34 @@ const updateProfile = async (req, res) => {
     }
 };
 
+const changePassword = async (req, res) => {
+    try {
+        const sellerId = parseInt(req.params.sellerId);
+        const { currentPassword, newPassword } = req.body;
+
+        if (isNaN(sellerId)) {
+            return res.status(400).json({ success: false, message: "Seller ID không hợp lệ" });
+        }
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ success: false, message: "Vui lòng cung cấp mật khẩu hiện tại và mật khẩu mới." });
+        }
+
+        const result = await sellerModel.changeSellerPassword(sellerId, currentPassword, newPassword);
+
+        if (!result.success) {
+            return res.status(401).json(result);
+        }
+        
+        res.status(200).json(result);
+
+    } catch (err) {
+        console.error("Lỗi Controller - changePassword:", err);
+        res.status(500).json({ success: false, error: "Lỗi server khi đổi mật khẩu" });
+    }
+};
+
 module.exports = {
     getProfile,
     updateProfile,
+    changePassword
 };
