@@ -34,16 +34,49 @@ document
   .getElementById("createVoucherForm")
   .addEventListener("submit", async (e) => {
     e.preventDefault();
+    const code = document.getElementById("voucherCode").value.trim();
+    const discountType = document.getElementById("discountType").value;
+    const discountVal = parseFloat(document.getElementById("discountVal").value);
+    const MinOrderAmt = parseFloat(document.getElementById("minOrderAmt").value);
+    const validFrom = document.getElementById("validFrom").value;
+    const validTo = document.getElementById("validTo").value;
+
+    // Validation
+    if (!code || code === "" || discountVal === "" || isNaN(discountVal) || MinOrderAmt === "" || isNaN(MinOrderAmt) || !validFrom || !validTo) {
+      alert("❌ Vui lòng điền đầy đủ thông tin!");
+      return; 
+    }
+    if (discountType === "Fixed" && discountVal <= 0) {
+      alert("❌ Giá trị giảm giá phải lớn hơn 0!");
+      return; 
+    }
+
+    if (discountType === "Percent" && (discountVal > 100 || discountVal < 0)) {
+      alert("❌ Giá trị phần trăm giảm giá phải từ 0% đến 100%!");
+      return; 
+    }
+
+
+    if (MinOrderAmt < 0) {
+      alert("❌ Giá trị đơn hàng tối thiểu không được âm!");
+      return; 
+    }
+
+    if (new Date(validFrom) >= new Date(validTo)) {
+      alert("❌ Ngày kết thúc phải sau ngày bắt đầu!");
+      return; 
+    }
 
     const voucher = {
-      Code: document.getElementById("voucherCode").value.trim(),
+      Code: code,
       CreatedByAdmin: document.getElementById("username").innerText,
-      DiscountType: document.getElementById("discountType").value,
-      DiscountVal: parseFloat(document.getElementById("discountVal").value),
-      MinOrderAmt: parseFloat(document.getElementById("minOrderAmt").value),
-      ValidFrom: document.getElementById("validFrom").value,
-      ValidTo: document.getElementById("validTo").value,
+      DiscountType: discountType,
+      DiscountVal: discountVal,
+      MinOrderAmt: MinOrderAmt,
+      ValidFrom: validFrom,
+      ValidTo: validTo,
     };
+
     console.log(voucher);
 
     try {
@@ -65,6 +98,7 @@ document
       alert("❌ Có lỗi xảy ra khi tạo voucher.");
     }
   });
+
 
 // 📊 Tải dữ liệu và vẽ biểu đồ doanh thu theo tháng
 async function loadRevenueChart() {

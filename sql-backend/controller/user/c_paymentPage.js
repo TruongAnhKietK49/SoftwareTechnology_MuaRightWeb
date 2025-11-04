@@ -232,6 +232,12 @@ document.getElementById("placeOrderBtn").addEventListener("click", async () => {
       return;
     }
 
+    const totalOrder = document.getElementById("orderTotal").textContent;
+    if( totalOrder === "") {
+      alert("⚠️ Vui lòng chọn sản phẩm để cập nhật đơn!");
+      return;
+    }
+
     // 🛒 2. Lấy danh sách sản phẩm đã chọn trong giỏ
     const selectedItems = document.querySelectorAll(".select-item:checked");
     if (selectedItems.length === 0) {

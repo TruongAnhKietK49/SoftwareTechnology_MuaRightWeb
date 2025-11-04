@@ -1,8 +1,11 @@
+🚞Môi trường
+VS Code (Visual Studio Code)
+NodeJS (cài nếu chưa có)
+
 🤖Các gói gần tải
-Dự án dùng HTML, CSS, BOOTSTRAP và xử lý backend bằng Node.JS + Express
-Cài NodeJS (nếu chưa có)
+Dự án dùng HTML, CSS, BOOTSTRAP ( và xử lý backend bằng Node.JS + Express)
 Clone code từ Repository
-Cài 'npm install express mssql cors'
+Cài 'npm install express mssql cors' trong terminal
 Kiểm tra bằng lệnh 'npm list express mssql cors'
 
 🎃Cấu hình config - SQL Server

@@ -27,7 +27,7 @@ function displayAdminProfile(data) {
   if (avatar) avatar.src = data.ImageUrl || defaultAvatar;
   if (nameElement) nameElement.innerText = data.FullName;
 
-  document.getElementById("admin-imgUrl").innerText =
+  document.getElementById("admin-imgUrl").value =
     data.ImageUrl || defaultAvatar;
   document.getElementById("admin-username").innerText = data.Username || "";
   document.getElementById("admin-email").innerText = data.Email || "";
@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   document
-    .querySelector("#editProfileModal .btn-primary")
+    .querySelector("#editProfileModal .update")
     ?.addEventListener("click", updateAdminProfile);
 
   initAvatarPreview();
