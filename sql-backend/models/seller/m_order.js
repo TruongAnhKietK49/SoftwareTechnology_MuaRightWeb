@@ -10,13 +10,11 @@ async function getSellerOrders(sellerId, state) {
         const request = pool.request().input('sellerId', sql.Int, sellerId);
         
         let query = `
-            SELECT DISTINCT
+            SELECT
                 O.OrderId, O.OrderDate, O.TotalAmount, O.State,
-                (SELECT SUM(OI_sub.LineTotal) 
-                 FROM OrderItem OI_sub 
-                 WHERE OI_sub.OrderId = O.OrderId AND OI_sub.SellerId = @sellerId) AS SellerTotalAmount,
                 CP.FullName AS CustomerName, A.Phone AS CustomerPhone,
                 SP.FullName AS ShipperName,
+                SUM(OI.LineTotal) AS SellerTotalAmount, -- Tính tổng trực tiếp
                 (
                     SELECT P.NameProduct, P.ImageUrl, OI_sub.Quantity, OI_sub.UnitPrice
                     FROM OrderItem OI_sub JOIN Product P ON OI_sub.ProductId = P.ProductId
@@ -36,7 +34,10 @@ async function getSellerOrders(sellerId, state) {
             request.input('state', sql.NVarChar, state);
         }
 
-        query += ` ORDER BY O.OrderDate DESC;`;
+        query += `
+            GROUP BY O.OrderId, O.OrderDate, O.TotalAmount, O.State, CP.FullName, A.Phone, SP.FullName
+            ORDER BY O.OrderDate DESC;
+        `;
 
         const result = await request.query(query);
         result.recordset.forEach(order => {
@@ -55,8 +56,6 @@ async function getSellerOrders(sellerId, state) {
 async function getOrderDetail(orderId, sellerId) {
     try {
         const pool = await getPool();
-
-        // Lấy thông tin chung của Order
         const orderInfo = await pool.request()
             .input('orderId', sql.Int, orderId)
             .input('sellerId', sql.Int, sellerId)
@@ -69,9 +68,14 @@ async function getOrderDetail(orderId, sellerId) {
                     O.ShipAddress AS CustomerAddress,
                     O.ShipPhone AS CustomerPhone,
                     (SELECT FullName FROM ShipperProfile WHERE ShipperId = O.ShipperId) AS ShipperName,
-                    V.Code AS VoucherCode, V.DiscountType, V.DiscountVal
+                    V.Code AS VoucherCode, V.DiscountType, V.DiscountVal,
+
+                    SP.StoreName,
+                    SP.StoreAddress
                 FROM OrderProduct O
                 JOIN CustomerProfile CP ON O.CustomerId = CP.CustomerId
+                -- THÊM JOIN VÀO BẢNG SELLERPROFILE --
+                JOIN SellerProfile SP ON SP.SellerId = @sellerId
                 LEFT JOIN Voucher V ON O.VoucherId = V.VoucherId
                 WHERE O.OrderId = @orderId AND EXISTS (
                     SELECT 1 FROM OrderItem OI WHERE OI.OrderId = O.OrderId AND OI.SellerId = @sellerId
@@ -81,7 +85,6 @@ async function getOrderDetail(orderId, sellerId) {
         if (!orderInfo.recordset || orderInfo.recordset.length === 0) return null;
         const orderHeader = orderInfo.recordset[0];
 
-        // Lấy chi tiết OrderItem
         const orderItems = await pool.request()
             .input('orderId', sql.Int, orderId)
             .input('sellerId', sql.Int, sellerId)
@@ -102,7 +105,8 @@ async function getOrderDetail(orderId, sellerId) {
             SubTotalForSeller: subTotal
         };
 
-    } catch (err) {
+    } catch (err)
+    {
         console.error("Lỗi khi lấy chi tiết đơn hàng:", err);
         throw err;
     }
@@ -112,11 +116,15 @@ async function getOrderDetail(orderId, sellerId) {
 /**
  * Cập nhật trạng thái OrderProduct
  */
-async function updateOrderStatus(orderId, newState) {
+async function updateOrderStatus(orderId, newState, sellerId) { 
     try {
         const pool = await getPool();
         let query = `UPDATE OrderProduct SET State = @newState, UpdatedAt = GETUTCDATE()`;
-        let whereClause = ` WHERE OrderId = @orderId`;
+
+        let whereClause = `
+            WHERE OrderId = @orderId 
+            AND EXISTS (SELECT 1 FROM OrderItem WHERE OrderId = @orderId AND SellerId = @sellerId)
+        `;
         
         switch (newState) {
             case 'Approved':
@@ -127,6 +135,10 @@ async function updateOrderStatus(orderId, newState) {
                 query += `, ShippedAt = GETUTCDATE()`;
                 whereClause += ` AND State = 'Approved'`;
                 break;
+            case 'Delivered':
+                query += `, DeliveredAt = GETUTCDATE()`;
+                whereClause += ` AND State = 'Shipped'`;
+                break;
             case 'Cancelled':
                 whereClause += ` AND State = 'Pending'`;
                 break;
@@ -136,7 +148,8 @@ async function updateOrderStatus(orderId, newState) {
         
         const request = pool.request()
             .input('orderId', sql.Int, orderId)
-            .input('newState', sql.NVarChar, newState);
+            .input('newState', sql.NVarChar, newState)
+            .input('sellerId', sql.Int, sellerId);
 
         const result = await request.query(query + whereClause);
         return result.rowsAffected[0] > 0;
@@ -146,8 +159,53 @@ async function updateOrderStatus(orderId, newState) {
     }
 }
 
+async function bulkUpdateOrderStatus(orderIds, action, sellerId) {
+    try {
+        const pool = await getPool();
+        const request = pool.request();
+
+        const idParams = orderIds.map((id, index) => `@id${index}`).join(',');
+        orderIds.forEach((id, index) => {
+            request.input(`id${index}`, sql.Int, id);
+        });
+
+        let query = `UPDATE OrderProduct SET State = @action, UpdatedAt = GETUTCDATE()`;
+
+        let whereClause = `
+            WHERE OrderId IN (${idParams})
+            AND EXISTS (SELECT 1 FROM OrderItem WHERE OrderId = OrderProduct.OrderId AND SellerId = @sellerId)
+        `;
+
+        switch (action) {
+            case 'Approved':
+                query += `, ApprovedAt = GETUTCDATE()`;
+                whereClause += ` AND State = 'Pending'`; 
+                break;
+            case 'Cancelled':
+                whereClause += ` AND State = 'Pending'`; 
+                break;
+            case 'Shipped':
+                query += `, ShippedAt = GETUTCDATE()`;
+                whereClause += ` AND State = 'Approved'`; 
+                break;
+            default:
+                return 0; 
+        }
+
+        request.input('action', sql.NVarChar, action);
+        request.input('sellerId', sql.Int, sellerId);
+
+        const result = await request.query(query + whereClause);
+        return result.rowsAffected[0];
+    } catch (err) {
+        console.error("Lỗi khi cập nhật trạng thái hàng loạt:", err);
+        throw err;
+    }
+}
+
 module.exports = {
     getSellerOrders,
     getOrderDetail,
-    updateOrderStatus
+    updateOrderStatus,
+    bulkUpdateOrderStatus
 };

@@ -1,58 +1,40 @@
 const sql = require("mssql");
 const { getPool } = require("../../routes/config");
 
-function getDateRanges(period) {
-    const endDate = new Date();
-    endDate.setHours(23, 59, 59, 999); 
+function getDateRanges(options) {
+    const { period, startDate: customStart, endDate: customEnd } = options;
 
-    let startDate = new Date(endDate);
-    startDate.setHours(0, 0, 0, 0); 
+    let startDate, endDate;
 
-    let periodLengthDays = 30;
+    if (period === 'custom' && customStart && customEnd) {
+        startDate = new Date(customStart);
+        startDate.setHours(0, 0, 0, 0);
 
-    switch (period) {
-        case 'today':
-            periodLengthDays = 1;
-            break;
-        case '7days':
-            periodLengthDays = 7;
-            startDate.setDate(startDate.getDate() - 6);
-            break;
-        case '3months':
-            startDate.setMonth(startDate.getMonth() - 3);
-            break;
-        case '6months':
-            startDate.setMonth(startDate.getMonth() - 6);
-            break;
-        case '1year':
-            startDate.setFullYear(startDate.getFullYear() - 1);
-            break;
-        case '30days':
-        default:
-            periodLengthDays = 30;
-            startDate.setDate(startDate.getDate() - 29);
-            break;
+        endDate = new Date(customEnd);
+        endDate.setHours(23, 59, 59, 999);
+    } else {
+        endDate = new Date();
+        endDate.setHours(23, 59, 59, 999);
+        startDate = new Date(endDate);
+        startDate.setHours(0, 0, 0, 0);
+
+        switch (period) {
+            case 'today': break;
+            case '7days': startDate.setDate(startDate.getDate() - 6); break;
+            case '3months': startDate.setMonth(startDate.getMonth() - 3); break;
+            case '6months': startDate.setMonth(startDate.getMonth() - 6); break;
+            case '1year': startDate.setFullYear(startDate.getFullYear() - 1); break;
+            case '30days': default: startDate.setDate(startDate.getDate() - 29); break;
+        }
     }
 
-    const prevEndDate = new Date(startDate);
-    prevEndDate.setDate(prevEndDate.getDate() - 1);
-    prevEndDate.setHours(23, 59, 59, 999);
-
-    const prevStartDate = new Date(prevEndDate);
-    prevStartDate.setHours(0, 0, 0, 0);
-
-    if (period === 'today' || period === '7days' || period === '30days') {
-        prevStartDate.setDate(prevStartDate.getDate() - (periodLengthDays - 1));
-    } else if (period === '3months') {
-        prevStartDate.setMonth(prevStartDate.getMonth() - 3);
-    } else if (period === '6months') {
-        prevStartDate.setMonth(prevStartDate.getMonth() - 6);
-    } else if (period === '1year') {
-        prevStartDate.setFullYear(prevStartDate.getFullYear() - 1);
-    }
+    const duration = endDate.getTime() - startDate.getTime();
+    const prevEndDate = new Date(startDate.getTime() - 1);
+    const prevStartDate = new Date(prevEndDate.getTime() - duration);
 
     return { startDate, endDate, prevStartDate, prevEndDate };
 }
+
 
 function calculateTrend(current, previous) {
     if (previous === 0) {
@@ -62,10 +44,12 @@ function calculateTrend(current, previous) {
     return parseFloat(trend.toFixed(1));
 }
 
-async function getFullSellerStatistics(sellerId, period) {
+
+async function getFullSellerStatistics(sellerId, options) {
     try {
         const pool = await getPool();
-        const { startDate, endDate, prevStartDate, prevEndDate } = getDateRanges(period);
+        const { startDate, endDate, prevStartDate, prevEndDate } = getDateRanges(options);
+        
         const summaryQuery = `
             SELECT
                 ISNULL(SUM(OI.LineTotal), 0) AS totalRevenue,

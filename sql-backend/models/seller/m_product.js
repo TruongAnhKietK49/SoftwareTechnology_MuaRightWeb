@@ -50,7 +50,7 @@ async function addProductForApproval(productData) {
  * Cập nhật thông tin một sản phẩm đã có
  */
 async function updateProductById(productId, productData) {
-    const { NameProduct, Category, Quantity, Price, Description, Warranty, TagName } = productData;
+    const { NameProduct, Category, Quantity, Price, Description, Warranty, TagName, ImageUrl } = productData; // Thêm ImageUrl ở đây
     const pool = await getPool();
     const cleanTagName = (TagName || '').replace(/_PENDING_APPROVAL_/g, '').trim();
     const request = await pool.request()
@@ -61,13 +61,14 @@ async function updateProductById(productId, productData) {
         .input('Price', sql.Decimal(18, 2), Price)
         .input('Description', sql.NVarChar, Description)
         .input('Warranty', sql.NVarChar, Warranty)
-        .input('TagName', sql.NVarChar, cleanTagName) 
+        .input('TagName', sql.NVarChar, cleanTagName)
+        .input('ImageUrl', sql.NVarChar, ImageUrl) 
         .query(`
             UPDATE Product SET 
                 NameProduct = @NameProduct, Category = @Category, Quantity = @Quantity, Price = @Price, 
-                Description = @Description, Warranty = @Warranty, TagName = @TagName
+                Description = @Description, Warranty = @Warranty, TagName = @TagName, ImageUrl = @ImageUrl
             WHERE ProductId = @ProductId; 
-        `);
+        `); 
     return request.rowsAffected[0] > 0;
 }
 
