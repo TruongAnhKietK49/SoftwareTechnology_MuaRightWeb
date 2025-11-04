@@ -7,6 +7,20 @@
     <style>
         body { font-family: Arial, sans-serif; padding: 20px; }
         .container { max-width: 800px; margin: auto; border: 1px solid #ddd; padding: 30px; }
+
+        body.is-cancelled::before {
+            content: "ĐÃ HỦY";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 10rem;
+            color: rgba(255, 0, 0, 0.15); 
+            font-weight: bold;
+            z-index: -1; 
+            pointer-events: none;
+        }
+
         @media print {
             body { padding: 0; }
             .container { border: none; }
@@ -29,7 +43,20 @@
 
             sessionStorage.removeItem('printableOrderData');
             const detail = JSON.parse(dataString);
-            const storeInfo = { name: "Cửa hàng của bạn", address: "Địa chỉ của bạn" };
+
+            let title = `THÔNG TIN ĐƠN HÀNG #${detail.OrderId}`;
+            let statusBanner = '';
+
+            if (detail.State === 'Cancelled') {
+                document.body.classList.add('is-cancelled'); 
+                title = `ĐƠN HÀNG #${detail.OrderId}`; 
+                statusBanner = `
+                    <div style="border: 1px solid red; color: red; background-color: #fff5f5; padding: 15px; text-align: center; margin-bottom: 20px;">
+                        <h5 style="margin: 0;">ĐƠN HÀNG NÀY ĐÃ BỊ HỦY</h5>
+                        ${detail.CancelReason ? `<p class="mb-0 mt-1"><strong>Lý do:</strong> ${detail.CancelReason}</p>` : ''}
+                    </div>
+                `; 
+            }
 
             const itemsHtml = detail.Items.map(item => `
                 <tr>
@@ -58,12 +85,13 @@
                 `<p><strong>Tổng giảm giá (toàn đơn):</strong> -${new Intl.NumberFormat('vi-VN').format(detail.DiscountAmt)} đ</p>` : '';
 
             const invoiceHtml = `
-                <h2 class="text-center mb-4">THÔNG TIN ĐƠN HÀNG #${detail.OrderId}</h2>
+                <h2 class="text-center mb-4">${title}</h2>
+                ${statusBanner}
                 <div class="row mb-4">
                     <div class="col-6">
                         <h5>Từ:</h5>
-                        <p class="mb-1"><strong>Cửa hàng:</strong> ${storeInfo.name}</p>
-                        <p class="mb-1"><strong>Địa chỉ:</strong> ${storeInfo.address}</p>
+                        <p class="mb-1"><strong>Cửa hàng:</strong> ${detail.StoreName || 'Chưa có thông tin'}</p>
+                        <p class="mb-1"><strong>Địa chỉ:</strong> ${detail.StoreAddress || 'Chưa có thông tin'}</p>
                     </div>
                     <div class="col-6">
                         <h5>Đến:</h5>

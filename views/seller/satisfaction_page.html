@@ -11,14 +11,7 @@
 </head>
 <body>
     <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h4>
-                <div class="logo-icon">
-                    <i class="fas fa-gem"></i>
-                </div>
-                <span>MuaRight</span>
-            </h4>
-        </div>
+        <div class="sidebar-header"><h4><div class="logo-icon"><i class="fas fa-gem"></i></div><span>MuaRight</span></h4></div>
         <ul class="sidebar-menu">
             <li><a href="homeSeller_page.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
             <li><a href="products_page.html"><i class="fas fa-box"></i> Quản lý sản phẩm</a></li>
@@ -37,373 +30,127 @@
         </div>
 
         <div class="filter-bar">
-            <div class="d-flex gap-2 flex-wrap">
-                <button class="btn-filter" data-period="today" onclick="changeTimePeriod('today')">Hôm nay</button>
-                <button class="btn-filter" data-period="7days" onclick="changeTimePeriod('7days')">7 ngày</button>
-                <button class="btn-filter active" data-period="30days" onclick="changeTimePeriod('30days')">30 ngày</button>
-                <button class="btn-filter" data-period="3months" onclick="changeTimePeriod('3months')">3 tháng</button>
-                <button class="btn-filter" data-period="6months" onclick="changeTimePeriod('6months')">6 tháng</button>
-                <button class="btn-filter" data-period="1year" onclick="changeTimePeriod('1year')">1 năm</button>
-                <!-- <button class="btn-filter" data-period="custom" onclick="changeTimePeriod('custom')">Tùy chỉnh</button> -->
-            </div>
-        </div>
-
-        <div class="row mb-4">
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="stats-card revenue">
-                    <div class="stats-icon">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
-                    <div class="stats-value" id="totalRevenue">0đ</div>
-                    <div class="stats-label">Tổng doanh thu</div>
-                    <span class="stats-change up" id="revenueTrend">
-                        <i class="fas fa-arrow-up"></i> +0%
-                    </span>
+            <div class="d-flex gap-2 flex-wrap align-items-center justify-content-between">
+                <div class="d-flex gap-2 flex-wrap">
+                    <button class="btn-filter" data-period="today">Hôm nay</button>
+                    <button class="btn-filter" data-period="7days">7 ngày</button>
+                    <button class="btn-filter active" data-period="30days">30 ngày</button>
+                    <button class="btn-filter" data-period="3months">3 tháng</button>
+                    <button class="btn-filter" data-period="6months">6 tháng</button>
+                    <button class="btn-filter" data-period="1year">1 năm</button>
+                    <button class="btn-filter" data-period="custom">Tùy chỉnh</button>
+                </div>
+                <div>
+                    <button class="btn btn-success" id="exportRevenueBtn"><i class="fas fa-file-excel"></i> Xuất báo cáo doanh thu</button>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="stats-card orders">
-                    <div class="stats-icon">
-                        <i class="fas fa-shopping-cart"></i>
-                    </div>
-                    <div class="stats-value" id="totalOrders">0</div>
-                    <div class="stats-label">Tổng đơn hàng</div>
-                    <span class="stats-change up" id="ordersTrend">
-                        <i class="fas fa-arrow-up"></i> +0%
-                    </span>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="stats-card products">
-                    <div class="stats-icon">
-                        <i class="fas fa-box"></i>
-                    </div>
-                    <div class="stats-value" id="productsSold">0</div>
-                    <div class="stats-label">Sản phẩm đã bán</div>
-                    <span class="stats-change up" id="productsTrend">
-                        <i class="fas fa-arrow-up"></i> +0%
-                    </span>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="stats-card customers">
-                    <div class="stats-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stats-value" id="newCustomers">0</div>
-                    <div class="stats-label">Khách hàng mới</div>
-                    <span class="stats-change up" id="customersTrend">
-                        <i class="fas fa-arrow-up"></i> +0%
-                    </span>
+            <div id="customDateFilter" class="mt-3 d-none">
+                <div class="row g-2 align-items-center">
+                    <div class="col-auto"><label class="form-label">Từ ngày:</label></div>
+                    <div class="col"><input type="date" id="startDate" class="form-control"></div>
+                    <div class="col-auto"><label class="form-label">Đến ngày:</label></div>
+                    <div class="col"><input type="date" id="endDate" class="form-control"></div>
+                    <div class="col-auto"><button class="btn btn-primary" id="applyDateFilterBtn">Áp dụng</button></div>
                 </div>
             </div>
         </div>
 
         <div class="row mb-4">
-            <div class="col-12">
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <div class="chart-title">
-                            <i class="fas fa-chart-area"></i>
-                            <span id="chartTitle">Biểu đồ doanh thu 30 ngày</span>
-                        </div>
-                        <div class="d-flex gap-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <div style="width: 15px; height: 15px; background: var(--primary-orange); border-radius: 3px;"></div>
-                                <small>Doanh thu</small>
-                            </div>
-                            <div class="d-flex align-items-center gap-2">
-                                <div style="width: 15px; height: 15px; background: #1976d2; border-radius: 3px;"></div>
-                                <small>Đơn hàng</small>
-                            </div>
-                        </div>
-                    </div>
-                    <canvas id="revenueChart" height="80"></canvas>
-                </div>
-            </div>
+            <div class="col-lg-3 col-md-6 mb-4"><div class="stats-card revenue"><div class="stats-icon"><i class="fas fa-dollar-sign"></i></div><div class="stats-value" id="totalRevenue">0đ</div><div class="stats-label">Tổng doanh thu</div><span class="stats-change up" id="revenueTrend"><i class="fas fa-arrow-up"></i> +0%</span></div></div>
+            <div class="col-lg-3 col-md-6 mb-4"><div class="stats-card orders"><div class="stats-icon"><i class="fas fa-shopping-cart"></i></div><div class="stats-value" id="totalOrders">0</div><div class="stats-label">Tổng đơn hàng</div><span class="stats-change up" id="ordersTrend"><i class="fas fa-arrow-up"></i> +0%</span></div></div>
+            <div class="col-lg-3 col-md-6 mb-4"><div class="stats-card products"><div class="stats-icon"><i class="fas fa-box"></i></div><div class="stats-value" id="productsSold">0</div><div class="stats-label">Sản phẩm đã bán</div><span class="stats-change up" id="productsTrend"><i class="fas fa-arrow-up"></i> +0%</span></div></div>
+            <div class="col-lg-3 col-md-6 mb-4"><div class="stats-card customers"><div class="stats-icon"><i class="fas fa-users"></i></div><div class="stats-value" id="newCustomers">0</div><div class="stats-label">Khách hàng mới</div><span class="stats-change up" id="customersTrend"><i class="fas fa-arrow-up"></i> +0%</span></div></div>
         </div>
-
-        <div class="row mb-4">
-            <div class="col-lg-6 mb-4">
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <div class="chart-title">
-                            <i class="fas fa-chart-pie"></i>
-                            Phân loại theo danh mục
-                        </div>
-                    </div>
-                    <canvas id="categoryChart" height="250"></canvas>
-                </div>
-            </div>
-            <div class="col-lg-6 mb-4">
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <div class="chart-title">
-                            <i class="fas fa-chart-bar"></i>
-                            Doanh thu theo tuần
-                        </div>
-                    </div>
-                    <canvas id="weeklyChart" height="250"></canvas>
-                </div>
-            </div>
-        </div>
+        <div class="row mb-4"><div class="col-12"><div class="chart-card"><div class="chart-header"><div class="chart-title"><i class="fas fa-chart-area"></i><span id="chartTitle">Biểu đồ doanh thu 30 ngày</span></div><div class="d-flex gap-3"><div class="d-flex align-items-center gap-2"><div style="width: 15px; height: 15px; background: var(--primary-orange); border-radius: 3px;"></div><small>Doanh thu</small></div><div class="d-flex align-items-center gap-2"><div style="width: 15px; height: 15px; background: #1976d2; border-radius: 3px;"></div><small>Đơn hàng</small></div></div></div><canvas id="revenueChart" height="80"></canvas></div></div></div>
+        <div class="row mb-4"><div class="col-lg-6 mb-4"><div class="chart-card"><div class="chart-header"><div class="chart-title"><i class="fas fa-chart-pie"></i> Phân loại theo danh mục</div></div><canvas id="categoryChart" height="250"></canvas></div></div><div class="col-lg-6 mb-4"><div class="chart-card"><div class="chart-header"><div class="chart-title"><i class="fas fa-chart-bar"></i> Doanh thu theo tuần</div></div><canvas id="weeklyChart" height="250"></canvas></div></div></div>
 
         <div class="row">
             <div class="col-12">
                 <div class="table-card">
                     <div class="table-header">
-                        <i class="fas fa-trophy"></i> Top 10 sản phẩm bán chạy nhất
+                        <span><i class="fas fa-trophy"></i> Top 10 sản phẩm bán chạy nhất</span>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Xếp hạng</th>
-                                    <th>Sản phẩm</th>
-                                    <th>Danh mục</th>
-                                    <th>Đã bán</th>
-                                    <th>Doanh thu</th>
-                                    <th>Đánh giá</th>
-                                </tr>
-                            </thead>
-                            <tbody id="topProductsTable">
-                                <!-- Table rows will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
+                    <div class="table-responsive"><table class="table"><thead><tr><th>Xếp hạng</th><th>Sản phẩm</th><th>Danh mục</th><th>Đã bán</th><th>Doanh thu</th><th>Đánh giá</th></tr></thead><tbody id="topProductsTable"></tbody></table></div>
                 </div>
             </div>
         </div>
     </div>
-
-    <button class="btn mobile-toggle" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </button>
+    
+    <button class="btn mobile-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let currentPeriod = '30days';
+        let customStartDate = '';
+        let customEndDate = '';
         let revenueChartInstance = null;
         let categoryChartInstance = null;
         let weeklyChartInstance = null;
         let statisticsData = {};
 
         document.addEventListener('DOMContentLoaded', function() {
-            loadStatistics();
-            
-            const logoutButton = document.getElementById('logoutBtn');
-            if (logoutButton) {
-                logoutButton.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
-                        localStorage.removeItem('account');
-                        window.location.href = '../../template/pages/signIn_page.html';
-                    }
-                });
-            }
-        });
-
-        function loadStatistics() {
-            const account = JSON.parse(localStorage.getItem('account'));
-            const sellerId = (account && account.AccountId) ? account.AccountId : 1;
-            fetchData(sellerId);
-        }
-    
-    function fetchData(sellerId) {
-        const apiUrl = `http://localhost:3000/seller/statistics/${sellerId}?period=${currentPeriod}`;
+            document.querySelectorAll('.btn-filter').forEach(button => {
+                button.addEventListener('click', () => changeTimePeriod(button));
+            });
+            document.getElementById('applyDateFilterBtn').addEventListener('click', applyCustomDateFilter);
         
-        fetch(apiUrl)
-            .then(res => {
-                if (!res.ok) throw new Error(`Lỗi HTTP! Trạng thái: ${res.status}`);
-                return res.json();
-            })
-            .then(response => {
-                if (response.success) {
-                    statisticsData = response.data;
-                    updateUI();
-                } else {
-                    console.error("API không trả về thành công:", response.message);
-                    alert("Không thể tải dữ liệu thống kê.");
+            document.getElementById('exportRevenueBtn').addEventListener('click', exportRevenueDataToCSV);
+            
+            document.getElementById('logoutBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
+                    localStorage.removeItem('account');
+                    window.location.href = '../../template/pages/signIn_page.html';
                 }
-            })
-            .catch(error => {
-                console.error('Lỗi khi fetch dữ liệu thống kê:', error);
-                alert("Đã xảy ra lỗi khi kết nối tới máy chủ.");
             });
-    }
-
-        function updateTrend(elementId, trendValue) {
-            const trendElement = document.getElementById(elementId);
-            if (!trendElement) return;
-
-            const isUp = trendValue >= 0;
-            trendElement.className = `stats-change ${isUp ? 'up' : 'down'}`;
-            trendElement.innerHTML = `
-                <i class="fas ${isUp ? 'fa-arrow-up' : 'fa-arrow-down'}"></i> 
-                ${isUp ? '+' : ''}${trendValue}%
-            `;
-        }
-
-        function updateUI() {
-            if (!statisticsData.summary) {
-                console.log("Dữ liệu thống kê chưa sẵn sàng.");
-                return;
-            }
-
-            document.getElementById('totalRevenue').textContent = formatPrice(statisticsData.summary.totalRevenue);
-            updateTrend('revenueTrend', statisticsData.summary.revenueTrend);
-            
-            document.getElementById('totalOrders').textContent = statisticsData.summary.totalOrders;
-            updateTrend('ordersTrend', statisticsData.summary.ordersTrend);
-            
-            document.getElementById('productsSold').textContent = statisticsData.summary.productsSold;
-            updateTrend('productsTrend', statisticsData.summary.productsTrend);
-            
-            document.getElementById('newCustomers').textContent = statisticsData.summary.newCustomers;
-            updateTrend('customersTrend', statisticsData.summary.customersTrend);
-
-            loadRevenueChart();
-            loadCategoryChart();
-            loadWeeklyChart();
-            loadTopProductsTable();
-        }
-
-        function loadRevenueChart() {
-            const ctx = document.getElementById('revenueChart').getContext('2d');
-            if (revenueChartInstance) revenueChartInstance.destroy();
-            
-            revenueChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: statisticsData.revenueChart.labels,
-                    datasets: [{
-                        label: 'Doanh thu (triệu đồng)',
-                        data: statisticsData.revenueChart.revenue,
-                        borderColor: '#ff7d1a',
-                        backgroundColor: 'rgba(255, 125, 26, 0.1)',
-                        tension: 0.4, fill: true, borderWidth: 3
-                    }, {
-                        label: 'Số đơn hàng',
-                        data: statisticsData.revenueChart.orders,
-                        borderColor: '#1976d2',
-                        backgroundColor: 'rgba(25, 118, 210, 0.1)',
-                        tension: 0.4, fill: true, borderWidth: 3
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0, 0, 0, 0.05)' } }, x: { grid: { display: false } } } }
-            });
-        }
-
-        function loadCategoryChart() {
-            const ctx = document.getElementById('categoryChart').getContext('2d');
-            if (categoryChartInstance) categoryChartInstance.destroy();
-            
-            categoryChartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: statisticsData.categoryChart.labels,
-                    datasets: [{
-                        data: statisticsData.categoryChart.data,
-                        backgroundColor: ['#ff7d1a', '#1976d2', '#388e3c', '#d32f2f', '#7b1fa2'],
-                        borderWidth: 0
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom', labels: { padding: 20, font: { size: 13, weight: '600' } } } } }
-            });
-        }
-
-        function loadWeeklyChart() {
-            const ctx = document.getElementById('weeklyChart').getContext('2d');
-            if (weeklyChartInstance) weeklyChartInstance.destroy();
-            
-            weeklyChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: statisticsData.weeklyChart.labels,
-                    datasets: [{
-                        label: 'Doanh thu (triệu đồng)',
-                        data: statisticsData.weeklyChart.data,
-                        backgroundColor: '#ff7d1a',
-                        borderRadius: 8, barThickness: 50
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0, 0, 0, 0.05)' } }, x: { grid: { display: false } } } }
-            });
-        }
-
-        function loadTopProductsTable() {
-            const tbody = document.getElementById('topProductsTable');
-            tbody.innerHTML = '';
-
-            if (!statisticsData.topProducts || statisticsData.topProducts.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center p-4">Không có dữ liệu sản phẩm cho khoảng thời gian này.</td></tr>';
-                return;
-            }
-
-            statisticsData.topProducts.forEach(product => {
-                const rankClass = product.rank === 1 ? 'rank-1' : product.rank === 2 ? 'rank-2' : product.rank === 3 ? 'rank-3' : 'rank-other';
-                const rankIcon = product.rank === 1 ? '<i class="fas fa-crown"></i>' : product.rank === 2 ? '<i class="fas fa-medal"></i>' : product.rank === 3 ? '<i class="fas fa-award"></i>' : product.rank;
-                const row = `
-                    <tr>
-                        <td><div class="product-rank ${rankClass}">${rankIcon}</div></td>
-                        <td><strong>${product.name}</strong></td>
-                        <td>${product.category}</td>
-                        <td><strong>${product.sold}</strong> sản phẩm</td>
-                        <td><strong style="color: var(--primary-orange);">${formatPrice(product.revenue)}</strong></td>
-                        <td>
-                            <div class="d-flex align-items-center gap-1">
-                                <strong>${product.rating}</strong>
-                                <i class="fas fa-star" style="color: #ffc107;"></i>   
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
-            });
-        }
-
-        function changeTimePeriod(period) {
-            const clickedButton = event.target;
-            if (clickedButton.classList.contains('active')) return;
-
-            currentPeriod = period;
-            
-            document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
-            clickedButton.classList.add('active');
-            
-            const titles = {
-                'today': 'Biểu đồ doanh thu hôm nay', '7days': 'Biểu đồ doanh thu 7 ngày',
-                '30days': 'Biểu đồ doanh thu 30 ngày', '3months': 'Biểu đồ doanh thu 3 tháng',
-                '6months': 'Biểu đồ doanh thu 6 tháng', '1year': 'Biểu đồ doanh thu 1 năm',
-                'custom': 'Biểu đồ doanh thu tùy chỉnh'
-            };
-            document.getElementById('chartTitle').textContent = titles[period];
-            
-            if (period === 'custom') {
-                alert('Chức năng tùy chỉnh ngày chưa được cài đặt.');
-                return;
-            }
-            
-            loadStatistics(); 
-        }
-
-        function formatPrice(price) {
-            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
-        }
-
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('show');
-        }
-
-        document.addEventListener('click', function(event) {
-            const sidebar = document.getElementById('sidebar');
-            const toggle = document.querySelector('.mobile-toggle');
-            if (window.innerWidth <= 768) {
-                if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
-                    sidebar.classList.remove('show');
-                }
-            }
+            loadStatistics();
         });
+
+        function loadStatistics() { const account = JSON.parse(localStorage.getItem('account')); if (!account || !account.AccountId) { alert("Không tìm thấy thông tin đăng nhập."); return; } fetchData(account.AccountId); }
+        function fetchData(sellerId) { let apiUrl = `http://localhost:3000/seller/statistics/${sellerId}?period=${currentPeriod}`; if (currentPeriod === 'custom' && customStartDate && customEndDate) { apiUrl += `&startDate=${customStartDate}&endDate=${customEndDate}`; } fetch(apiUrl).then(res => res.json()).then(response => { if (response.success) { statisticsData = response.data; updateUI(); } else { throw new Error(response.message); } }).catch(error => { console.error('Lỗi khi fetch dữ liệu:', error); alert("Không thể tải dữ liệu thống kê."); }); }
+        function changeTimePeriod(clickedButton) { const period = clickedButton.dataset.period; if (clickedButton.classList.contains('active') && period !== 'custom') return; document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active')); clickedButton.classList.add('active'); const customFilter = document.getElementById('customDateFilter'); if (period === 'custom') { customFilter.classList.remove('d-none'); } else { customFilter.classList.add('d-none'); currentPeriod = period; loadStatistics(); } updateChartTitle(); }
+        function applyCustomDateFilter() { const startDate = document.getElementById('startDate').value; const endDate = document.getElementById('endDate').value; if (!startDate || !endDate) { alert('Vui lòng chọn cả ngày bắt đầu và ngày kết thúc.'); return; } if (new Date(startDate) > new Date(endDate)) { alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc.'); return; } currentPeriod = 'custom'; customStartDate = startDate; customEndDate = endDate; loadStatistics(); updateChartTitle(); }
+        function updateChartTitle() { const titles = { 'today': 'Biểu đồ doanh thu hôm nay', '7days': 'Biểu đồ doanh thu 7 ngày', '30days': 'Biểu đồ doanh thu 30 ngày', '3months': 'Biểu đồ doanh thu 3 tháng', '6months': 'Biểu đồ doanh thu 6 tháng', '1year': 'Biểu đồ doanh thu 1 năm', 'custom': `Biểu đồ từ ${customStartDate} đến ${customEndDate}` }; document.getElementById('chartTitle').textContent = titles[currentPeriod] || 'Biểu đồ doanh thu'; }
+
+        function exportRevenueDataToCSV() {
+            const revenueData = statisticsData.revenueChart;
+            if (!revenueData || !revenueData.labels || revenueData.labels.length === 0) {
+                alert("Không có dữ liệu doanh thu để xuất.");
+                return;
+            }
+
+            const headers = ["Ngày", "Doanh thu (VND)", "Số đơn hàng"];
+            const rows = revenueData.labels.map((label, index) => {
+                const revenueInVND = revenueData.revenue[index] * 1000000; 
+                const orderCount = revenueData.orders[index];
+                return [label, revenueInVND, orderCount];
+            });
+
+            let csvContent = headers.join(",") + "\n" 
+                           + rows.map(e => e.join(",")).join("\n");
+            
+            const bom = "\uFEFF";
+            const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
+
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            const date = new Date().toISOString().slice(0, 10);
+            link.setAttribute("download", `bao_cao_doanh_thu_${date}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function updateTrend(elementId, trendValue) { const trendElement = document.getElementById(elementId); if (!trendElement) return; const isUp = trendValue >= 0; trendElement.className = `stats-change ${isUp ? 'up' : 'down'}`; trendElement.innerHTML = `<i class="fas ${isUp ? 'fa-arrow-up' : 'fa-arrow-down'}"></i> ${isUp ? '+' : ''}${trendValue}%`; }
+        function updateUI() { if (!statisticsData.summary) return; document.getElementById('totalRevenue').textContent = formatPrice(statisticsData.summary.totalRevenue); updateTrend('revenueTrend', statisticsData.summary.revenueTrend); document.getElementById('totalOrders').textContent = statisticsData.summary.totalOrders; updateTrend('ordersTrend', statisticsData.summary.ordersTrend); document.getElementById('productsSold').textContent = statisticsData.summary.productsSold; updateTrend('productsTrend', statisticsData.summary.productsTrend); document.getElementById('newCustomers').textContent = statisticsData.summary.newCustomers; updateTrend('customersTrend', statisticsData.summary.customersTrend); loadRevenueChart(); loadCategoryChart(); loadWeeklyChart(); loadTopProductsTable(); }
+        function loadRevenueChart() { const ctx = document.getElementById('revenueChart').getContext('2d'); if (revenueChartInstance) revenueChartInstance.destroy(); revenueChartInstance = new Chart(ctx, { type: 'line', data: { labels: statisticsData.revenueChart.labels, datasets: [{ label: 'Doanh thu (triệu đồng)', data: statisticsData.revenueChart.revenue, borderColor: '#ff7d1a', backgroundColor: 'rgba(255, 125, 26, 0.1)', tension: 0.4, fill: true, borderWidth: 3 }, { label: 'Số đơn hàng', data: statisticsData.revenueChart.orders, borderColor: '#1976d2', backgroundColor: 'rgba(25, 118, 210, 0.1)', tension: 0.4, fill: true, borderWidth: 3 }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0, 0, 0, 0.05)' } }, x: { grid: { display: false } } } } }); }
+        function loadCategoryChart() { const ctx = document.getElementById('categoryChart').getContext('2d'); if (categoryChartInstance) categoryChartInstance.destroy(); categoryChartInstance = new Chart(ctx, { type: 'doughnut', data: { labels: statisticsData.categoryChart.labels, datasets: [{ data: statisticsData.categoryChart.data, backgroundColor: ['#ff7d1a', '#1976d2', '#388e3c', '#d32f2f', '#7b1fa2'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom', labels: { padding: 20, font: { size: 13, weight: '600' } } } } } }); }
+        function loadWeeklyChart() { const ctx = document.getElementById('weeklyChart').getContext('2d'); if (weeklyChartInstance) weeklyChartInstance.destroy(); weeklyChartInstance = new Chart(ctx, { type: 'bar', data: { labels: statisticsData.weeklyChart.labels, datasets: [{ label: 'Doanh thu (triệu đồng)', data: statisticsData.weeklyChart.data, backgroundColor: '#ff7d1a', borderRadius: 8, barThickness: 50 }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0, 0, 0, 0.05)' } }, x: { grid: { display: false } } } } }); }
+        function loadTopProductsTable() { const tbody = document.getElementById('topProductsTable'); tbody.innerHTML = ''; if (!statisticsData.topProducts || statisticsData.topProducts.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="text-center p-4">Không có dữ liệu sản phẩm cho khoảng thời gian này.</td></tr>'; return; } statisticsData.topProducts.forEach(product => { const rankClass = product.rank === 1 ? 'rank-1' : product.rank === 2 ? 'rank-2' : product.rank === 3 ? 'rank-3' : 'rank-other'; const rankIcon = product.rank === 1 ? '<i class="fas fa-crown"></i>' : product.rank === 2 ? '<i class="fas fa-medal"></i>' : product.rank === 3 ? '<i class="fas fa-award"></i>' : product.rank; const row = `<tr><td><div class="product-rank ${rankClass}">${rankIcon}</div></td><td><strong>${product.name}</strong></td><td>${product.category}</td><td><strong>${product.sold}</strong> sản phẩm</td><td><strong style="color: var(--primary-orange);">${formatPrice(product.revenue)}</strong></td><td><div class="d-flex align-items-center gap-1"><strong>${product.rating}</strong> <i class="fas fa-star" style="color: #ffc107;"></i></div></td></tr>`; tbody.innerHTML += row; }); }
+        function formatPrice(price) { return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price); }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('show'); }
+        document.addEventListener('click', function(event) { const sidebar = document.getElementById('sidebar'); const toggle = document.querySelector('.mobile-toggle'); if (window.innerWidth <= 768) { if (!sidebar.contains(event.target) && !toggle.contains(event.target)) { sidebar.classList.remove('show'); } } });
     </script>
 </body>
 </html>

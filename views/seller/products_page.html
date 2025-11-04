@@ -39,25 +39,17 @@
                 <div class="stat-box"><i class="fas fa-exclamation-triangle"></i><h4 id="outOfStock">0</h4><p>Hết hàng</p></div>
                 <div class="stat-box"><i class="fas fa-star"></i><h4 id="avgRating">0</h4><p>Đánh giá TB</p></div>
             </div>
-
             <div class="filter-bar d-flex gap-3 align-items-center" id="filterBar">
                 <div class="search-box flex-grow-1">
                     <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm theo tên, tags (VD: Chanel, nam tính)...">
                     <i class="fas fa-search"></i>
                 </div>
             </div>
-
-            <div class="row g-4" id="productsContainer">
-                <!-- Sản phẩm sẽ được tải từ API-->
-            </div>
+            <div class="row g-4" id="productsContainer"></div>
         </div>
 
-
-        <!-- Thêm sản phẩm -->
         <div id="addProductSection" class="card" style="display: none;">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-plus-circle"></i> Gửi yêu cầu thêm sản phẩm mới</h5>
-            </div>
+            <div class="card-header"><h5 class="mb-0"><i class="fas fa-plus-circle"></i> Gửi yêu cầu thêm sản phẩm mới</h5></div>
             <div class="card-body">
                 <form id="addProductForm">
                     <div class="row">
@@ -67,17 +59,16 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Danh mục*</label>
-                            <input list="categoryOptions" class="form-control" name="Category" placeholder="Chọn hoặc nhập danh mục" required>
-                            <datalist id="categoryOptions">
-                                <option value="Nước hoa Nam">
-                                <option value="Nước hoa Nữ">
-                                <option value="Nước hoa Unisex">
-                                <option value="Nước hoa Mini">
-                                <option value="Body Mist">
-                            </datalist>
+                            <select class="form-select" name="Category" required>
+                                <option value="" disabled selected>-- Chọn danh mục --</option>
+                                <option value="Unisex">Nước hoa Unisex</option>
+                                <option value="Nước hoa Nam">Nước hoa Nam</option>
+                                <option value="Nước hoa Nữ">Nước hoa Nữ</option>
+                                <option value="Nước hoa Mini">Nước hoa Mini</option>
+                                <option value="Body Mist">Body Mist</option>
+                            </select>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Giá bán (VNĐ)*</label>
@@ -88,42 +79,22 @@
                             <input type="number" class="form-control" name="Quantity" min="0" required>
                         </div>
                     </div>
-                    
                     <div class="mb-3">
                         <label class="form-label">Link hình ảnh*</label>
                         <input type="url" class="form-control" name="ImageUrl" placeholder="https://example.com/image.png" required>
                     </div>
-
                     <div class="mb-3">
                         <label class="form-label">Tags*</label>
-                        <input list="tagOptions" type="text" class="form-control" name="TagName" placeholder="Các từ khóa cách nhau bởi dấu phẩy, VD: Chanel, hương gỗ, nam tính" required>
-                        <datalist id="tagOptions">
-                            <option value="Chanel">
-                            <option value="Dior">
-                            <option value="Gucci">
-                            <option value="Hương hoa cỏ">
-                            <option value="Hương gỗ">
-                            <option value="Mùi hương ngọt ngào">
-                            <option value="Sang trọng">
-                            <option value="Nam tính">
-                        </datalist>
+                        <input type="text" class="form-control" name="TagName" placeholder="Các từ khóa cách nhau bởi dấu phẩy, VD: Calvin Klein, Unisex, tươi mát" required>
                     </div>
-
                     <div class="mb-3">
                         <label class="form-label">Bảo hành</label>
-                        <input list="warrantyOptions" class="form-control" name="Warranty" placeholder="Chọn hoặc nhập chính sách bảo hành">
-                        <datalist id="warrantyOptions">
-                            <option value="Bảo hành mùi hương trọn đời">
-                            <option value="Đổi trả trong 7 ngày nếu lỗi">
-                            <option value="Không bảo hành">
-                        </datalist>
+                        <input type="text" class="form-control" name="Warranty" placeholder="VD: Bảo hành 12 tháng">
                     </div>
-                    
                     <div class="mb-3">
                         <label class="form-label">Mô tả sản phẩm</label>
-                        <textarea class="form-control" name="Description" rows="4" placeholder="Mô tả chi tiết về các tầng hương, xuất xứ, dung tích..."></textarea>
+                        <textarea class="form-control" name="Description" rows="4" placeholder="Mô tả chi tiết về sản phẩm..."></textarea>
                     </div>
-
                     <div class="d-flex justify-content-end gap-2 mt-3">
                         <button type="button" class="btn btn-outline-secondary" id="cancelAddProductBtn">Hủy</button>
                         <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Gửi đi duyệt</button>
@@ -136,14 +107,9 @@
     <div class="modal fade" id="productDetailModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-info-circle"></i> Chi tiết sản phẩm</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
+                <div class="modal-header"><h5 class="modal-title"><i class="fas fa-info-circle"></i> Chi tiết sản phẩm</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body" id="productDetailContent"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Đóng</button>
-                </div>
+                <div class="modal-footer"><button type="button" class="btn btn-primary" data-bs-dismiss="modal">Đóng</button></div>
             </div>
         </div>
     </div>
@@ -156,21 +122,53 @@
                      <form id="editProductForm">
                         <input type="hidden" name="ProductId" id="editProductId">
                         <div class="row">
-                            <div class="col-md-6 mb-3"><label class="form-label">Tên sản phẩm*</label><input type="text" class="form-control" name="NameProduct" id="editName" required></div>
-                            <div class="col-md-6 mb-3"><label class="form-label">Danh mục*</label><input type="text" class="form-control" name="Category" id="editCategory" required></div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Tên sản phẩm*</label>
+                                <input type="text" class="form-control" name="NameProduct" id="editName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Danh mục*</label>
+                                <select class="form-select" name="Category" id="editCategory" required>
+                                    <option value="Unisex">Nước hoa Unisex</option>
+                                    <option value="Nước hoa Nam">Nước hoa Nam</option>
+                                    <option value="Nước hoa Nữ">Nước hoa Nữ</option>
+                                    <option value="Nước hoa Mini">Nước hoa Mini</option>
+                                    <option value="Body Mist">Body Mist</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-3"><label class="form-label">Giá bán (VNĐ)*</label><input type="number" class="form-control" name="Price" id="editPrice" required></div>
-                            <div class="col-md-6 mb-3"><label class="form-label">Số lượng tồn kho*</label><input type="number" class="form-control" name="Quantity" id="editStock" required></div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Giá bán (VNĐ)*</label>
+                                <input type="number" class="form-control" name="Price" id="editPrice" min="0" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Số lượng tồn kho*</label>
+                                <input type="number" class="form-control" name="Quantity" id="editStock" min="0" required>
+                            </div>
                         </div>
-                        <div class="mb-3"><label class="form-label">Tags*</label><input type="text" class="form-control" name="TagName" id="editTagName" required></div>
-                        <div class="mb-3"><label class="form-label">Bảo hành</label><input type="text" class="form-control" name="Warranty" id="editWarranty"></div>
-                        <div class="mb-3"><label class="form-label">Mô tả sản phẩm</label><textarea class="form-control" name="Description" id="editDescription" rows="4"></textarea></div>
+                        <div class="mb-3">
+                            <label class="form-label">Link hình ảnh*</label>
+                            <input type="url" class="form-control" name="ImageUrl" id="editImageUrl" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tags*</label>
+                            <input type="text" class="form-control" name="TagName" id="editTagName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Bảo hành</label>
+                            <input type="text" class="form-control" name="Warranty" id="editWarranty">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mô tả sản phẩm</label>
+                            <textarea class="form-control" name="Description" id="editDescription" rows="4"></textarea>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-primary" onclick="saveEditProduct()"><i class="fas fa-save"></i> Cập nhật</button>
+
+                    <button type="button" class="btn btn-primary" id="saveEditProductBtn"><i class="fas fa-save"></i> Cập nhật</button>
                 </div>
             </div>
         </div>
@@ -241,6 +239,7 @@
         showAddProductFormBtn.addEventListener('click', () => toggleAddProductView(!isAddingProduct));
         document.getElementById('cancelAddProductBtn').addEventListener('click', () => toggleAddProductView(false));
         addProductForm.addEventListener('submit', handleAddProductSubmit);
+        document.getElementById('saveEditProductBtn').addEventListener('click', saveEditProduct);
     });
 
     async function fetchProducts() {
@@ -325,23 +324,18 @@
         const formData = new FormData(form);
         const productData = Object.fromEntries(formData.entries());
         productData.SellerId = sellerId;
-        productData.Price = parseFloat(productData.Price);
-        productData.Quantity = parseInt(productData.Quantity);
 
         const price = parseFloat(productData.Price);
         const quantity = parseInt(productData.Quantity);
 
-        if (productData.Price < 0) {
-            alert("Giá bán không được âm. Vui lòng nhập lại!");
-            document.querySelector('input[name="Price"]').value = '';
+        if (isNaN(price) || price < 0) {
+            alert("Giá bán không hợp lệ. Vui lòng nhập một số không âm.");
             return;
         }
-        if (productData.Quantity < 0) {
-            alert("Số lượng tồn không được âm. Vui lòng nhập lại!");
-            document.querySelector('input[name="Quantity"]').value = '';
+        if (isNaN(quantity) || quantity < 0) {
+            alert("Số lượng tồn kho không hợp lệ. Vui lòng nhập một số nguyên không âm.");
             return;
         }
-
 
         try {
             const response = await fetch(`${API_URL}/seller/products/submit`, {
@@ -359,7 +353,7 @@
             alert('Đã xảy ra lỗi khi gửi sản phẩm.');
         }
     }
-    
+
     async function openDetailModal(product) {
         const modalBody = document.getElementById('productDetailContent');
         modalBody.innerHTML = `
@@ -382,15 +376,10 @@
             <p>${product.Description || 'Chưa có mô tả cho sản phẩm này.'}</p>
             <hr>
             <h5>Đánh giá từ khách hàng (${product.ReviewCount} lượt)</h5>
-            <div id="productReviews" class="list-group">
-                <!-- Reviews will be loaded here -->
-            </div>
+            <div id="productReviews" class="list-group"></div>
         `;
-
         await loadProductReviews(product.ProductId);
-
-        const detailModal = new bootstrap.Modal(document.getElementById('productDetailModal'));
-        detailModal.show();
+        new bootstrap.Modal(document.getElementById('productDetailModal')).show();
     }
 
     async function loadProductReviews(productId) {
@@ -431,6 +420,7 @@
         document.getElementById('editCategory').value = product.Category;
         document.getElementById('editPrice').value = product.Price;
         document.getElementById('editStock').value = product.Quantity;
+        document.getElementById('editImageUrl').value = product.ImageUrl; 
         document.getElementById('editDescription').value = product.Description;
         document.getElementById('editTagName').value = product.TagName;
         document.getElementById('editWarranty').value = product.Warranty;
@@ -443,20 +433,19 @@
             form.reportValidity();
             return;
         }
-        const productData = Object.fromEntries(new FormData(form).entries());
+        const formData = new FormData(form);
+        const productData = Object.fromEntries(formData.entries());
         const productId = productData.ProductId;
 
         const price = parseFloat(productData.Price);
         const quantity = parseInt(productData.Quantity);
 
-        if (price < 0) {
-            alert("Giá bán không được âm. Vui lòng nhập lại!");
-            document.querySelector('input[name="Price"]').value = '';
+        if (isNaN(price) || price < 0) {
+            alert("Giá bán không hợp lệ. Vui lòng nhập một số không âm.");
             return;
         }
-        if (quantity < 0) {
-            alert("Số lượng tồn không được âm. Vui lòng nhập lại!");
-            document.querySelector('input[name="Quantity"]').value = '';
+        if (isNaN(quantity) || quantity < 0) {
+            alert("Số lượng tồn kho không hợp lệ. Vui lòng nhập một số nguyên không âm.");
             return;
         }
 

@@ -6,14 +6,11 @@
     <title>Cài đặt Tài khoản - MuaRight</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../../public/CSS/seller/profileSeller_page.css"> 
-
+    <link rel="stylesheet" href="../../public/CSS/seller/profileSeller_page.css">
 </head>
 <body>
     <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h4><div class="logo-icon"><i class="fas fa-gem"></i></div><span>MuaRight</span></h4>
-        </div>
+        <div class="sidebar-header"><h4><div class="logo-icon"><i class="fas fa-gem"></i></div><span>MuaRight</span></h4></div>
         <ul class="sidebar-menu">
             <li><a href="homeSeller_page.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
             <li><a href="products_page.html"><i class="fas fa-box"></i> Quản lý sản phẩm</a></li>
@@ -24,6 +21,7 @@
             <li><a href="#logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
         </ul>
     </div>
+
     <div class="main-content">
         <div class="page-header">
             <h2><i class="fas fa-cog"></i> Cài đặt & Thông tin Profile</h2>
@@ -39,91 +37,64 @@
                 </div>
                 <div class="mb-3">
                     <label for="imageUrl" class="form-label">URL Ảnh đại diện</label>
-                    <input type="url" class="form-control" id="imageUrl" name="ImageUrl" disabled oninput="previewImage(this.value)">
+                    <input type="url" class="form-control" id="imageUrl" name="ImageUrl" disabled>
                 </div>
                 <hr>
 
                 <h5 class="card-title text-center mb-4">Thông tin Tài khoản</h5>
                 <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="username" class="form-label">Tên đăng nhập</label>
-                        <input type="text" class="form-control" id="username" name="Username" readonly>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="Email" readonly>
-                    </div>
+                    <div class="col-md-6"><label class="form-label">Tên đăng nhập</label><input type="text" class="form-control" id="username" readonly></div>
+                    <div class="col-md-6"><label class="form-label">Email</label><input type="email" class="form-control" id="email" readonly></div>
                 </div>
                 <hr>
 
                 <h5 class="card-title text-center mb-4">Thông tin Cá nhân</h5>
                 <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="fullName" class="form-label">Họ và tên</label>
-                        <input type="text" class="form-control" id="fullName" name="FullName" required disabled> 
-                    </div>
-                    <div class="col-md-6">
-                        <label for="phone" class="form-label">Số điện thoại</label>
-                        <input type="tel" class="form-control" id="phone" name="Phone" required disabled>
-                    </div>
+                    <div class="col-md-6"><label for="fullName" class="form-label">Họ và tên*</label><input type="text" class="form-control" id="fullName" name="FullName" required disabled></div>
+                    <div class="col-md-6"><label for="phone" class="form-label">Số điện thoại*</label><input type="tel" class="form-control" id="phone" name="Phone" required disabled></div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="address" class="form-label">Địa chỉ cá nhân</label>
-                        <input type="text" class="form-control" id="address" name="Address" disabled>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="birthday" class="form-label">Ngày sinh</label>
-                        <input type="date" class="form-control" id="birthday" name="Birthday" disabled>
-                    </div>
+                    <div class="col-md-6"><label for="address" class="form-label">Địa chỉ cá nhân</label><input type="text" class="form-control" id="address" name="Address" disabled></div>
+                    <div class="col-md-6"><label for="birthday" class="form-label">Ngày sinh</label><input type="date" class="form-control" id="birthday" name="Birthday" disabled></div>
                 </div>
                 <div class="row mb-3">
-                     <div class="col-md-6">
-                        <label for="gender" class="form-label">Giới tính</label>
-                        <select id="gender" name="Gender" class="form-select" disabled>
-                            <option value="">Chọn giới tính</option>
-                            <option value="Male">Nam</option>
-                            <option value="Female">Nữ</option>
-                            <option value="Other">Khác</option>
-                        </select>
-                    </div>
+                     <div class="col-md-6"><label for="gender" class="form-label">Giới tính</label><select id="gender" name="Gender" class="form-select" disabled><option value="">Chọn giới tính</option><option value="Male">Nam</option><option value="Female">Nữ</option><option value="Other">Khác</option></select></div>
                 </div>
                 <hr>
 
                 <h5 class="card-title text-center mb-4">Thông tin Cửa hàng</h5>
                 <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="storeName" class="form-label">Tên cửa hàng</label>
-                        <input type="text" class="form-control" id="storeName" name="StoreName" required disabled>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="storeAddress" class="form-label">Địa chỉ Cửa hàng</label>
-                        <input type="text" class="form-control" id="storeAddress" name="StoreAddress" disabled>
-                    </div>
+                    <div class="col-md-6"><label for="storeName" class="form-label">Tên cửa hàng*</label><input type="text" class="form-control" id="storeName" name="StoreName" required disabled></div>
+                    <div class="col-md-6"><label for="storeAddress" class="form-label">Địa chỉ Cửa hàng</label><input type="text" class="form-control" id="storeAddress" name="StoreAddress" disabled></div>
                 </div>
                 <hr>
-
-                <div id="changePasswordSection" style="display: none;">
-                    <h5 class="card-title text-center mb-4 text-warning">Thay đổi Mật khẩu</h5>
-                    <div class="mb-3">
-                        <label for="currentPassword" class="form-label">Mật khẩu hiện tại</label>
-                        <input type="password" class="form-control" id="currentPassword">
-                    </div>
-                    <div class="mb-3">
-                        <label for="newPassword" class="form-label">Mật khẩu mới</label>
-                        <input type="password" class="form-control" id="newPassword">
-                    </div>
-                    <div class="mb-3">
-                        <label for="confirmNewPassword" class="form-label">Xác nhận mật khẩu mới</label>
-                        <input type="password" class="form-control" id="confirmNewPassword">
+     
+                <div class="d-flex justify-content-between mt-4" id="button-group">
+                    <div id="action-buttons">
                     </div>
                 </div>
-
-     
-                <div class="d-flex justify-content-end mt-4" id="button-group"></div>
             </form>
         </div>
+    </div>
 
+    <div class="modal fade" id="changePasswordModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title"><i class="fas fa-lock"></i> Thay đổi mật khẩu</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+                <div class="modal-body">
+                    <form id="changePasswordForm">
+                        <div class="mb-3"><label for="currentPassword" class="form-label">Mật khẩu hiện tại*</label><input type="password" class="form-control" id="currentPassword" required></div>
+                        <div class="mb-3"><label for="newPassword" class="form-label">Mật khẩu mới* (tối thiểu 8 ký tự)</label><input type="password" class="form-control" id="newPassword" required minlength="8"></div>
+                        <div class="mb-3"><label for="confirmNewPassword" class="form-label">Xác nhận mật khẩu mới*</label><input type="password" class="form-control" id="confirmNewPassword" required></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="savePasswordBtn">Lưu mật khẩu</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -135,218 +106,164 @@
         const form = document.getElementById('profileForm');
         const editableFields = form.querySelectorAll('input:not([readonly]), select');
         const buttonGroup = document.getElementById('button-group');
+        const actionButtonsContainer = document.getElementById('action-buttons');
+        let changePasswordModal;
 
         document.addEventListener('DOMContentLoaded', function() {
             const accountString = localStorage.getItem("account");
-            if (!accountString) {
-                window.location.href = "../../template/pages/signIn_page.html";
-                return;
-            }
+            if (!accountString) { window.location.href = "../../template/pages/signIn_page.html"; return; }
             try {
                 const account = JSON.parse(accountString);
-                if (account.Role !== 'Seller') {
-                    window.location.href = "../../template/pages/signIn_page.html";
-                    return;
-                }
+                if (account.Role !== 'Seller') { window.location.href = "../../template/pages/signIn_page.html"; return; }
                 sellerId = account.AccountId;
                 loadProfile(sellerId);
                 updateButtons();
-            } catch (e) {
-                console.error("Lỗi parse Account:", e);
-                window.location.href = "../../template/pages/signIn_page.html";
-            }
-            
-            // sự kiện Đăng xuất
-            document.getElementById('logoutBtn').addEventListener('click', function(e) {
-                e.preventDefault();
-                if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
-                    localStorage.removeItem('account');
-                    window.location.href = '../../template/pages/signIn_page.html';
-                }
-            });
+            } catch (e) { window.location.href = "../../template/pages/signIn_page.html"; }
 
-            form.addEventListener('submit', handleSaveProfile); 
+            changePasswordModal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
+            document.getElementById('logoutBtn').addEventListener('click', (e) => { e.preventDefault(); if (confirm("Bạn có chắc chắn muốn đăng xuất?")) { localStorage.removeItem('account'); window.location.href = '../../template/pages/signIn_page.html'; } });
+            form.addEventListener('submit', handleSaveProfile);
+            document.getElementById('savePasswordBtn').addEventListener('click', handleChangePassword);
+            document.getElementById('imageUrl').addEventListener('input', (e) => previewImage(e.target.value));
         });
 
         function updateButtons() {
-            buttonGroup.innerHTML = ''; 
+            buttonGroup.innerHTML = '';
+            actionButtonsContainer.innerHTML = '';
+
+            const changePasswordButton = document.createElement('button');
+            changePasswordButton.type = 'button';
+            changePasswordButton.className = 'btn btn-outline-warning';
+            changePasswordButton.innerHTML = '<i class="fas fa-key"></i> Đổi mật khẩu';
+            changePasswordButton.onclick = () => {
+                document.getElementById('changePasswordForm').reset();
+                changePasswordModal.show();
+            };
+            buttonGroup.appendChild(changePasswordButton);
+            buttonGroup.appendChild(actionButtonsContainer);
 
             if (isEditMode) {
-                const cancelButton = document.createElement('button');
-                cancelButton.type = 'button';
-                cancelButton.className = 'btn btn-secondary me-2';
-                cancelButton.innerHTML = '<i class="fas fa-times"></i> Hủy';
-                cancelButton.onclick = handleCancel;
-                
-                const saveButton = document.createElement('button');
-                saveButton.type = 'submit';
-                saveButton.className = 'btn btn-success';
-                saveButton.innerHTML = '<i class="fas fa-save"></i> Lưu Thay Đổi';
-
-                buttonGroup.appendChild(cancelButton);
-                buttonGroup.appendChild(saveButton);
+                actionButtonsContainer.innerHTML = `
+                    <button type="button" class="btn btn-secondary me-2" id="cancelBtn"><i class="fas fa-times"></i> Hủy</button>
+                    <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Lưu Thay Đổi</button>
+                `;
+                document.getElementById('cancelBtn').addEventListener('click', handleCancel);
             } else {
-                const editButton = document.createElement('button');
-                editButton.type = 'button';
-                editButton.className = 'btn btn-primary';
-                editButton.innerHTML = '<i class="fas fa-pencil-alt"></i> Chỉnh Sửa';
-                editButton.onclick = handleEditToggle;
-
-                buttonGroup.appendChild(editButton);
+                actionButtonsContainer.innerHTML = `<button type="button" class="btn btn-primary" id="editBtn"><i class="fas fa-pencil-alt"></i> Chỉnh Sửa</button>`;
+                document.getElementById('editBtn').addEventListener('click', handleEditToggle);
             }
         }
 
         function setFormEditable(isEditable) {
-            editableFields.forEach(field => {
-                field.disabled = !isEditable;
-            });
-            document.getElementById('changePasswordSection').style.display = isEditable ? 'block' : 'none';
+            editableFields.forEach(field => field.disabled = !isEditable);
         }
 
-        function handleEditToggle() {
-            isEditMode = true;
-            setFormEditable(true);
-            updateButtons(); 
-        }
-
-        function handleCancel() {
-            isEditMode = false;
-            fillForm(originalProfileData); 
-            setFormEditable(false);
-            updateButtons(); 
-        }
+        function handleEditToggle() { isEditMode = true; setFormEditable(true); updateButtons(); }
+        function handleCancel() { isEditMode = false; fillForm(originalProfileData); setFormEditable(false); updateButtons(); }
 
         async function loadProfile(id) {
             try {
                 const response = await fetch(`${API_URL}/seller/profile/${id}`);
                 const result = await response.json();
-
                 if (result.success && result.data) {
                     originalProfileData = { ...result.data }; 
                     fillForm(result.data);
-                } else {
-                    alert('Không thể tải thông tin Profile: ' + result.message);
-                }
-            } catch (error) {
-                console.error('Lỗi Network/Server:', error);
-                alert('Lỗi kết nối Server khi tải Profile.');
-            }
+                } else { alert('Không thể tải thông tin Profile: ' + result.message); }
+            } catch (error) { alert('Lỗi kết nối Server khi tải Profile.'); }
         }
 
         function fillForm(data) {
             document.getElementById('username').value = data.Username || '';
             document.getElementById('email').value = data.Email || '';
-
             document.getElementById('fullName').value = data.FullName || '';
             document.getElementById('phone').value = data.Phone || '';
             document.getElementById('address').value = data.Address || '';
-            
-            if (data.Birthday) {
-                 const date = new Date(data.Birthday);
-                 document.getElementById('birthday').value = date.toISOString().split('T')[0];
-            } else {
-                 document.getElementById('birthday').value = '';
-            }
-
+            document.getElementById('birthday').value = data.Birthday ? new Date(data.Birthday).toISOString().split('T')[0] : '';
             document.getElementById('gender').value = data.Gender || '';
             document.getElementById('storeName').value = data.StoreName || '';
             document.getElementById('storeAddress').value = data.StoreAddress || '';
-            
             const imageUrl = data.ImageUrl || 'https://placehold.co/150x150?text=NA';
             document.getElementById('imageUrl').value = imageUrl;
             previewImage(imageUrl);
         }
 
-
-        function previewImage(url) {
-            document.getElementById('imagePreview').src = url || 'https://placehold.co/150x150?text=NA';
-        }
+        function previewImage(url) { document.getElementById('imagePreview').src = url || 'https://placehold.co/150x150?text=NA'; }
 
         async function handleSaveProfile(event) {
             event.preventDefault();
-
-            const currentPassword = document.getElementById('currentPassword').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
-
-            if (newPassword) { 
-                if (!currentPassword) {
-                    return alert('Vui lòng nhập mật khẩu hiện tại để đổi mật khẩu mới.');
-                }
-                if (newPassword.length < 8) {
-                    return alert('Mật khẩu mới phải có ít nhất 8 ký tự.');
-                }
-                if (newPassword !== confirmNewPassword) {
-                    return alert('Mật khẩu mới và xác nhận mật khẩu không khớp.');
-                }
-
-                const passwordChanged = await changePassword(currentPassword, newPassword);
-                if (!passwordChanged) {
-                    return; 
-                }
-            }
-
             const formData = {
-                FullName: document.getElementById('fullName').value,
-                Phone: document.getElementById('phone').value,
-                Address: document.getElementById('address').value,
+                FullName: document.getElementById('fullName').value.trim(),
+                Phone: document.getElementById('phone').value.trim(),
+                Address: document.getElementById('address').value.trim(),
                 Birthday: document.getElementById('birthday').value || null,
                 Gender: document.getElementById('gender').value,
-                StoreName: document.getElementById('storeName').value,
-                StoreAddress: document.getElementById('storeAddress').value,
-                ImageUrl: document.getElementById('imageUrl').value,
+                StoreName: document.getElementById('storeName').value.trim(),
+                StoreAddress: document.getElementById('storeAddress').value.trim(),
+                ImageUrl: document.getElementById('imageUrl').value.trim(),
             };
 
             if (!formData.FullName || !formData.Phone || !formData.StoreName) {
-                alert('Vui lòng điền đầy đủ Họ và tên, Số điện thoại và Tên cửa hàng.');
-                return;
+                return alert('Vui lòng điền đầy đủ Họ và tên, Số điện thoại và Tên cửa hàng.');
             }
-
+            const phoneRegex = /^(0\d{9,10})$/;
+            if (!phoneRegex.test(formData.Phone)) {
+                return alert('Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại Việt Nam hợp lệ (10-11 số, bắt đầu bằng 0).');
+            }
+    
             try {
                 const response = await fetch(`${API_URL}/seller/profile/${sellerId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
                 });
-
                 const result = await response.json();
-                if (result.success && !newPassword) {
-                    alert(result.message);
-                } else if (!result.success) {
-                    alert('Lưu thông tin thất bại: ' + (result.message || result.error));
-                }
-
+                alert(result.message || 'Cập nhật thành công!');
                 if (result.success) {
                     originalProfileData = { ...result.data }; 
                     fillForm(result.data); 
-
-                    document.getElementById('currentPassword').value = '';
-                    document.getElementById('newPassword').value = '';
-                    document.getElementById('confirmNewPassword').value = '';
-                    
                     isEditMode = false; 
                     setFormEditable(false);
                     updateButtons();
                 }
-            } catch (error) {
-                console.error('Lỗi Network/Server khi lưu Profile:', error);
-                alert('Lỗi kết nối Server khi lưu Profile!');
-            }
+            } catch (error) { alert('Lỗi kết nối Server khi lưu Profile!'); }
         }
-        async function changePassword(currentPassword, newPassword) {
+
+        async function handleChangePassword() {
+            const form = document.getElementById('changePasswordForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+            if (newPassword !== confirmNewPassword) {
+                return alert('Mật khẩu mới và xác nhận mật khẩu không khớp.');
+            }
+
+            if (currentPassword === newPassword) {
+                return alert('Mật khẩu mới không được trùng với mật khẩu hiện tại. Vui lòng chọn một mật khẩu khác.');
+            }
+
             try {
                 const response = await fetch(`${API_URL}/seller/profile/${sellerId}/change-password`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ currentPassword, newPassword })
                 });
-                const result = await response.json();
-                alert(result.message);
-                return result.success;
+
+                const result = await response.json(); 
+
+                if (response.ok) {
+                    alert(result.message); 
+                    changePasswordModal.hide();
+                } else {
+                    alert('Lỗi: ' + result.message);
+                }
             } catch (error) {
-                console.error('Lỗi khi đổi mật khẩu:', error);
+                console.error('Lỗi mạng khi đổi mật khẩu:', error);
                 alert('Lỗi kết nối khi đổi mật khẩu.');
-                return false;
             }
         }
     </script>

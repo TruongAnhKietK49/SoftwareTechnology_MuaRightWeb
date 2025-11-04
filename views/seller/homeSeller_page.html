@@ -142,11 +142,11 @@
     async function loadDashboard(sellerId) {
         try {
             const response = await fetch(`${API_URL}/seller/dashboard/${sellerId}`);
+            const result = await response.json(); // Luôn parse JSON để lấy message lỗi
             if (!response.ok) { 
-                const errorResult = await response.json();
-                throw new Error(errorResult.message || 'Server responded with an error');
+                // Sử dụng message từ server nếu có, nếu không thì dùng thông báo mặc định
+                throw new Error(result.message || `Server responded with status: ${response.status}`);
             }
-            const result = await response.json();
             if (result.success) {
                 updateDashboard(result.data);
             } else {
@@ -154,6 +154,7 @@
             }
         } catch (error) { 
             console.error('Fetch Error:', error);
+            // Hiển thị thông báo lỗi chi tiết hơn
             alert('Lỗi kết nối hoặc xử lý từ Server: ' + error.message); 
         }
     }
@@ -169,6 +170,7 @@
         updateTrendElement(document.getElementById('ordersTrend'), data.stats.ordersTrend, '%');
         
         document.getElementById('totalProducts').textContent = data.stats.totalProducts;
+        // Cập nhật hiển thị sản phẩm mới
         document.getElementById('productsTrend').innerHTML = `<i class="fas fa-plus"></i> +${data.stats.newProducts} mới`;
         
         document.getElementById('pendingOrders').textContent = data.stats.pendingOrders;

@@ -45,47 +45,44 @@
             <div class="status-tab" data-status="Delivered"><i class="fas fa-check-circle"></i> Đã giao <span class="badge" id="countDelivered">0</span></div>
             <div class="status-tab" data-status="Cancelled"><i class="fas fa-times-circle"></i> Đã hủy <span class="badge" id="countCancelled">0</span></div>
         </div>
+        <div class="bulk-actions-bar d-none" id="bulkActionsBar">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="selectAllCheckbox"> 
+                <label class="form-check-label" for="selectAllCheckbox">
+                    <strong>Đã chọn <span id="selectedCount">0</span></strong>
+                </label>
+            </div>
+            <div class="actions-group">
+                <div id="pendingActions" class="d-none">
+                    <button class="btn btn-sm btn-success" id="approveSelectedBtn"><i class="fas fa-check"></i> Duyệt đơn đã chọn</button>
+                    <button class="btn btn-sm btn-danger" id="cancelSelectedBtn"><i class="fas fa-times"></i> Hủy đơn đã chọn</button>
+                </div>
+                <div id="approvedActions" class="d-none">
+                    <button class="btn btn-sm btn-primary" id="shipSelectedBtn"><i class="fas fa-truck"></i> Gửi đi hàng loạt</button>
+                </div>
+            </div>
+        </div>
 
         <div class="orders-list" id="ordersContainer">
             <div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>
         </div>
     </div>
 
-    <!-- Modals -->
     <div class="modal fade" id="orderDetailModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="orderDetailTitle"><i class="fas fa-file-invoice"></i> Chi tiết đơn hàng</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
+                <div class="modal-header"><h5 class="modal-title" id="orderDetailTitle"><i class="fas fa-file-invoice"></i> Chi tiết đơn hàng</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body p-4" id="orderDetailContent"></div>
-                <div class="modal-footer" style="border: none; padding: 20px 30px;">
-                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary" id="printOrderBtn">
-                        <i class="fas fa-print"></i> In đơn hàng
-                    </button>
-                </div>
+                <div class="modal-footer" style="border: none; padding: 20px 30px;"><button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Đóng</button><button type="button" class="btn btn-primary" id="printOrderBtn"><i class="fas fa-print"></i> In đơn hàng</button></div>
             </div>
         </div>
     </div>
-
     <div class="modal fade" id="cancelOrderModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header"><h5 class="modal-title"><i class="fas fa-times-circle"></i> Hủy đơn hàng</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
-                <div class="modal-body">
-                    <input type="hidden" id="cancelOrderId">
-                    <p>Bạn có chắc chắn muốn hủy đơn hàng này không? Hành động này không thể hoàn tác.</p>
-                    <div class="mb-3">
-                        <label class="form-label">Lý do hủy (bắt buộc):</label>
-                        <textarea class="form-control" id="cancelReasonText" rows="3" placeholder="Ví dụ: Hết hàng, khách hàng yêu cầu..."></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-danger" id="confirmCancelBtn">Xác nhận hủy</button>
-                </div>
+                <div class="modal-body"><input type="hidden" id="cancelOrderId"><p>Bạn có chắc chắn muốn hủy đơn hàng này không? Hành động này không thể hoàn tác.</p><div class="mb-3"><label class="form-label">Lý do hủy (bắt buộc):</label><textarea class="form-control" id="cancelReasonText" rows="3" placeholder="Ví dụ: Hết hàng, khách hàng yêu cầu..."></textarea></div></div>
+                <div class="modal-footer"><button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button><button type="button" class="btn btn-danger" id="confirmCancelBtn">Xác nhận hủy</button></div>
             </div>
         </div>
     </div>
@@ -98,7 +95,39 @@
             let allOrders = [];
             let currentStatusFilter = 'All';
             const ordersContainer = document.getElementById('ordersContainer');
+            
+            const selectedOrders = new Set();
+            const bulkActionsBar = document.getElementById('bulkActionsBar');
+            const selectedCountSpan = document.getElementById('selectedCount');
+            const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+            const pendingActionsDiv = document.getElementById('pendingActions');
+            const approvedActionsDiv = document.getElementById('approvedActions');
 
+            function updateBulkActionsUI() {
+                const canBulkAction = (currentStatusFilter === 'Pending' || currentStatusFilter === 'Approved');
+                const visibleCheckboxes = document.querySelectorAll('.order-checkbox');
+                const totalVisible = visibleCheckboxes.length;
+                const totalSelected = selectedOrders.size;
+
+                bulkActionsBar.classList.toggle('d-none', !canBulkAction);
+
+                if (!canBulkAction) return;
+
+                selectedCountSpan.textContent = totalSelected;
+
+                if (totalVisible > 0) {
+                    selectAllCheckbox.disabled = false;
+                    selectAllCheckbox.checked = totalSelected === totalVisible;
+                    selectAllCheckbox.indeterminate = totalSelected > 0 && totalSelected < totalVisible;
+                } else {
+                    selectAllCheckbox.disabled = true;
+                    selectAllCheckbox.checked = false;
+                    selectAllCheckbox.indeterminate = false;
+                }
+
+                pendingActionsDiv.classList.toggle('d-none', currentStatusFilter !== 'Pending');
+                approvedActionsDiv.classList.toggle('d-none', currentStatusFilter !== 'Approved');
+            }
 
             async function fetchAllOrders() {
                 if (!sellerId) return;
@@ -109,7 +138,7 @@
                     if (result.success) {
                         allOrders = result.data;
                         updateCounts();
-                        filterAndRenderOrders();
+                        filterByStatus(currentStatusFilter, true); 
                     } else {
                         ordersContainer.innerHTML = `<p class="text-center text-danger">${result.message}</p>`;
                     }
@@ -130,10 +159,15 @@
                 }
             }
 
-            function filterByStatus(status) {
+            function filterByStatus(status, isInitialLoad = false) {
                 currentStatusFilter = status;
                 document.querySelectorAll('.status-tab').forEach(tab => tab.classList.remove('active'));
                 document.querySelector(`.status-tab[data-status="${status}"]`).classList.add('active');
+
+                if (!isInitialLoad) {
+                    selectedOrders.clear();
+                }
+                
                 filterAndRenderOrders(document.getElementById('searchInput').value);
             }
 
@@ -147,18 +181,20 @@
                     searchTerm = searchTerm.toLowerCase();
                     filteredOrders = filteredOrders.filter(order => 
                         order.OrderId.toString().includes(searchTerm) ||
-                        order.CustomerName.toLowerCase().includes(searchTerm)
+                        (order.CustomerName && order.CustomerName.toLowerCase().includes(searchTerm))
                     );
                 }
                 if (filteredOrders.length === 0) {
                     ordersContainer.innerHTML = `<p class="text-center p-5">Không có đơn hàng nào.</p>`;
-                    return;
+                } else {
+                    filteredOrders.forEach(order => {
+                        ordersContainer.insertAdjacentHTML('beforeend', createOrderCard(order));
+                    });
                 }
-                filteredOrders.forEach(order => {
-                    ordersContainer.insertAdjacentHTML('beforeend', createOrderCard(order));
-                });
+
+                updateBulkActionsUI();
             }
-            
+
             function getActionButtons(order) {
                 switch (order.State) {
                     case 'Pending':
@@ -179,6 +215,11 @@
             }
 
             function createOrderCard(order) {
+                const showCheckbox = currentStatusFilter === 'Pending' || currentStatusFilter === 'Approved';
+                const checkboxHtml = showCheckbox 
+                    ? `<div class="order-select"><input type="checkbox" class="form-check-input order-checkbox" data-order-id="${order.OrderId}"></div>`
+                    : `<div class="order-select-placeholder"></div>`; 
+
                 const orderDate = new Date(order.OrderDate).toLocaleDateString('vi-VN');
                 const sellerTotal = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.SellerTotalAmount);
                 const collapseId = `order-items-${order.OrderId}`;
@@ -190,9 +231,11 @@
                             <span>Số lượng: ${item.Quantity} x ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.UnitPrice)}</span>
                         </div>
                     </div>`).join('');
+
                 return `
                     <div class="order-card">
                         <div class="order-header">
+                            ${checkboxHtml} 
                             <div class="order-info-main" data-bs-toggle="collapse" href="#${collapseId}">
                                 <p class="order-id">Đơn hàng: <strong>#${order.OrderId}</strong> - ${order.CustomerName}</p>
                                 <span class="order-date">${orderDate}</span> | 
@@ -212,14 +255,43 @@
                         </div>
                     </div>`;
             }
-            
+
+            async function handleBulkAction(action) {
+                const orderIds = Array.from(selectedOrders);
+                if (orderIds.length === 0) {
+                    alert("Vui lòng chọn ít nhất một đơn hàng để thực hiện hành động này.");
+                    return;
+                }
+
+                let actionText = '';
+                if (action === 'Approved') actionText = 'duyệt';
+                else if (action === 'Cancelled') actionText = 'hủy';
+                else if (action === 'Shipped') actionText = 'gửi đi';
+
+                if (!confirm(`Bạn có chắc muốn ${actionText} ${orderIds.length} đơn hàng đã chọn?`)) return;
+
+                try {
+                    const response = await fetch(`${API_URL}/seller/orders/bulk-update`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ orderIds, action, sellerId })
+                    });
+                    const result = await response.json();
+                    alert(result.message);
+                    if (result.success) {
+                        selectedOrders.clear();
+                        await fetchAllOrders();
+                    }
+                } catch (error) { alert('Lỗi kết nối server khi xử lý hàng loạt.'); }
+            }
+
             async function updateOrderStatus(orderId, newState) {
                 if (!confirm(`Bạn có chắc muốn cập nhật đơn hàng #${orderId} sang trạng thái '${newState}'?`)) return;
                 try {
                     const response = await fetch(`${API_URL}/seller/orders/${orderId}/status`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ newState })
+                        body: JSON.stringify({ newState, sellerId: sellerId })
                     });
                     const result = await response.json();
                     alert(result.message);
@@ -231,8 +303,7 @@
 
             function openCancelModal(orderId) {
                 document.getElementById('cancelOrderId').value = orderId;
-                const cancelModal = new bootstrap.Modal(document.getElementById('cancelOrderModal'));
-                cancelModal.show();
+                new bootstrap.Modal(document.getElementById('cancelOrderModal')).show();
             }
 
             async function confirmCancelOrder() {
@@ -243,7 +314,7 @@
                     const response = await fetch(`${API_URL}/seller/orders/${orderId}/cancel`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ cancelReason })
+                        body: JSON.stringify({ cancelReason, sellerId: sellerId })
                     });
                     const result = await response.json();
                     alert(result.message);
@@ -323,7 +394,8 @@
                 sessionStorage.setItem('printableOrderData', JSON.stringify(detail));
                 window.open('print_invoice.html', '_blank');
             }
-            
+
+           
             const accountString = localStorage.getItem("account");
             if (accountString) {
                 try {
@@ -331,22 +403,14 @@
                     if (account.Role === 'Seller') {
                         sellerId = account.AccountId;
                         fetchAllOrders(); 
-                    } else {
-                        window.location.href = "../../template/pages/signIn_page.html";
-                    }
-                } catch (e) {
-                    window.location.href = "../../template/pages/signIn_page.html";
-                }
-            } else {
-                window.location.href = "../../template/pages/signIn_page.html";
-            }
+                    } else { window.location.href = "../../template/pages/signIn_page.html"; }
+                } catch (e) { window.location.href = "../../template/pages/signIn_page.html"; }
+            } else { window.location.href = "../../template/pages/signIn_page.html"; }
             
             document.querySelectorAll('.status-tab').forEach(tab => {
                 tab.addEventListener('click', () => filterByStatus(tab.dataset.status));
             });
-
             document.getElementById('searchInput').addEventListener('input', (e) => filterAndRenderOrders(e.target.value));
-            
             document.getElementById('logoutBtn').addEventListener('click', (e) => {
                 e.preventDefault();
                 if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
@@ -354,8 +418,37 @@
                     window.location.href = '../../template/pages/signIn_page.html';
                 }
             });
-
             document.getElementById('confirmCancelBtn').addEventListener('click', confirmCancelOrder);
+            document.getElementById('approveSelectedBtn').addEventListener('click', () => handleBulkAction('Approved'));
+            document.getElementById('cancelSelectedBtn').addEventListener('click', () => handleBulkAction('Cancelled'));
+            document.getElementById('shipSelectedBtn').addEventListener('click', () => handleBulkAction('Shipped'));
+
+            selectAllCheckbox.addEventListener('change', (event) => {
+                const isChecked = event.target.checked;
+                const visibleCheckboxes = document.querySelectorAll('.order-checkbox');
+                visibleCheckboxes.forEach(checkbox => {
+                    const orderId = checkbox.dataset.orderId;
+                    checkbox.checked = isChecked; 
+                    if (isChecked) {
+                        selectedOrders.add(orderId);
+                    } else {
+                        selectedOrders.delete(orderId);
+                    }
+                });
+                updateBulkActionsUI(); 
+            });
+
+            ordersContainer.addEventListener('change', (event) => {
+                if (event.target.classList.contains('order-checkbox')) {
+                    const orderId = event.target.dataset.orderId;
+                    if (event.target.checked) {
+                        selectedOrders.add(orderId);
+                    } else {
+                        selectedOrders.delete(orderId);
+                    }
+                    updateBulkActionsUI(); 
+                }
+            });
             
             ordersContainer.addEventListener('click', (event) => {
                 const button = event.target.closest('button[data-action]');
@@ -373,3 +466,8 @@
     </script>
 </body>
 </html>
+
+            
+            
+            
+            
