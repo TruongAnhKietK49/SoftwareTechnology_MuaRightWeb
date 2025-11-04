@@ -1,6 +1,6 @@
 const express = require("express");
 const sql = require("mssql");
-const { getPool } = require("./config");
+const { getPool } = require("../config");
 
 const router = express.Router();
 

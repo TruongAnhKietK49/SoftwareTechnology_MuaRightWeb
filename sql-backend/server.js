@@ -44,19 +44,19 @@ const signUpRoutes = require("./routes/signUpRoute");
 const signInRoutes = require("./routes/signInRoute");
 app.use("/api", signUpRoutes, signInRoutes);
 
-const cartRoutes = require("./routes/cartRoutes");
+const cartRoutes = require("./routes/User/cartRoutes");
 app.use("/cart", cartRoutes);
 
-const productUserRoutes = require("./routes/productRoutes");
+const productUserRoutes = require("./routes/User/productRoutes");
 app.use("/products", productUserRoutes);
 
-const userProfileRoutes = require("./routes/userRoutes");
+const userProfileRoutes = require("./routes/User/userRoutes");
 const paymentRoutes = require("./routes/User/paymentRoute");
 const orderHistoryRoutes = require("./routes/User/orderHistoryRoute");
 app.use("/user", userProfileRoutes, paymentRoutes, orderHistoryRoutes);
 
-const passwordResetRoutes = require('./routes/passwordResetRoute');
-app.use('/api', passwordResetRoutes);
+const passwordResetRoutes = require("./routes/passwordResetRoute");
+app.use("/api", passwordResetRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
