@@ -84,11 +84,11 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label" id="discountValueLabel">Giá trị giảm (%)*</label>
-                            <input type="number" class="form-control" name="DiscountVal" id="discountValue" min="0" required placeholder="VD: 10 hoặc 10000">
+                            <input type="text" class="form-control" name="DiscountVal" id="discountValue" min="0" required placeholder="VD: 10 hoặc 10000">
                         </div>
                          <div class="col-md-6 mb-3">
                             <label class="form-label">Đơn hàng tối thiểu (VNĐ)</label>
-                            <input type="number" class="form-control" name="MinOrderAmt" id="minOrderAmt" min="0" placeholder="Bỏ trống nếu không có">
+                            <input type="text" class="form-control" name="MinOrderAmt" id="minOrderAmt" min="0" placeholder="Bỏ trống nếu không có">
                         </div>
                     </div>
 
@@ -123,6 +123,7 @@
         let sellerId = null;
         let allVouchers = [];
         let account = null;
+        let isFormVisible = false;
 
         document.addEventListener('DOMContentLoaded', function() {
             const accountString = localStorage.getItem("account");
@@ -145,8 +146,15 @@
 
         function setupEventListeners() {
             document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-            document.getElementById('showAddVoucherFormBtn').addEventListener('click', () => toggleVoucherView(true));
-            document.getElementById('cancelAddEditVoucherBtn').addEventListener('click', () => toggleVoucherView(false));
+            document.getElementById('showAddVoucherFormBtn').addEventListener('click', () => {
+                isFormVisible = !isFormVisible; 
+                toggleVoucherView(isFormVisible);
+            });
+
+            document.getElementById('cancelAddEditVoucherBtn').addEventListener('click', () => {
+                isFormVisible = false; 
+                toggleVoucherView(false);
+            })
             document.getElementById('addEditVoucherForm').addEventListener('submit', handleFormSubmit);
             document.getElementById('searchInput').addEventListener('input', applyFilters);
             document.getElementById('statusFilter').addEventListener('change', applyFilters);
@@ -181,6 +189,7 @@
                 mainView.style.display = 'block';
                 formView.style.display = 'none';
                 toggleBtn.innerHTML = `<i class="fas fa-plus"></i> Tạo Voucher mới`;
+                isFormVisible = false;
                 fetchVouchers();
             }
         }
@@ -233,7 +242,6 @@
             const statusInfo = statusMap[v.DisplayStatus];
             const discountText = v.DiscountType === 'Percent' ? `Giảm ${v.DiscountVal}%` : `Giảm ${formatPrice(v.DiscountVal)}`;
             const minOrderText = v.MinOrderAmt > 0 ? `Đơn từ ${formatPrice(v.MinOrderAmt)}` : 'Áp dụng cho mọi đơn hàng';
-            const isEditable = v.DisplayStatus !== 'Expired';
 
             return `
                 <div class="col-lg-4 col-md-6">
@@ -248,17 +256,17 @@
                             <p><i class="fas fa-calendar-alt"></i> HSD: ${new Date(v.ValidTo).toLocaleDateString('vi-VN')}</p>
                         </div>
                         <div class="voucher-actions">
-                            <button class="btn-action btn-edit" onclick='editVoucher(${JSON.stringify(v)})' ${!isEditable ? 'disabled title="Không thể sửa voucher đã hết hạn."' : ''}>
+                            <button class="btn-action btn-edit" onclick='editVoucher(${JSON.stringify(v)})'>
                                 <i class="fas fa-edit"></i> Sửa
                             </button>
-                            <button class="btn-action btn-delete" onclick="deleteVoucher(${v.VoucherId}, ${sellerId})">
+                            <button class="btn-action btn-delete" onclick="deleteVoucher(${v.VoucherId})">
                                 <i class="fas fa-trash"></i> Xóa
                             </button>
                         </div>
                     </div>
                 </div>`;
         }
-        
+
         function editVoucher(voucher) {
             toggleVoucherView(true, true, voucher);
         }
@@ -299,75 +307,109 @@
             displayVouchers(filtered);
         }
 
+        function validateVoucherForm(rawData) {
+            const MIN_FIXED_DISCOUNT = 1000;
+            const numberRegex = /^\d+$/; 
+
+            if (!rawData.Code.trim() || !rawData.ValidFrom || !rawData.ValidTo) {
+                alert('Vui lòng điền đầy đủ Mã Voucher, Ngày bắt đầu và Ngày kết thúc.');
+                return false;
+            }
+
+            const discountValStr = rawData.DiscountVal.trim();
+            if (!discountValStr) {
+                alert('Vui lòng nhập Giá trị giảm là một số hợp lệ.');
+                return false;
+            }
+            if (!numberRegex.test(discountValStr)) {
+                alert('Giá trị giảm phải là một số hợp lệ.');
+                return false;
+            }
+
+            const minOrderAmtStr = rawData.MinOrderAmt.trim();
+            if (minOrderAmtStr && !numberRegex.test(minOrderAmtStr)) {
+                alert('Đơn hàng tối thiểu phải là một số hợp lệ .');
+                return false;
+            }
+
+            const discountValNum = parseFloat(discountValStr);
+            const minOrderAmtNum = minOrderAmtStr ? parseFloat(minOrderAmtStr) : null;
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); 
+            const validFromDate = new Date(rawData.ValidFrom);
+
+            if (validFromDate >= new Date(rawData.ValidTo)) {
+                alert("Ngày bắt đầu phải trước ngày hết hạn.");
+                return false;
+            }
+            if (!rawData.VoucherId && validFromDate < today) {
+                alert("Ngày bắt đầu không được là một ngày trong quá khứ.");
+                return false;
+            }
+
+            if (minOrderAmtNum !== null && minOrderAmtNum > 0 && minOrderAmtNum < MIN_FIXED_DISCOUNT) {
+                alert(`Đơn hàng tối thiểu phải ít nhất là ${MIN_FIXED_DISCOUNT.toLocaleString('vi-VN')} VNĐ.`);
+                return false;
+            }
+
+            if (rawData.DiscountType === 'Percent') {
+                if (discountValNum > 100 || discountValNum <= 0) {
+                    alert('Giá trị giảm theo % phải lớn hơn 0 và không được quá 100.');
+                    return false;
+                }
+            } else if (rawData.DiscountType === 'Fixed') {
+                if (discountValNum < MIN_FIXED_DISCOUNT) {
+                    alert(`Giá trị giảm theo số tiền phải ít nhất là ${MIN_FIXED_DISCOUNT.toLocaleString('vi-VN')} VNĐ.`);
+                    return false;
+                }
+                if (minOrderAmtNum && discountValNum >= minOrderAmtNum) {
+                    alert('Số tiền giảm phải nhỏ hơn giá trị đơn hàng tối thiểu.');
+                    return false;
+                }
+            }
+            return true; 
+        }
+
         async function handleFormSubmit(event) {
             event.preventDefault();
-            const form = event.target;
-            const MIN_FIXED_DISCOUNT = 1000;
 
-            const voucherCode = document.getElementById('voucherCode').value.trim();
-            const discountValue = document.getElementById('discountValue').value;
-            const validFrom = document.getElementById('validFrom').value;
-            const validTo = document.getElementById('validTo').value;
-
-            if (!voucherCode) {
-                alert('Vui lòng nhập Mã Voucher.');
-                return;
-            }
-            if (!discountValue) {
-                alert('Vui lòng nhập Giá trị giảm.');
-                return;
-            }
-            if (!validFrom) {
-                alert('Vui lòng chọn Ngày bắt đầu hiệu lực.');
-                return;
-            }
-            if (!validTo) {
-                alert('Vui lòng chọn Ngày hết hạn.');
-                return;
-            }
-
-            const voucherData = {
+            const rawData = {
                 VoucherId: document.getElementById('voucherId').value,
-                Code: voucherCode, 
+                Code: document.getElementById('voucherCode').value,
                 DiscountType: document.getElementById('discountType').value,
-                DiscountVal: parseFloat(discountValue),
-                MinOrderAmt: document.getElementById('minOrderAmt').value ? parseFloat(document.getElementById('minOrderAmt').value) : null,
-                ValidFrom: validFrom,
-                ValidTo: validTo,
-                IsActive: document.getElementById('isActiveSwitch').checked,
+                DiscountVal: document.getElementById('discountValue').value,
+                MinOrderAmt: document.getElementById('minOrderAmt').value,
+                ValidFrom: document.getElementById('validFrom').value,
+                ValidTo: document.getElementById('validTo').value,
+                IsActive: document.getElementById('isActiveSwitch').checked
+            };
+
+            if (!validateVoucherForm(rawData)) {
+                return; 
+            }
+
+            const finalPayload = {
+                VoucherId: rawData.VoucherId,
+                Code: rawData.Code.trim(),
+                DiscountType: rawData.DiscountType,
+                DiscountVal: parseFloat(rawData.DiscountVal),
+                MinOrderAmt: rawData.MinOrderAmt.trim() ? parseFloat(rawData.MinOrderAmt) : null,
+                ValidFrom: rawData.ValidFrom,
+                ValidTo: rawData.ValidTo,
+                IsActive: rawData.IsActive,
                 CreatedBySeller: sellerId
             };
-            
-            if (new Date(voucherData.ValidFrom) >= new Date(voucherData.ValidTo)) {
-                alert("Ngày bắt đầu phải trước ngày hết hạn."); 
-                return;
-            }
 
-            if (voucherData.DiscountType === 'Percent') {
-                if (voucherData.DiscountVal <= 0 || voucherData.DiscountVal > 100) {
-                    alert('Giá trị giảm theo % phải lớn hơn 0 và không quá 100.');
-                    return;
-                }
-            } else if (voucherData.DiscountType === 'Fixed') {
-                if (voucherData.DiscountVal < MIN_FIXED_DISCOUNT) {
-                    alert(`Giá trị giảm theo số tiền phải ít nhất là ${MIN_FIXED_DISCOUNT.toLocaleString('vi-VN')} VNĐ.`);
-                    return;
-                }
-                if (voucherData.MinOrderAmt && voucherData.DiscountVal > voucherData.MinOrderAmt) {
-                    alert('Số tiền giảm không được lớn hơn giá trị đơn hàng tối thiểu.');
-                    return;
-                }
-            }
-
-            const isUpdating = !!voucherData.VoucherId;
+            const isUpdating = !!finalPayload.VoucherId;
             const method = isUpdating ? 'PUT' : 'POST';
-            const url = isUpdating ? `${API_URL}/vouchers/${voucherData.VoucherId}` : `${API_URL}/vouchers`;
+            const url = isUpdating ? `${API_URL}/vouchers/${finalPayload.VoucherId}` : `${API_URL}/vouchers`;
 
             try {
                 const response = await fetch(url, {
                     method,
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(voucherData),
+                    body: JSON.stringify(finalPayload),
                 });
                 const result = await response.json();
                 alert(result.message);
