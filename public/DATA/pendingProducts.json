@@ -105,5 +105,16 @@
     "Warranty": "12 năm",
     "Description": "Rất mượt",
     "SellerId": 12
+  },
+  {
+    "NameProduct": "Calvin Klein CK Be",
+    "Category": "Unisex",
+    "Price": "1080000",
+    "Quantity": "100",
+    "ImageUrl": "https://product.hstatic.net/1000340570/product/calvin-klein-ck-be-100ml_ac9cb0eb3eaf4da8ade05a6539d94343_master.jpg",
+    "TagName": "Calvin Klein, Unisex, Bạc hà, Quả quýt",
+    "Warranty": "6 tháng tại cửa hàng",
+    "Description": "Hương đầu: Hoa oải hương, Nốt hương xanh, Cam Bergamot, Bạc hà, Lá bách xù, Quả quýt.\nHương giữa: Hương cỏ xanh, Quả đào, Hoa nhài, Hoa lan Nam Phi, Hoa mộc lan, Hoa phong lan.\nHương cuối: Xạ hương, Gỗ đàn hương, Gỗ tuyết tùng, Vanilla, Nhựa hổ phách, Nhựa Opoponax.",
+    "SellerId": 10
   }
 ]
