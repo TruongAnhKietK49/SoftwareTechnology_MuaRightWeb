@@ -461,6 +461,17 @@ function renderFilteredAccounts(accounts) {
   }
 
   accounts.forEach((account) => {
+    const roleClass =
+      account.Role === "Customer"
+        ? "role-customer"
+        : account.Role === "Seller"
+        ? "role-seller"
+        : account.Role === "Shipper"
+        ? "role-shipper"
+        : "";
+
+    const statusClass =
+      account.State === "Active" ? "status-active" : "status-inactive";
     const row = document.createElement("tr");
     row.innerHTML = `
       <div class="user-card">
@@ -484,8 +495,8 @@ function renderFilteredAccounts(accounts) {
             </div>
           </div>
           <div class="d-flex justify-content-between align-items-center">
-            <span class="user-role">${account.Role}</span>
-            <span class="user-status">
+            <span class="user-role ${roleClass}">${account.Role}</span>
+            <span class="user-status ${statusClass}">
               <i class="bi bi-circle-fill me-1"></i>${account.State}
             </span>
           </div>

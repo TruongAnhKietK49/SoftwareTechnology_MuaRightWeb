@@ -201,6 +201,7 @@ DBCC CHECKIDENT ('Product', RESEED, 0);
 Delete From Product
 
 SELECT * FROM Review
+WHERE ProductId = 14
 DBCC CHECKIDENT ('Review', RESEED, 0);
 Delete From Review
 
