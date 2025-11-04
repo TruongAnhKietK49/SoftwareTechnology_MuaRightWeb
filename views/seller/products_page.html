@@ -72,11 +72,11 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Giá bán (VNĐ)*</label>
-                            <input type="number" class="form-control" name="Price" min="0" required>
+                            <input type="text" class="form-control" name="Price" min="0" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Số lượng tồn kho*</label>
-                            <input type="number" class="form-control" name="Quantity" min="0" required>
+                            <input type="text" class="form-control" name="Quantity" min="0" required>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -87,9 +87,14 @@
                         <label class="form-label">Tags*</label>
                         <input type="text" class="form-control" name="TagName" placeholder="Các từ khóa cách nhau bởi dấu phẩy, VD: Calvin Klein, Unisex, tươi mát" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Bảo hành</label>
-                        <input type="text" class="form-control" name="Warranty" placeholder="VD: Bảo hành 12 tháng">
+                    <div class="mb-3"><label class="form-label">Bảo hành</label>
+                        <select class="form-select" name="Warranty">
+                            <option value="">-- Chọn chính sách bảo hành --</option>
+                            <option value="Không bảo hành">Không bảo hành</option>
+                            <option value="Bảo hành 12 tháng">Bảo hành 12 tháng</option>
+                            <option value="Đổi trả trong 7 ngày">Đổi trả trong 7 ngày</option>
+                            <option value="Bảo hành mùi hương trọn đời">Bảo hành mùi hương trọn đời</option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Mô tả sản phẩm</label>
@@ -140,11 +145,11 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Giá bán (VNĐ)*</label>
-                                <input type="number" class="form-control" name="Price" id="editPrice" min="0" required>
+                                <input type="text" class="form-control" name="Price" id="editPrice" min="0" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Số lượng tồn kho*</label>
-                                <input type="number" class="form-control" name="Quantity" id="editStock" min="0" required>
+                                <input type="text" class="form-control" name="Quantity" id="editStock" min="0" required>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -155,9 +160,14 @@
                             <label class="form-label">Tags*</label>
                             <input type="text" class="form-control" name="TagName" id="editTagName" required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Bảo hành</label>
-                            <input type="text" class="form-control" name="Warranty" id="editWarranty">
+                        <div class="mb-3"><label class="form-label">Bảo hành</label>
+                            <select class="form-select" name="Warranty" id="editWarranty">
+                                <option value="">-- Chọn chính sách bảo hành --</option>
+                                <option value="Không bảo hành">Không bảo hành</option>
+                                <option value="Bảo hành 12 tháng">Bảo hành 12 tháng</option>
+                                <option value="Đổi trả trong 7 ngày">Đổi trả trong 7 ngày</option>
+                                <option value="Bảo hành mùi hương trọn đời">Bảo hành mùi hương trọn đời</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Mô tả sản phẩm</label>
@@ -314,34 +324,68 @@
         displayProducts(filtered);
     }
 
+    function validateProductForm(rawData) {
+        const numberRegex = /^\d+$/; 
+        const priceRegex = /^\d+(\.\d{1,2})?$/; 
+
+        if (!rawData.NameProduct.trim() || !rawData.Category.trim() || !rawData.ImageUrl.trim() || !rawData.TagName.trim()) {
+            alert('Vui lòng điền đầy đủ các trường có dấu (*).');
+            return false;
+        }
+
+        const priceStr = rawData.Price.trim();
+        if (!priceStr) {
+            alert('Vui lòng nhập Giá bán.');
+            return false;
+        }
+        if (!priceRegex.test(priceStr)) {
+            alert('Giá bán không hợp lệ. Vui lòng chỉ nhập số (ví dụ: 1500000).');
+            return false;
+        }
+        if (parseFloat(priceStr) < 0) {
+            alert('Giá bán không được là số âm.');
+            return false;
+        }
+
+        const quantityStr = rawData.Quantity.trim();
+        if (!quantityStr) {
+            alert('Vui lòng nhập Số lượng tồn kho.');
+            return false;
+        }
+        if (!numberRegex.test(quantityStr)) {
+            alert('Số lượng tồn kho không hợp lệ. Vui lòng chỉ nhập số nguyên (ví dụ: 50).');
+            return false;
+        }
+        if (parseInt(quantityStr) < 0) {
+            alert('Số lượng tồn kho không được là số âm.');
+            return false;
+        }
+        
+        return true; 
+    }
+
     async function handleAddProductSubmit(event) {
-        event.preventDefault(); 
+        event.preventDefault();
         const form = event.target;
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
-        }
         const formData = new FormData(form);
-        const productData = Object.fromEntries(formData.entries());
-        productData.SellerId = sellerId;
+        const rawData = Object.fromEntries(formData.entries());
 
-        const price = parseFloat(productData.Price);
-        const quantity = parseInt(productData.Quantity);
-
-        if (isNaN(price) || price < 0) {
-            alert("Giá bán không hợp lệ. Vui lòng nhập một số không âm.");
+        if (!validateProductForm(rawData)) {
             return;
         }
-        if (isNaN(quantity) || quantity < 0) {
-            alert("Số lượng tồn kho không hợp lệ. Vui lòng nhập một số nguyên không âm.");
-            return;
-        }
+
+        const finalPayload = {
+            ...rawData,
+            Price: parseFloat(rawData.Price),
+            Quantity: parseInt(rawData.Quantity),
+            SellerId: sellerId
+        };
 
         try {
             const response = await fetch(`${API_URL}/seller/products/submit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(productData),
+                body: JSON.stringify(finalPayload),
             });
             const result = await response.json();
             alert(result.message);
@@ -349,7 +393,6 @@
                 toggleAddProductView(false);
             }
         } catch (error) {
-            console.error("Lỗi addProduct:", error);
             alert('Đã xảy ra lỗi khi gửi sản phẩm.');
         }
     }
@@ -420,40 +463,34 @@
         document.getElementById('editCategory').value = product.Category;
         document.getElementById('editPrice').value = product.Price;
         document.getElementById('editStock').value = product.Quantity;
-        document.getElementById('editImageUrl').value = product.ImageUrl; 
+        document.getElementById('editImageUrl').value = product.ImageUrl;
         document.getElementById('editDescription').value = product.Description;
         document.getElementById('editTagName').value = product.TagName;
-        document.getElementById('editWarranty').value = product.Warranty;
+        document.getElementById('editWarranty').value = product.Warranty || ""; 
         new bootstrap.Modal(document.getElementById('editProductModal')).show();
     }
 
     async function saveEditProduct() {
         const form = document.getElementById('editProductForm');
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
-        }
         const formData = new FormData(form);
-        const productData = Object.fromEntries(formData.entries());
-        const productId = productData.ProductId;
+        const rawData = Object.fromEntries(formData.entries());
 
-        const price = parseFloat(productData.Price);
-        const quantity = parseInt(productData.Quantity);
+        if (!validateProductForm(rawData)) {
+            return; 
+        }
 
-        if (isNaN(price) || price < 0) {
-            alert("Giá bán không hợp lệ. Vui lòng nhập một số không âm.");
-            return;
-        }
-        if (isNaN(quantity) || quantity < 0) {
-            alert("Số lượng tồn kho không hợp lệ. Vui lòng nhập một số nguyên không âm.");
-            return;
-        }
+        const finalPayload = {
+            ...rawData,
+            Price: parseFloat(rawData.Price),
+            Quantity: parseInt(rawData.Quantity)
+        };
+        const productId = finalPayload.ProductId;
 
         try {
             const response = await fetch(`${API_URL}/seller/products/${productId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(productData),
+                body: JSON.stringify(finalPayload),
             });
             const result = await response.json();
             alert(result.message);
@@ -462,7 +499,6 @@
                 fetchProducts();
             }
         } catch (error) { 
-            console.error("Lỗi saveEditProduct:", error);
             alert('Lỗi khi cập nhật sản phẩm.');
         }
     }
