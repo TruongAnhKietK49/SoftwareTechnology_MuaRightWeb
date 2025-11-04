@@ -19,29 +19,34 @@ async function getSellerDashboardData(sellerId) {
         const sellerName = sellerInfoResult.recordset[0]?.FullName || 'Seller';
 
         const now = new Date();
+        const startOfCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const startOfPreviousMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        const startOfTwoMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 2, 1);
         const thirtyDaysAgo = new Date(new Date().setDate(now.getDate() - 30));
-        const sixtyDaysAgo = new Date(new Date().setDate(now.getDate() - 60));
-        
+
         const request = pool.request()
             .input('sellerId', sql.Int, sellerId)
-            .input('thirtyDaysAgo', sql.DateTime2, thirtyDaysAgo)
-            .input('sixtyDaysAgo', sql.DateTime2, sixtyDaysAgo);
+            .input('startOfCurrentMonth', sql.DateTime2, startOfCurrentMonth)
+            .input('startOfPreviousMonth', sql.DateTime2, startOfPreviousMonth)
+            .input('startOfTwoMonthsAgo', sql.DateTime2, startOfTwoMonthsAgo)
+            .input('thirtyDaysAgo', sql.DateTime2, thirtyDaysAgo);
 
         const statsResult = await request.query(`
+            -- Tính doanh thu và đơn hàng tháng này và tháng trước
             SELECT 
-                ISNULL(SUM(CASE WHEN O.OrderDate >= @thirtyDaysAgo THEN OI.LineTotal ELSE 0 END), 0) AS CurrentMonthRevenue,
-                COUNT(DISTINCT CASE WHEN O.OrderDate >= @thirtyDaysAgo THEN O.OrderId ELSE NULL END) AS CurrentMonthOrders,
-                ISNULL(SUM(CASE WHEN O.OrderDate < @thirtyDaysAgo THEN OI.LineTotal ELSE 0 END), 0) AS PreviousMonthRevenue,
-                COUNT(DISTINCT CASE WHEN O.OrderDate < @thirtyDaysAgo THEN O.OrderId ELSE NULL END) AS PreviousMonthOrders
+                ISNULL(SUM(CASE WHEN O.OrderDate >= @startOfCurrentMonth THEN OI.LineTotal ELSE 0 END), 0) AS CurrentMonthRevenue,
+                COUNT(DISTINCT CASE WHEN O.OrderDate >= @startOfCurrentMonth THEN O.OrderId ELSE NULL END) AS CurrentMonthOrders,
+                ISNULL(SUM(CASE WHEN O.OrderDate >= @startOfPreviousMonth AND O.OrderDate < @startOfCurrentMonth THEN OI.LineTotal ELSE 0 END), 0) AS PreviousMonthRevenue,
+                COUNT(DISTINCT CASE WHEN O.OrderDate >= @startOfPreviousMonth AND O.OrderDate < @startOfCurrentMonth THEN O.OrderId ELSE NULL END) AS PreviousMonthOrders
             FROM OrderProduct O 
             JOIN OrderItem OI ON O.OrderId = OI.OrderId
-            WHERE OI.SellerId = @sellerId AND O.State = 'Delivered' AND O.OrderDate >= @sixtyDaysAgo;
+            WHERE OI.SellerId = @sellerId AND O.State = 'Delivered' AND O.OrderDate >= @startOfTwoMonthsAgo;
+
             SELECT 
                 (SELECT COUNT(*) FROM Product WHERE SellerId = @sellerId AND Quantity > 0) AS TotalProducts,
                 (SELECT COUNT(DISTINCT O.OrderId) FROM OrderProduct O JOIN OrderItem OI ON O.OrderId = OI.OrderId WHERE OI.SellerId = @sellerId AND O.State = 'Pending') AS PendingOrders,
-                -- TẠM THỜI trả về 0 vì cột 'CreatedAt' không tồn tại trong CSDL của bạn.
-                -- Đây là giải pháp để chương trình chạy được mà không cần sửa CSDL.
-                0 AS NewProducts;
+                -- Sửa lỗi: Đếm sản phẩm mới dựa trên cột CreatedAt
+                (SELECT COUNT(*) FROM Product WHERE SellerId = @sellerId AND CreatedAt >= @thirtyDaysAgo) AS NewProducts;
         `);
 
         const periodStats = statsResult.recordsets[0][0] || { CurrentMonthRevenue: 0, CurrentMonthOrders: 0, PreviousMonthRevenue: 0, PreviousMonthOrders: 0 };
@@ -49,15 +54,27 @@ async function getSellerDashboardData(sellerId) {
 
         const revenueTrend = calculateTrend(periodStats.CurrentMonthRevenue, periodStats.PreviousMonthRevenue);
         const ordersTrend = calculateTrend(periodStats.CurrentMonthOrders, periodStats.PreviousMonthOrders);
-        
+
         const recentOrdersResult = await request.query(`
-            SELECT TOP 5 O.OrderId, O.State, C.FullName AS CustomerName,
-                (SELECT TOP 1 P.NameProduct + '...' FROM OrderItem OI JOIN Product P ON OI.ProductId = P.ProductId WHERE OI.OrderId = O.OrderId AND OI.SellerId = @sellerId) AS TopItem,
-                (SELECT SUM(OI.Quantity) FROM OrderItem OI WHERE OI.OrderId = O.OrderId AND OI.SellerId = @sellerId) AS TotalQtyForSeller,
-                (SELECT SUM(OI_sub.LineTotal) FROM OrderItem OI_sub WHERE OI_sub.OrderId = O.OrderId AND OI_sub.SellerId = @sellerId) AS SellerTotalAmount
-            FROM OrderProduct O JOIN CustomerProfile C ON O.CustomerId = C.CustomerId
-            WHERE EXISTS (SELECT 1 FROM OrderItem OI_filter WHERE OI_filter.OrderId = O.OrderId AND OI_filter.SellerId = @sellerId)
-            ORDER BY O.OrderDate DESC;
+            WITH OrderDetails AS (
+                SELECT
+                    O.OrderId, O.State, O.OrderDate, C.FullName AS CustomerName,
+                    P.NameProduct, OI.Quantity, OI.LineTotal,
+                    ROW_NUMBER() OVER(PARTITION BY O.OrderId ORDER BY OI.LineTotal DESC) as rn
+                FROM OrderProduct O
+                JOIN CustomerProfile C ON O.CustomerId = C.CustomerId
+                JOIN OrderItem OI ON O.OrderId = OI.OrderId
+                JOIN Product P ON OI.ProductId = P.ProductId
+                WHERE OI.SellerId = @sellerId
+            )
+            SELECT TOP 5
+                od.OrderId, od.State, od.CustomerName,
+                (SELECT TOP 1 NameProduct FROM OrderDetails WHERE OrderId = od.OrderId AND rn = 1) + '...' AS TopItem,
+                SUM(od.Quantity) AS TotalQtyForSeller,
+                SUM(od.LineTotal) AS SellerTotalAmount
+            FROM OrderDetails od
+            GROUP BY od.OrderId, od.State, od.CustomerName, od.OrderDate
+            ORDER BY od.OrderDate DESC;
         `);
         const recentOrders = recentOrdersResult.recordset.map(order => ({
             id: order.OrderId, displayId: 'DH' + String(order.OrderId).padStart(3, '0'), product: order.TopItem || 'N/A',

@@ -37,17 +37,16 @@ router.get("/order/detail/:orderId/:sellerId", async (req, res) => {
 // PUT /seller/orders/:orderId/status
 router.put("/orders/:orderId/status", async (req, res) => {
     const orderId = parseInt(req.params.orderId);
-    const { newState } = req.body;
+    const { newState, sellerId } = req.body;
 
-    if (!newState) {
-        return res.status(400).json({ success: false, message: "Thiếu trạng thái cập nhật (newState)." });
+    if (!newState || !sellerId) {
+        return res.status(400).json({ success: false, message: "Thiếu thông tin 'newState' hoặc 'sellerId'." });
     }
 
     try {
-        const result = await orderController.updateOrderState(orderId, newState);
+        const result = await orderController.updateOrderState(orderId, newState, sellerId);
         res.json(result);
     } catch (err) {
-        console.error("[ROUTE ERROR] /orders/:orderId/status :", err);
         res.status(400).json({ success: false, message: err.message });
     }
 });
@@ -55,14 +54,32 @@ router.put("/orders/:orderId/status", async (req, res) => {
 // PUT /seller/orders/:orderId/cancel
 router.put("/orders/:orderId/cancel", async (req, res) => {
     const orderId = parseInt(req.params.orderId);
-    const { cancelReason } = req.body;
+    const { cancelReason, sellerId } = req.body;
+
+    if (!cancelReason || !sellerId) {
+        return res.status(400).json({ success: false, message: "Thiếu thông tin 'cancelReason' hoặc 'sellerId'." });
+    }
 
     try {
-        const result = await orderController.cancelOrder(orderId, cancelReason);
+        const result = await orderController.cancelOrder(orderId, cancelReason, sellerId);
         res.json(result);
     } catch (err) {
-        console.error("[ROUTE ERROR] /orders/:orderId/cancel :", err);
         res.status(400).json({ success: false, message: err.message });
+    }
+});
+
+router.post("/orders/bulk-update", async (req, res) => {
+    const { orderIds, action, sellerId } = req.body;
+
+    if (!orderIds || !Array.isArray(orderIds) || orderIds.length === 0 || !action || !sellerId) {
+        return res.status(400).json({ success: false, message: "Dữ liệu không hợp lệ." });
+    }
+
+    try {
+        const result = await orderController.bulkUpdateOrderState(orderIds, action, sellerId);
+        res.json(result);
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
     }
 });
 

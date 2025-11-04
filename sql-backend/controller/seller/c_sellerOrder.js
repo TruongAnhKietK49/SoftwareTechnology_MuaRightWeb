@@ -2,6 +2,8 @@ const orderModel = require("../../models/seller/m_order");
 
 const ALLOWED_UPDATE_STATES = ['Approved', 'Shipped', 'Delivered'];
 
+const ALLOWED_BULK_ACTIONS = ['Approved', 'Cancelled', 'Shipped'];
+
 /**
  * Lấy danh sách đơn hàng theo trạng thái
  */
@@ -29,19 +31,19 @@ async function getOrderDetail(orderId, sellerId) {
 /**
  * Cập nhật trạng thái đơn hàng chung (Approved, Shipped, Delivered)
  */
-async function updateOrderState(orderId, newState) {
-    if (isNaN(orderId)) {
-        throw new Error("Order ID không hợp lệ.");
+async function updateOrderState(orderId, newState, sellerId) { 
+    if (isNaN(orderId) || isNaN(sellerId)) {
+        throw new Error("ID không hợp lệ.");
     }
 
     if (!ALLOWED_UPDATE_STATES.includes(newState)) {
         throw new Error(`Trạng thái cập nhật '${newState}' không hợp lệ.`);
     }
 
-    const success = await orderModel.updateOrderStatus(orderId, newState);
+    const success = await orderModel.updateOrderStatus(orderId, newState, sellerId);
 
     if (!success) {
-        throw new Error(`Không thể cập nhật. Đơn hàng #${orderId} có thể không ở trạng thái hợp lệ để chuyển sang '${newState}'.`);
+        throw new Error(`Không thể cập nhật. Đơn hàng #${orderId} có thể không tồn tại hoặc không ở trạng thái hợp lệ để chuyển sang '${newState}'.`);
     }
     return { success: true, message: `Đã cập nhật đơn hàng #${orderId} sang trạng thái '${newState}'!` };
 }
@@ -49,15 +51,15 @@ async function updateOrderState(orderId, newState) {
 /**
  * Hủy đơn hàng 
  */
-async function cancelOrder(orderId, cancelReason) {
-    if (isNaN(orderId)) {
-        throw new Error("Order ID không hợp lệ.");
+async function cancelOrder(orderId, cancelReason, sellerId) { 
+    if (isNaN(orderId) || isNaN(sellerId)) {
+        throw new Error("ID không hợp lệ.");
     }
     if (!cancelReason || !cancelReason.trim()) {
         throw new Error("Lý do hủy đơn hàng là bắt buộc.");
     }
 
-    const success = await orderModel.updateOrderStatus(orderId, 'Cancelled', cancelReason);
+    const success = await orderModel.updateOrderStatus(orderId, 'Cancelled', sellerId);
 
     if (!success) {
         throw new Error(`Không thể hủy. Đơn hàng #${orderId} có thể đã được xử lý hoặc không tồn tại.`);
@@ -65,9 +67,25 @@ async function cancelOrder(orderId, cancelReason) {
     return { success: true, message: `Đã hủy thành công đơn hàng #${orderId}.` };
 }
 
+async function bulkUpdateOrderState(orderIds, action, sellerId) {
+    if (isNaN(sellerId)) {
+        throw new Error("Seller ID không hợp lệ.");
+    }
+    if (!ALLOWED_BULK_ACTIONS.includes(action)) {
+        throw new Error("Hành động không được phép.");
+    }
+    const updatedCount = await orderModel.bulkUpdateOrderStatus(orderIds, action, sellerId);
+    if (updatedCount > 0) {
+        return { success: true, message: `Đã cập nhật thành công ${updatedCount} đơn hàng.` };
+    } else {
+        throw new Error("Không có đơn hàng nào được cập nhật. Có thể các đơn hàng đã chọn không ở trạng thái hợp lệ cho hành động này.");
+    }
+}
+
 module.exports = {
     getOrders,
     getOrderDetail,
     updateOrderState,
     cancelOrder,
+    bulkUpdateOrderState
 };

@@ -1,4 +1,5 @@
 const sql = require("mssql");
+const bcrypt = require("bcrypt");
 const { getPool } = require("../../routes/config");
 
 async function getSellerProfile(sellerId) {
@@ -83,9 +84,7 @@ async function updateSellerProfile(sellerId, data) {
 async function changeSellerPassword(sellerId, currentPassword, newPassword) {
     try {
         const pool = await getPool();
-        const request = pool.request();
-
-        const userResult = await request
+        const userResult = await pool.request()
             .input('sellerId', sql.Int, sellerId)
             .query('SELECT PasswordHash FROM Account WHERE AccountId = @sellerId');
 
@@ -93,16 +92,30 @@ async function changeSellerPassword(sellerId, currentPassword, newPassword) {
             return { success: false, message: 'Không tìm thấy tài khoản.' };
         }
 
-        const currentPasswordInDB = userResult.recordset[0].PasswordHash;
+        const passwordInDb = userResult.recordset[0].PasswordHash;
+        let isMatch = false;
 
-        if (currentPasswordInDB !== currentPassword) {
+        if (passwordInDb.startsWith('$2')) {
+            isMatch = await bcrypt.compare(currentPassword, passwordInDb);
+        } else {
+            isMatch = (currentPassword === passwordInDb);
+        }
+
+        if (!isMatch) {
             return { success: false, message: 'Mật khẩu hiện tại không chính xác.' };
         }
 
+        if (currentPassword === newPassword) {
+            return { success: false, message: 'Mật khẩu mới không được trùng với mật khẩu hiện tại.' };
+        }
+
+        const saltRounds = 10;
+        const newPasswordHash = await bcrypt.hash(newPassword, saltRounds);
+
         await pool.request()
             .input('sellerId', sql.Int, sellerId)
-            .input('newPassword', sql.NVarChar(255), newPassword)
-            .query('UPDATE Account SET PasswordHash = @newPassword WHERE AccountId = @sellerId');
+            .input('newPasswordHash', sql.NVarChar(255), newPasswordHash)
+            .query('UPDATE Account SET PasswordHash = @newPasswordHash WHERE AccountId = @sellerId');
         
         return { success: true, message: 'Đổi mật khẩu thành công!' };
 
@@ -111,6 +124,7 @@ async function changeSellerPassword(sellerId, currentPassword, newPassword) {
         throw err;
     }
 }
+
 module.exports = {
     getSellerProfile,
     updateSellerProfile,
