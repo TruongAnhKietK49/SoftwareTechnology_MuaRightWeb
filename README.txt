@@ -1,5 +1,6 @@
 🚞Môi trường
 VS Code (Visual Studio Code)
+SQL Management 2022
 NodeJS (cài nếu chưa có)
 
 🤖Các gói gần tải
