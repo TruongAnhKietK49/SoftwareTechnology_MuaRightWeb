@@ -226,99 +226,101 @@ document.getElementById("placeOrderBtn").addEventListener("click", async () => {
     const fullName = document.getElementById("fullName").value.trim();
     const phone = document.getElementById("phone").value.trim();
     const address = document.getElementById("address").value.trim();
-
+    
     if (!fullName || !phone || !address) {
       alert("⚠️ Vui lòng nhập đầy đủ thông tin giao hàng!");
       return;
     }
 
-    const totalOrder = document.getElementById("orderTotal").textContent;
-    if( totalOrder === "") {
+    const totalOrderText = document.getElementById("orderTotal").textContent;
+    if (!totalOrderText) {
       alert("⚠️ Vui lòng chọn sản phẩm để cập nhật đơn!");
       return;
     }
 
     // 🛒 2. Lấy danh sách sản phẩm đã chọn trong giỏ
-    const selectedItems = document.querySelectorAll(".select-item:checked");
-    if (selectedItems.length === 0) {
+    const selectedItemsCheckboxes = document.querySelectorAll(".select-item:checked");
+    if (selectedItemsCheckboxes.length === 0) {
       alert("⚠️ Vui lòng chọn ít nhất một sản phẩm để đặt hàng!");
       return;
     }
-    
-    // Lấy dữ liệu từ giỏ hàng (vì loadCartItems() trả về dữ liệu đầy đủ từ API)
-    const cartItems = await loadCartItems();
+
+    const allCartItems = await loadCartItems();
 
     // 3️⃣ Tạo danh sách items đúng cấu trúc
-    const items = Array.from(selectedItems)
-      .map((checkbox) => {
-        const basketId = checkbox.dataset.id;
-        const found = cartItems.find((c) => c.BasketId == basketId);
-        if (!found) return null;
-        return {
-          productId: found.ProductId,
-          sellerId: found.SellerId || null,
-          quantity: found.Quantity,
-          unitPrice: found.Price,
-        };
-      })
-      .filter((x) => x !== null);
+    const ordersBySeller = {};
+    selectedItemsCheckboxes.forEach(checkbox => {
+      const basketId = checkbox.dataset.id;
+      const productInfo = allCartItems.find(item => item.BasketId == basketId);
+      
+      if (productInfo) {
+        const sellerId = productInfo.SellerId;
+        if (!ordersBySeller[sellerId]) {
+          ordersBySeller[sellerId] = {
+            items: [],
+            subTotal: 0,
+          };
+        }
+        ordersBySeller[sellerId].items.push({
+          productId: productInfo.ProductId,
+          sellerId: productInfo.SellerId,
+          quantity: productInfo.Quantity,
+          unitPrice: productInfo.Price,
+        });
+        ordersBySeller[sellerId].subTotal += productInfo.Price * productInfo.Quantity;
+      }
+    });
+    
+    // 4. Chuẩn bị dữ liệu để gửi đi
+    const grandOrderTotal = parseFloat(document.getElementById("orderTotal").dataset.value || "0");
+    const totalDiscountAmt = parseFloat(document.getElementById("discount").textContent.replace(/[^\d]/g, "") || "0");
+    const voucherId = document.getElementById("voucher").dataset.voucherid || null;
+    const shippingFeePerOrder = 30000;
 
-    if (items.length === 0) {
-      alert("⚠️ Không tìm thấy thông tin sản phẩm trong giỏ hàng!");
-      return;
+    // 5. Tạo một mảng các đối tượng đơn hàng
+    const orders = [];
+    for (const sellerId in ordersBySeller) {
+      const sellerOrder = ordersBySeller[sellerId];
+      const proportion = sellerOrder.subTotal / grandOrderTotal;
+      const discountForThisOrder = totalDiscountAmt * proportion;
+      const totalAmountForThisOrder = sellerOrder.subTotal - discountForThisOrder + shippingFeePerOrder;
+      
+      orders.push({
+        items: sellerOrder.items,
+        shippingFee: shippingFeePerOrder,
+        discountAmt: discountForThisOrder,
+        totalAmount: totalAmountForThisOrder,
+      });
     }
 
-    console.log("✅ Sản phẩm chọn mua:", items);
-
-    // 💰 4. Tính toán tiền
-    const orderTotal = parseFloat(
-      document.getElementById("orderTotal").dataset.value || "0"
-    );
-    const shippingFee = parseFloat(
-      document.getElementById("shippingFee").dataset.value || "0"
-    );
-    const discountText =
-      document.getElementById("discount").textContent.replace(/[^\d]/g, "") ||
-      "0";
-    const discountAmt = parseFloat(discountText) || 0;
-
-    const totalAmount = orderTotal - discountAmt + shippingFee;
-
-    // 🎟️ 5. Lấy voucherId (nếu có)
-    const voucherId =
-      document.getElementById("voucher").dataset.voucherid || null;
-
-    // 🧠 6. Tạo object hoá đơn đúng chuẩn
-    const orderObj = {
+    // 6. Tạo payload cuối cùng để gửi đi MỘT LẦN
+    const bulkPayload = {
       customerId: account.AccountId,
       shipAddress: address,
       shipPhone: phone,
-      items,
-      shippingFee,
-      discountAmt,
-      totalAmount,
-      voucherId,
+      voucherId: voucherId,
+      orders: orders, 
     };
 
-    console.log("📦 Dữ liệu gửi API:", orderObj);
+    console.log("📦 Gửi payload hàng loạt lên API:", bulkPayload);
 
     // 🚀 7. Gửi dữ liệu sang backend
-    const response = await fetch("http://localhost:3000/user/create-invoice", {
+    const response = await fetch("http://localhost:3000/user/create-bulk-invoices", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(orderObj),
+      body: JSON.stringify(bulkPayload),
     });
 
     const result = await response.json();
     console.log("📬 Kết quả trả về:", result);
-
+    
     if (result.success) {
       alert("🎉 Đặt hàng thành công!");
-      // window.location.href = `/user/order-success.html?id=${result.orderId}`;
       window.location.href = `../../../views/user/payment_page.html`;
     } else {
       alert(result.message || "❌ Đặt hàng thất bại. Vui lòng thử lại!");
     }
+
   } catch (error) {
     console.error("💥 Lỗi khi đặt hàng:", error);
     alert("⚠️ Đã xảy ra lỗi trong quá trình tạo đơn hàng!");

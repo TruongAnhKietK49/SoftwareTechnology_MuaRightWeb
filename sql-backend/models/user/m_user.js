@@ -169,7 +169,127 @@ async function createInvoice(object) {
   }
 }
 
+async function createBulkInvoices(bulkData) {
+  const {
+    customerId,
+    shipAddress,
+    shipPhone,
+    voucherId = null,
+    orders = [], 
+  } = bulkData;
+
+  if (!customerId || orders.length === 0) {
+    throw new Error("Thiếu dữ liệu khách hàng hoặc danh sách đơn hàng rỗng.");
+  }
+
+  const pool = await getPool();
+  const transaction = new sql.Transaction(pool);
+
+  try {
+    await transaction.begin();
+
+    const orderIds = [];
+    let totalSpent = 0;
+
+    // Lặp qua từng đơn hàng và tạo OrderProduct, OrderItem
+    for (const order of orders) {
+      const { items, shippingFee, discountAmt, totalAmount } = order;
+      
+      const subTotal = items.reduce(
+        (sum, item) => sum + item.unitPrice * item.quantity,
+        0
+      );
+
+      const orderRequest = new sql.Request(transaction);
+      orderRequest.input("CustomerId", customerId);
+      orderRequest.input("VoucherId", voucherId);
+      orderRequest.input("ShipAddress", shipAddress);
+      orderRequest.input("ShipPhone", shipPhone);
+      orderRequest.input("SubTotal", subTotal);
+      orderRequest.input("DiscountAmt", discountAmt);
+      orderRequest.input("ShippingFee", shippingFee);
+      orderRequest.input("TotalAmount", totalAmount);
+
+      const orderResult = await orderRequest.query(`
+        INSERT INTO OrderProduct 
+        (CustomerId, VoucherId, ShipAddress, ShipPhone, SubTotal, DiscountAmt, ShippingFee, TotalAmount)
+        OUTPUT INSERTED.OrderId
+        VALUES (@CustomerId, @VoucherId, @ShipAddress, @ShipPhone, @SubTotal, @DiscountAmt, @ShippingFee, @TotalAmount)
+      `);
+
+      const orderId = orderResult.recordset[0].OrderId;
+      orderIds.push(orderId);
+      totalSpent += totalAmount;
+
+      for (const item of items) {
+        const itemRequest = new sql.Request(transaction);
+        itemRequest.input("OrderId", orderId);
+        itemRequest.input("ProductId", item.productId);
+        itemRequest.input("SellerId", item.sellerId);
+        itemRequest.input("Quantity", item.quantity);
+        itemRequest.input("UnitPrice", item.unitPrice);
+        itemRequest.input("LineTotal", item.unitPrice * item.quantity);
+        await itemRequest.query(`
+          INSERT INTO OrderItem 
+          (OrderId, ProductId, SellerId, Quantity, UnitPrice, LineTotal)
+          VALUES (@OrderId, @ProductId, @SellerId, @Quantity, @UnitPrice, @LineTotal)
+        `);
+      }
+    }
+
+    if (voucherId) {
+      const voucherRequest = new sql.Request(transaction);
+      voucherRequest.input("VoucherId", voucherId);
+      voucherRequest.input("CustomerId", customerId);
+      // Ghi nhận orderId đầu tiên làm tham chiếu, hoặc có thể để NULL
+      voucherRequest.input("OrderId", orderIds[0]); 
+      await voucherRequest.query(`
+        INSERT INTO VoucherUsage (VoucherId, CustomerId, OrderId)
+        VALUES (@VoucherId, @CustomerId, @OrderId)
+      `);
+    }
+
+    // Xóa tất cả sản phẩm đã đặt khỏi giỏ hàng
+    const allItems = orders.flatMap(o => o.items);
+    for (const item of allItems) {
+      const deleteReq = new sql.Request(transaction);
+      deleteReq.input("CustomerId", customerId);
+      deleteReq.input("ProductId", item.productId);
+      await deleteReq.query(`
+        DELETE FROM Basket WHERE CustomerId = @CustomerId AND ProductId = @ProductId
+      `);
+    }
+
+    // Cập nhật tổng số tiền đã chi tiêu
+    await new sql.Request(transaction)
+      .input("CustomerId", sql.Int, customerId)
+      .input("Spent", sql.Decimal(18, 2), totalSpent)
+      .query(`
+        UPDATE CustomerProfile
+        SET Balance = Balance + @Spent
+        WHERE CustomerId = @CustomerId
+      `);
+
+    await transaction.commit();
+    console.log("✅ Hoá đơn đã được tạo thành công:", orderIds);
+    return {
+      success: true,
+      message: "Tạo tất cả hoá đơn thành công.",
+      orderIds,
+    };
+
+  } catch (error) {
+    console.error("❌ Lỗi khi tạo hàng loạt hoá đơn:", error);
+    await transaction.rollback();
+    return {
+      success: false,
+      message: error.message || "Lỗi khi tạo hàng loạt hoá đơn.",
+    };
+  }
+}
+
 module.exports = {
   checkVoucher,
   createInvoice,
+  createBulkInvoices,
 };
