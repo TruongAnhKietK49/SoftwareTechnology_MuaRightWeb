@@ -534,7 +534,7 @@ const renderManager = {
     }
   },
 
-  openProductModal(productId) {
+   async openProductModal(productId) {
     const product = PRODUCTS.find((p) => p.ProductId == productId);
     if (!product) return;
 
@@ -596,6 +596,18 @@ const renderManager = {
         `;
         modalElements.reviews.appendChild(reviewEl);
       });
+
+    const reviewForm = modalElements.form;
+    const reviewNotice = document.getElementById("pm-review-notice");
+
+    if (account && account.AccountId) {
+        reviewForm.style.display = '';
+        reviewNotice.style.display = 'none';
+    } else {
+        reviewForm.style.display = 'none';
+        reviewNotice.textContent = "Vui lòng đăng nhập để đánh giá sản phẩm.";
+        reviewNotice.style.display = 'block';
+    }
 
     if (productModal) {
       productModal.show();
@@ -741,16 +753,30 @@ const eventHandlers = {
           text: modalElements.text.value.trim(),
         };
 
-        if (!reviewData.text) return;
+        if (!reviewData.text) {
+          alert("Vui lòng nhập nội dung đánh giá.");
+          return;
+        }
 
         try {
-          await api.post("/products/addReview", {
-            ProductId: modalElements.id.textContent,
-            CustomerId: account.AccountId,
-            Rating: reviewData.rating,
-            Comment: reviewData.text,
-            CreatedAt: new Date().toISOString(),
+          const response = await fetch(`${API_BASE}/products/addReview`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              ProductId: modalElements.id.textContent,
+              CustomerId: account.AccountId,
+              Rating: reviewData.rating,
+              Comment: reviewData.text,
+              CreatedAt: new Date().toISOString(),
+            }),
           });
+
+          if (!response.ok) {
+            const errorResult = await response.json();
+            alert(errorResult.message || "Đã xảy ra lỗi, vui lòng thử lại.");
+            modalElements.text.value = "";
+            return;
+          }
 
           modalElements.text.value = "";
           if (modalElements.toast) {
@@ -763,8 +789,10 @@ const eventHandlers = {
 
           await dataManager.init();
           renderManager.openProductModal(modalElements.id.textContent);
+
         } catch (error) {
           console.error("Review submission error:", error);
+          alert("Lỗi kết nối đến máy chủ. Vui lòng thử lại sau.");
         }
       });
     }

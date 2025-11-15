@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { checkVoucher, createInvoice } = require("../../models/user/m_user");
+const { checkVoucher, createInvoice, createBulkInvoices } = require("../../models/user/m_user");
 
 // Kiểm tra voucher
 router.post("/check-voucher", async (req, res) => {
@@ -29,5 +29,20 @@ router.post("/create-invoice", async (req, res) => {
       .json({ success: false, message: "Lỗi server khi tạo hoá đơn." });
   }
 });
+
+router.post("/create-bulk-invoices", async (req, res) => {
+  const bulkOrderData = req.body;
+  try {
+    const result = await createBulkInvoices(bulkOrderData);
+    res.json(result);
+  } catch (error)
+  {
+    console.error("Lỗi khi tạo hàng loạt hoá đơn:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Lỗi server khi tạo hàng loạt hoá đơn." });
+  }
+});
+
 
 module.exports = router;

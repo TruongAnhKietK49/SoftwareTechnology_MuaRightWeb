@@ -1,7 +1,34 @@
 const express = require("express");
 const { getPool } = require("../config");
+const sql = require("mssql");
 
 const router = express.Router();
+
+async function hasPurchased(productId, customerId) {
+  if (!productId || !customerId) {
+    return false;
+  }
+  try {
+    const pool = await getPool();
+    const result = await pool.request()
+      .input("ProductId", sql.Int, productId)
+      .input("CustomerId", sql.Int, customerId)
+      .query(`
+        SELECT COUNT(oi.OrderItemId) AS PurchaseCount
+        FROM OrderItem oi
+        JOIN OrderProduct op ON oi.OrderId = op.OrderId
+        WHERE oi.ProductId = @ProductId
+          AND op.CustomerId = @CustomerId
+          AND op.State = 'Delivered'; 
+      `);
+    
+    return result.recordset[0].PurchaseCount > 0;
+
+  } catch (error) {
+    console.error("Lỗi khi kiểm tra lịch sử mua hàng:", error);
+    return false;
+  }
+}
 
 router.get("/getProductList", async (req, res) => {
   try {
@@ -85,9 +112,28 @@ router.get("/getProductReview", async (req, res) => {
   }
 });
 
+router.get("/can-review/:productId/:customerId", async (req, res) => {
+  try {
+    const { productId, customerId } = req.params;
+    const canReview = await hasPurchased(productId, customerId);
+    res.json({ canReview });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Lỗi server." });
+  }
+});
+
 router.post("/addReview", async (req, res) => {
   try {
     const { ProductId, CustomerId, Rating, Comment, CreatedAt } = req.body;
+
+    const canReview = await hasPurchased(ProductId, CustomerId);
+    if (!canReview) {
+      return res.status(403).json({ 
+        success: false, 
+        message: "Bạn cần mua sản phẩm này để có thể đánh giá." 
+      });
+    }
+
     const pool = await getPool();
     const result = await pool
       .request()
